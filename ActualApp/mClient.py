@@ -7,13 +7,18 @@ import socket
 mySocket = socket.socket()
 
 # connecting to machine
-address = ("127.0.0.1", 3305)
+address = ("192.168.43.184", 3305)
 mySocket.connect(address)
 
 while True:
     # get data
     data = input("> ")
     
-    mySocket.sendall(data)
+    dataB = data.encode()
+
+    mySocket.sendall(dataB)
+
+    if data == 'q':
+        break
 
 mySocket.close()
