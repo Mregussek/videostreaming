@@ -7,18 +7,21 @@ import socket
 mySocket = socket.socket()
 
 # creating a server
-address = ("192.168.43.70", 3305)
+address = ('0.0.0.0', 3305)
 mySocket.bind(address)
 
+print("Server Started")
+
 # listen for 2 devices
-mySocket.listen(2)
+mySocket.listen(5)
 
 # accept connection
 connection, adressRPI = mySocket.accept()
+print("Got connection from %s" % str(addr))
 
 while True:
     # receive data in bytes
-    receivedData =connection.recv(1000)
+    receivedData = connection.recv(1024)
 
     print(receivedData)
 

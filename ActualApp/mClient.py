@@ -7,7 +7,7 @@ import socket
 mySocket = socket.socket()
 
 # connecting to machine
-address = ("192.168.43.70", 3305)
+address = ("127.0.0.1", 3305)
 mySocket.connect(address)
 
 while True:
