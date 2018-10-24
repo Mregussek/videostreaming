@@ -10,7 +10,7 @@ import io
 # get connection
 serverSocket = socket.socket(socket.AF_INET, 
                         socket.SOCK_STREAM)
-address = ("192.168.43.70", 3305)
+address = ("192.168.137.1", 3305)
 serverSocket.connect(address)
 
 print("Connected!")

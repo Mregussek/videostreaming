@@ -4,7 +4,7 @@ import numpy as np
 import sys 
 import time
 
-address = ('192.168.43.184', 3305)
+address = ('192.168.137.1', 3305)
 clientSocket = socket.socket(socket.AF_INET,
                             socket.SOCK_STREAM)
 
