@@ -17,13 +17,15 @@ clientSocket.listen(5)
 # accept connection
 connection, adressRPI = clientSocket.accept()
 
+cv2.namedWindow('Image')
+
 while True:
     # receive data in bytes
-    receivedData = connection.recv(4096)
+    receivedData = connection.recv(65507)
 
     array = np.frombuffer(receivedData, 
                             dtype =  np.dtype('uint8'))
-    img = cv2.imdecode()
+    img = cv2.imdecode(array, 1)
 
     cv2.imshow('Image', img)
 
