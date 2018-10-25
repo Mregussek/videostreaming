@@ -4,8 +4,6 @@
 import socket
 import picamera
 import time
-import struct
-import io
 
 # get connection
 serverSocket = socket.socket(socket.AF_INET, 
@@ -19,42 +17,17 @@ connection = serverSocket.makefile('wb')
 
 camera = picamera.PiCamera()
 
-# camera configuration
-camera.resolution = (640, 480)
-camera.framerate = 10
+try:
+    with picamera.PiCamera() as camera:
+        camera.resolution = (640, 480)
+        camera.framerate = 10
+        
+        #camera.start_preview()
+        #time.sleep(2)
 
-# timing for stream
-time.sleep(1)
-start = time.time()
-
-# create object for getting bytes in stream
-stream = io.BytesIO()
-
-count = 0
-
-for nothing in camera.capture_continuous(stream, 'jpeg',
-                            use_video_port = True):
-    currentPosition = stream.tell()
-    
-    # return written bytes of stream
-    connection.write( struct.pack('<L', currentPosition))
-    
-    # flush write buffers
-    connection.flush()
-
-    # change stream position to beginining
-    stream.seek(0)
-    connection.write( stream.read() )
-    count += 1
-
-    if time.time() - start > 30:
-        break
-
-    # clear buffer and begin again
-    stream.seek(0)
-    stream.truncate()
-
-connection.write( struct.pack('<L', 0) )
-
-connection.close()
-serverSocket.close()
+        camera.start_recording(connection, format='h264')
+        camera.wait_recording(60)
+        camera.stop_recording()
+finally:
+    connection.close()
+    serverSocket.close()
