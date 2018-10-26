@@ -1,34 +1,47 @@
+# Video Streaming with Picamera
+# made by Mateusz Rzeczyca
+# This file run on your machine
+
 import socket
 import cv2
-import numpy as np
-import sys 
-import time
+import struct
+import io
 
-address = ('192.168.137.1', 3305)
 clientSocket = socket.socket(socket.AF_INET,
-                            socket.SOCK_STREAM)
+                            socket.SOCK_DGRAM)
 
-# start server
+# run server
+address = ('192.168.137.1', 3305)
 clientSocket.bind(address)
 
-# listen for 2 devices
+# listen and accept first connection
 clientSocket.listen(5)
+connection = clientSocket.accept()[0].makefile('rb')
 
-# accept connection
-connection, adressRPI = clientSocket.accept()
+cv2.namedWindow('VideoStream')
 
-cv2.namedWindow('Image')
+while 1:
+    # get length from the image
+    # it gets unsigned long 
+    imgLength = struct.unpack('<L', 
+        connection.read( struct.calcsize('<L') ))[0]
 
-while True:
-    # receive data in bytes
-    receivedData = connection.recv(65507)
+    # when there is no image, quit the loop
+    if not imgLength:
+        break
 
-    array = np.frombuffer(receivedData, 
-                            dtype =  np.dtype('uint8'))
-    img = cv2.imdecode(array, 1)
+    # stream, which will hold data for every frame    
+    imgStream = io.BytesIO()
+    # and read data from connection
+    imgStream.write( connection.read(imgLength) )
 
-    cv2.imshow('Image', img)
+    # set stream to start position
+    imgStream.seek(0)
 
-    time.sleep(1)
+    # decode video from bytes
+    img = cv2.imdecode('img.jpg', imgStream)
+
+    # show the image
+    cv2.imshow(img)
 
 clientSocket.close()
