@@ -3,19 +3,19 @@
 # This file run on your machine
 
 import socket
-import cv2
 import struct
 import io
+import cv2
+import numpy 
 
-clientSocket = socket.socket(socket.AF_INET,
-                            socket.SOCK_DGRAM)
+clientSocket = socket.socket()
 
 # run server
 address = ('192.168.137.1', 3305)
 clientSocket.bind(address)
 
 # listen and accept first connection
-clientSocket.listen(5)
+clientSocket.listen(0)
 connection = clientSocket.accept()[0].makefile('rb')
 
 cv2.namedWindow('VideoStream')
@@ -35,13 +35,15 @@ while 1:
     # and read data from connection
     imgStream.write( connection.read(imgLength) )
 
-    # set stream to start position
+    # set buffer to the beginning
     imgStream.seek(0)
 
-    # decode video from bytes
-    img = cv2.imdecode('img.jpg', imgStream)
+    imgBytes = numpy.asarray( bytearray(imgStream.read() ),
+                                            dtype = numpy.uint8)
 
-    # show the image
-    cv2.imshow(img)
+    img = cv2.imdecode(imgBytes, cv2.IMREAD_COLOR)
+
+    cv2.imshow('VideoStream', img)
+
 
 clientSocket.close()

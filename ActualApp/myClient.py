@@ -8,7 +8,6 @@ import time
 import io
 import struct
 
-# get connection
 serverSocket = socket.socket(socket.AF_INET, 
                         socket.SOCK_STREAM)
 address = ("192.168.137.1", 3305)
@@ -18,12 +17,10 @@ connection = serverSocket.makefile('wb')
 
 try:
     with picamera.PiCamera() as camera:
-        # camera configuration
         camera.resolution = (640, 480)
         camera.framerate = 30
 
-        # warm-up for camera
-        time.sleep(2)
+        time.sleep(1)
         start = time.time()
 
         count = 0
@@ -49,6 +46,3 @@ finally:
     connection.close()
     serverSocket.close()
     finish = time.time()
-    
-print('Sent %d images in %d seconds at %.2ffps' % (
-    count, finish-start, count / (finish-start)))
