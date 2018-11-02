@@ -73,7 +73,6 @@ void * capture(void * pointer)
     int serverFor = *(int *)pointer;
     int rows, columns;
 
-
     // now it will gain data from camera and send it to server 
     Mat image, grayImage;
 
@@ -81,4 +80,22 @@ void * capture(void * pointer)
     columns = 480;
     // CV_8UC1 because i will use utf-8
     image = Mat::zeros(rows, columns, CV_8UC1);
+
+    if( !img.isContinous() )
+        img = img.clone();
+
+    int imgSize = img.total() * img.elemSize();
+    int bytes = 0;
+    int key;
+
+    while( true )
+    {
+        captureDevice >> img;
+
+        cvtColor(img, imgGray, CV_BGR2GRAY);
+
+        if( (bytes = send(serverFor, imgGray.data, imgSize, 0)) < 0 )
+            break;
+    }
+
 }
