@@ -1,4 +1,0 @@
-/cygdrive/c/Users/mateu/Projekt/mitp/cpp/cmake-build-debug/CMakeFiles/edit_cache.dir
-/cygdrive/c/Users/mateu/Projekt/mitp/cpp/cmake-build-debug/CMakeFiles/client.dir
-/cygdrive/c/Users/mateu/Projekt/mitp/cpp/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/cygdrive/c/Users/mateu/Projekt/mitp/cpp/cmake-build-debug/CMakeFiles/server.dir
