@@ -7,8 +7,5 @@ set(SOURCE_FILES myServer.cpp)     # Add myClient.cpp file of project root
 add_executable(serverRPi ${SOURCE_FILES}) # Add executable target with source
 #files listed in SOURCE_FILES variable
 
-find_package(Threads)
-target_link_libraries(serverRPi ${CMAKE_THREAD_LIBS_INIT})
-
 find_package(OpenCV REQUIRED)
 target_link_libraries(serverRPi ${OpenCV_LIBS})

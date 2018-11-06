@@ -2,7 +2,6 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <unistd.h>
-#include <netdb.h>
 
 void run();
 
@@ -16,12 +15,8 @@ int main()
 void run()
 {
     int mainSocket, connectSocket, serverPort;
+    std::string serverIP = "192.168.139.70";
     struct sockaddr_in serverAddress;
-    struct hostent getHostName;
-    char hostName = "pi@raspberrypi";
-
-    // may work :D
-    getHostName = gethostbyname(hostName);
 
     // change to SOCK_DGRAM for UDP
     mainSocket = socket(AF_INET, SOCK_STREAM, 0);
@@ -31,7 +26,7 @@ void run()
 
     serverPort = 3305;
     serverAddress.sin_family = AF_INET;
-    serverAddress.sin_addr.s_addr = inet_addr(getHostName);
+    serverAddress.sin_addr.s_addr = inet_addr( serverIP.c_str() );
     serverAddress.sin_port = htons( (uint16_t) serverPort);
 
     connectSocket = connect(mainSocket, (struct sockaddr *) &serverAddress,
@@ -46,7 +41,7 @@ void run()
     cv::namedWindow("VideoStream", 1);
 
     cv::Mat image;
-    uchar* iptr = image.data();
+    uchar* iptr = image.data;
     int rows;
     int columns;
 
