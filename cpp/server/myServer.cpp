@@ -52,6 +52,7 @@ void run()
 
     size_t imageSize = image.total() * image.elemSize();
     ssize_t bytes = 0;
+    iptr = image.data;
 
     if(!image.isContinuous())
         image = image.clone();
