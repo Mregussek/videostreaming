@@ -19,7 +19,6 @@ void run()
 {
     int sockSystemCall, acceptSystemCall,
                 bindSystemCall, portNumber;
-    char buffer[256];
     pthread_t thread_id;
     struct sockaddr_in serverAddress, clientAddress;
     int clientAddSize;

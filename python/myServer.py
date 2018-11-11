@@ -11,7 +11,7 @@ import numpy
 clientSocket = socket.socket()
 
 # run server
-address = ('192.168.137.1', 3305)
+address = ('192.168.201.74', 3305)
 clientSocket.bind(address)
 
 # listen and accept first connection
@@ -23,8 +23,7 @@ cv2.namedWindow('VideoStream')
 while 1:
     # get length from the image
     # it gets unsigned long 
-    imgLength = struct.unpack('<L', 
-        connection.read( struct.calcsize('<L') ))[0]
+    imgLength = struct.unpack('<L', connection.read( struct.calcsize('<L') ))[0]
 
     # when there is no image, quit the loop
     if not imgLength:
@@ -33,13 +32,12 @@ while 1:
     # stream, which will hold data for every frame    
     imgStream = io.BytesIO()
     # and read data from connection
-    imgStream.write( connection.read(imgLength) )
+    imgStream.write(connection.read(imgLength))
 
     # set buffer to the beginning
     imgStream.seek(0)
 
-    imgBytes = numpy.asarray( bytearray(imgStream.read() ),
-                                            dtype = numpy.uint8)
+    imgBytes = numpy.asarray(bytearray(imgStream.read()), dtype=numpy.uint8)
 
     img = cv2.imdecode(imgBytes, cv2.IMREAD_COLOR)
 

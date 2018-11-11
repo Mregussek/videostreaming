@@ -10,7 +10,7 @@ import struct
 
 serverSocket = socket.socket(socket.AF_INET, 
                         socket.SOCK_STREAM)
-address = ("192.168.137.1", 3305)
+address = ("192.168.201.74", 3305)
 serverSocket.connect(address)
 
 connection = serverSocket.makefile('wb')
