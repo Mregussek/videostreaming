@@ -8,4 +8,10 @@ Python Explanation:
 
 Bash Explanation:
 
+Observations:
+Since I used only Python for streaming data, I have seen that this app
+sometimes losses data. For checking this up I have written scripts in bash.
+My charger has low voltage to make RPi run correctly. Also the delay was
+between 5 - 8 seconds. 
+
 Made by Mateusz Rzeczyca.

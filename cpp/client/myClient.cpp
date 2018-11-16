@@ -35,8 +35,7 @@ void run()
     // sin_addr.s_addr contains ip address
     serverAddress.sin_addr.s_addr = INADDR_ANY;
     // sin_port contains port number
-    // maybe htons !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    serverAddress.sin_port = htons(portNumber);
+    serverAddress.sin_port = htons((uint16_t )portNumber);
 
     // bind the server and check if it runs
     bindSystemCall = bind(sockSystemCall, (struct sockaddr *) &serverAddress,

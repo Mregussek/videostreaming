@@ -18,7 +18,10 @@ clientSocket.bind(address)
 clientSocket.listen(0)
 connection = clientSocket.accept()[0].makefile('rb')
 
-cv2.namedWindow('VideoStream')
+columns = 640
+rows = 480
+
+cv2.namedWindow('VideoStream', cv2.WINDOW_NORMAL)
 
 while 1:
     # get length from the image
@@ -39,7 +42,7 @@ while 1:
 
     imgBytes = numpy.asarray(bytearray(imgStream.read()), dtype=numpy.uint8)
 
-    img = cv2.imdecode(imgBytes, cv2.IMREAD_COLOR)
+    img = cv2.imdecode(imgBytes, cv2.COLOR_BGR2GRAY)
 
     cv2.imshow('VideoStream', img)
 
