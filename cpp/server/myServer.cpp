@@ -62,7 +62,7 @@ void run()
         bytes = recv(mainSocket, iptr, imageSize, MSG_WAITALL);
 
         if(bytes == -1)
-                exit(0);
+                break;
 
         cv::imshow("cv", image);
     }
