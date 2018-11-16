@@ -1,0 +1,3 @@
+/home/mateusz/Project/mitp/cpp/client/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/mateusz/Project/mitp/cpp/client/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/mateusz/Project/mitp/cpp/client/cmake-build-debug/CMakeFiles/clientRPi.dir
