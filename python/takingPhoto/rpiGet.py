@@ -4,6 +4,10 @@
 import socket
 import cv2
 
+CHUNK_SIZE = 8 * 1024
+null = '0'
+nullEncoded = null.encode()
+
 # creating an object
 mySocket = socket.socket()
 
@@ -14,9 +18,9 @@ helper = ""
 
 while True:
     # receive data in bytes
-    receivedData = connection.recv(8 * 1024)
+    receivedData = mySocket.recv(CHUNK_SIZE)
 
-    if receivedData > 0
+    if receivedData > nullEncoded:
         helper = receivedData
         break
 

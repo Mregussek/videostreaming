@@ -2,6 +2,7 @@
 # Made by Mateusz Rzeczyca
 
 import socket
+import cv2
 
 CHUNK_SIZE = 8 * 1024
 
@@ -13,9 +14,8 @@ mySocket.bind(address)
 mySocket.listen(1)
 connection = mySocket.accept()
 
-file = open('rpiPhoto,jpg')
-data = file.read(CHUNK_SIZE)
-encodedData = data.encode()
+file = cv2.imread('rpiPhoto.jpg', 0)
+encodedData = cv2.imencode('jpg', file)
 mySocket.send(encodedData)
 
 mySocket.close()
