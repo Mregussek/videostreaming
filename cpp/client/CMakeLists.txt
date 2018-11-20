@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.6)
 project(clientRPi)
 
 # Enable c++11 standard
-set(CMAKE_CXX_STANDARD 11)
+#set(CMAKE_CXX_STANDARD 11)
 
 # Add myClient.cpp file of project root directory as source file
 set(SOURCE_FILES myClient.cpp)
@@ -23,7 +23,7 @@ target_link_libraries(clientRPi ${OpenCV_LIBS})
 
 # for cross compilation
 
-SET(CMAKE_TOOLCHAIN_FILE ~/Development/pi.cmake)
+SET(CMAKE_TOOLCHAIN_FILE ~/RPi/opencv/platforms/linux/arm-gnueabi.toolchain.cmake)
 
 # some issues with code below ...
 # specify system version
