@@ -7,7 +7,7 @@ from time import sleep
 import socket
 
 serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-address = ("0.0.0.0", 3305)
+address = ("10.42.0.30", 7123)
 
 serverSocket.bind(address)
 serverSocket.listen(0)

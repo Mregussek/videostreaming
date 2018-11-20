@@ -9,7 +9,7 @@ import numpy as np
 clientSocket = socket.socket()
 
 # run server
-address = ('0.0.0.0', 3305)
+address = ('10.42.0.30', 7123)
 connection = clientSocket.connect(address)
 
 columns = 640
@@ -19,7 +19,7 @@ resolution = (columns, rows)
 cv2.namedWindow('VideoStream')
 
 while 1:
-    data, server = connection.recvfrom(65507)
+    data = clientSocket.recv(65507)
 
     print("Data length: {}".format(len(data)))
     if len(data) == 4:

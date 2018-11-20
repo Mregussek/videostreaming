@@ -16,4 +16,4 @@ cam.resolution = resolution
 cam.start_preview()
 sleep(2)
 
-camera.capture('rpiPhoto.jpg')
+cam.capture('rpiPhoto.jpg')
