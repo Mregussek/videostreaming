@@ -12,6 +12,7 @@
 network::network()
 : network(3305, "127.0.0.1", "tcp")
 {
+    addressSize = std::make_unique<socklen_t>( sizeof(sockaddr_in) );
 
 }
 

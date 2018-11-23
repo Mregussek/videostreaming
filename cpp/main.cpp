@@ -3,7 +3,7 @@
 //
 
 #include <iostream>
-#include "network.h"
+#include "src/network.h"
 
 void menu();
 void streaming();
@@ -64,7 +64,7 @@ void watching()
             std::make_unique<network>(7123, "10.42.0.30", "tcp");
 
     watchVideo ->createSocket();
-    watchVideo ->connectServer();
+    watchVideo ->connectServer( watchVideo ->serverAddress );
 
     // now we should be allowed to see stream
 

@@ -36,10 +36,13 @@ public:
     network(uint16_t, std::string, std::string);
 
     void createSocket();
+    // use clientAddress
     int acceptCall(std::shared_ptr<sockaddr_in>&);
+    // for those use serverAddress
     int bindServer(std::shared_ptr<sockaddr_in>&);
     int connectServer(std::shared_ptr<sockaddr_in>&);
     void listenForConnection();
+    // this int means the amount of devices
     void listenForConnection(int);
     void closeConnection();
 
