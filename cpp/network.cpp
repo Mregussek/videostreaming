@@ -1,5 +1,7 @@
 //
-// Created by mateusz on 22.11.18.
+// Created by Mateusz Rzeczyca.
+// Library for networking made with socket.h and inet.h
+// Tested only with Raspberry Pi to stream video using TCP and UDP protocols
 //
 
 #include <sys/socket.h>
@@ -8,15 +10,16 @@
 #include "network.h"
 
 network::network()
-: portNumber( std::make_unique<uint16_t>(3305) ),
-        addressSize( std::make_unique<socklen_t>( sizeof(sockaddr_in) ) )
+: network(3305, "127.0.0.1", "tcp")
 {
 
 }
 
-network::network(uint16_t port)
+network::network(uint16_t port, std::string ipAddress, std::string protocol)
 : portNumber( std::make_unique<uint16_t >(port) ),
-        addressSize( std::make_unique<socklen_t>( sizeof(sockaddr_in) ) )
+    ipAddress( std::make_unique<std::string>(ipAddress) ),
+        protocolType( std::make_unique<std::string>(protocol) ),
+                addressSize( std::make_unique<socklen_t>( sizeof(sockaddr_in) ) )
 {
 
 }
@@ -29,9 +32,9 @@ void network::initializeSockaddr(std::shared_ptr<sockaddr_in> sockaddr, std::str
 }
 
 
-void network::createSocket(std::string protocolType)
+void network::createSocket()
 {
-    int protocolNumber = getProtocolNumber(protocolType);
+    int protocolNumber = getProtocolNumber(*protocolType);
 
     if(protocolNumber < 0)
         throw("Badly chosen protocol!");
@@ -113,6 +116,16 @@ int network::connectServer(std::shared_ptr<sockaddr_in>& serverObject)
 void network::listenForConnection()
 {
     listen(*sockSystemCall, DEVICES);
+}
+
+void network::listenForConnection(int numberOfDevices)
+{
+    listen(*sockSystemCall, numberOfDevices);
+}
+
+void network::closeConnection()
+{
+    shutdown(*sockSystemCall, SHUT_RDWR);
 }
 
 
