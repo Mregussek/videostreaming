@@ -39,6 +39,8 @@ void menu()
         case 2:
             streaming();
             break;
+        case 3:
+            exit(0);
         default:
             goto begin;
     }
