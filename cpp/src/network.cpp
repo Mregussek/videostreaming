@@ -58,7 +58,7 @@ void network::createSocket()
         throw("Cannot create socket object");
 }
 
-int network::getProtocolNumber(std::string& protocolType)
+int network::getProtocolNumber(std::string& protocolType) const
 {
     if(protocolType == "tcp")
         return 1;
@@ -114,19 +114,37 @@ int network::connectServer(std::shared_ptr<sockaddr_in>& serverObject)
         throw("Cannot connect to server!");
 }
 
-void network::listenForConnection()
+void network::listenForConnection() const
 {
     listen(*sockSystemCall, DEVICES);
 }
 
-void network::listenForConnection(int numberOfDevices)
+void network::listenForConnection(int numberOfDevices) const
 {
     listen(*sockSystemCall, numberOfDevices);
 }
 
-void network::closeConnection()
+void network::closeConnection() const
 {
     shutdown(*sockSystemCall, SHUT_RDWR);
+}
+
+void network::sendData(unsigned char* data, size_t size)
+{
+    sentData =
+            std::make_unique<int>( send(*sockSystemCall, data, size, 0) );
+
+    if(*sentData < 0)
+        throw("Cannot send data!");
+}
+
+void network::receiveData(unsigned char* socketData, size_t size)
+{
+    receivedData =
+            std::make_shared<ssize_t>( recv(*sockSystemCall, socketData, size, 0) );
+
+    if(*receivedData < 0)
+        throw("Cannot receive data!");
 }
 
 

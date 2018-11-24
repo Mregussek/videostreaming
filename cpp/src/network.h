@@ -22,6 +22,7 @@ private:
     std::unique_ptr<int> acceptSystemCall;
     std::unique_ptr<int> bindSystemCall;
     std::unique_ptr<int> connectSystemCall;
+    std::unique_ptr<int> sentData;
     std::unique_ptr<std::string> protocolType;
     std::unique_ptr<uint16_t > portNumber;
 public:
@@ -30,8 +31,10 @@ public:
 private:
     std::unique_ptr<socklen_t> addressSize;
     std::unique_ptr<std::string> ipAddress;
-
 public:
+    std::shared_ptr<ssize_t> receivedData;
+
+
     network();
     network(uint16_t, std::string, std::string);
 
@@ -41,14 +44,16 @@ public:
     // for those use serverAddress
     int bindServer(std::shared_ptr<sockaddr_in>&);
     int connectServer(std::shared_ptr<sockaddr_in>&);
-    void listenForConnection();
+    void listenForConnection() const;
     // this int means the amount of devices
-    void listenForConnection(int);
-    void closeConnection();
+    void listenForConnection(int) const;
+    void closeConnection() const;
+    void sendData(unsigned char*, size_t);
+    void receiveData(unsigned char*, size_t);
 
 private:
     void initializeSockaddr(std::shared_ptr<struct sockaddr_in>, std::string);
-    int getProtocolNumber(std::string&);
+    int getProtocolNumber(std::string&) const;
 };
 
 
