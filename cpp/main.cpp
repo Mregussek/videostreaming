@@ -24,7 +24,7 @@ void menu()
 
     std::cout << "1. Watch" << std::endl;
     std::cout << "2. Stream" << std::endl;
-    std::cout << "3. Exit";
+    std::cout << "3. Exit" << std::endl;
     std::cout << "Please type correct number!" << std::endl;
     std::cout << "Choice:";
 
@@ -49,7 +49,7 @@ void menu()
 void streaming()
 {
     std::unique_ptr<network> streamVideo =
-            std::make_unique<network>(7123, "10.42.0.30", "tcp");
+            std::make_unique<network>(7123, "127.0.0.1", "tcp");
 
     streamVideo ->createSocket();
     streamVideo ->bindServer( streamVideo ->serverAddress );
@@ -75,7 +75,7 @@ void streaming()
 void watching()
 {
     std::unique_ptr<network> watchVideo =
-            std::make_unique<network>(7123, "10.42.0.30", "tcp");
+            std::make_unique<network>(7123, "127.0.0.1", "tcp");
 
     watchVideo ->createSocket();
     watchVideo ->connectServer( watchVideo ->serverAddress );
@@ -87,7 +87,7 @@ void watching()
 
     while(true)
     {
-        std::shared_ptr<cv::Mat> image = stream ->getImageToReceive();
+        cv::Mat image = stream ->getImageToReceive();
 
         size_t imageSize = stream ->getImageSize( image );
         unsigned char socketData[imageSize];
@@ -101,7 +101,7 @@ void watching()
         {
             for(int j = 0; j < COLUMNS; j++)
             {
-                image ->at<cv::Vec3b>(i, j) =
+                image.at<cv::Vec3b>(i, j) =
                         cv::Vec3b(socketData[pointer + 0], socketData[pointer + 1], socketData[pointer + 2]);
 
                 pointer += 3;
@@ -109,7 +109,7 @@ void watching()
         }
 
         cv::namedWindow("VideoStream", cv::WINDOW_AUTOSIZE);
-        cv::imshow("Server", *image);
+        cv::imshow("Server", image);
 
         char key = static_cast<char>( cv::waitKey(30) );
         if(key == 27)
