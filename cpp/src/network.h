@@ -36,7 +36,7 @@ public:
 
 
     network();
-    network(uint16_t&, std::string&, std::string&);
+    network(uint16_t, std::string, std::string);
 
     void createSocket();
     // use clientAddress

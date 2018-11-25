@@ -60,14 +60,13 @@ void streaming()
 
     std::unique_ptr<camera> sendVideo =
             std::make_unique<camera>();
-    std::shared_ptr<cv::Mat> image =
-            std::make_shared<cv::Mat>();
+    cv::Mat image;
 
     sendVideo ->getImage(image);
     sendVideo ->cropImage(image);
 
     size_t imageSize = sendVideo ->getImageSize(image);
-    streamVideo ->sendData(image ->data, imageSize);
+    streamVideo ->sendData(image.data, imageSize);
 
     streamVideo ->closeConnection();
 }
@@ -92,7 +91,7 @@ void watching()
         size_t imageSize = stream ->getImageSize( image );
         unsigned char socketData[imageSize];
 
-        for(int i = 0; i < imageSize; i += *watchVideo ->receivedData)
+        for(int i = 0; i < imageSize; i += watchVideo ->receivedData)
             watchVideo ->receiveData(socketData + i, imageSize - i);
 
         int pointer = 0;

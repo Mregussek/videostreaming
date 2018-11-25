@@ -10,17 +10,17 @@
 #include "networkPointers.h"
 
 networkPointers::networkPointers()
-        : networkPointers(3305, "127.0.0.1", "tcp")
+: networkPointers(3305, "127.0.0.1", "tcp")
 {
     addressSize = std::make_unique<socklen_t>( sizeof(sockaddr_in) );
 
 }
 
 networkPointers::networkPointers(uint16_t port, std::string ipAddress, std::string protocol)
-        : portNumber( std::make_unique<uint16_t >(port) ),
-          ipAddress( std::make_unique<std::string>(ipAddress) ),
-          protocolType( std::make_unique<std::string>(protocol) ),
-          addressSize( std::make_unique<socklen_t>( sizeof(sockaddr_in) ) )
+: portNumber( std::make_unique<uint16_t >(port) ),
+    ipAddress( std::make_unique<std::string>(ipAddress) ),
+        protocolType( std::make_unique<std::string>(protocol) ),
+            addressSize( std::make_unique<socklen_t>( sizeof(sockaddr_in) ) )
 {
 
 }
@@ -68,7 +68,8 @@ int networkPointers::getProtocolNumber(std::string& protocolType) const
         return -1;
 }
 
-int networkPointers::acceptCall(std::shared_ptr<sockaddr_in>& clientObject)
+
+int networkPointers::acceptCall(std::unique_ptr<sockaddr_in>& clientObject)
 {
     auto address =
             reinterpret_cast<sockaddr*>( clientObject.get() );

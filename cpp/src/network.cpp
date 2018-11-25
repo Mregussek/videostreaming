@@ -18,7 +18,7 @@ network::network()
 
 }
 
-network::network(uint16_t& port, std::string& ipAddress, std::string& protocol)
+network::network(uint16_t port, std::string ipAddress, std::string protocol)
 : portNumber( port ),
     ipAddress( ipAddress ),
         protocolType( protocol ),
@@ -72,8 +72,8 @@ int network::getProtocolNumber(std::string& protocolType) const
 
 int network::acceptCall(sockaddr_in& clientObject)
 {
-    auto address = (sockaddr*) clientObject;
-    auto size = this ->addressSize;
+    auto address = (sockaddr*) &clientObject;
+    auto size = &(this ->addressSize);
 
     this ->acceptSystemCall =
             accept(this ->sockSystemCall, address, size);
@@ -86,13 +86,12 @@ int network::acceptCall(sockaddr_in& clientObject)
 
 int network::bindServer(sockaddr_in& serverObject)
 {
-    auto address =
-            reinterpret_cast<sockaddr*>( serverObject );
+    auto serverPointer = (sockaddr*) &serverObject;
 
     this ->bindSystemCall =
-            bind(this ->sockSystemCall, address , addressSize);
+            bind(this ->sockSystemCall, serverPointer , addressSize);
 
-    delete address;
+    delete serverPointer;
 
     if(bindSystemCall < 0)
         throw("Cannot bind the server!");
@@ -101,13 +100,12 @@ int network::bindServer(sockaddr_in& serverObject)
 
 int network::connectServer(sockaddr_in& serverObject)
 {
-    auto address =
-            reinterpret_cast<sockaddr*>( serverObject );
+    auto serverPointer = (sockaddr*) &serverObject;
 
     this ->connectSystemCall =
-            connect(this ->sockSystemCall, address, addressSize);
+            connect(this ->sockSystemCall, serverPointer, addressSize);
 
-    delete address;
+    delete serverPointer;
 
     if(connectSystemCall < 0)
         throw("Cannot connect to server!");
@@ -125,7 +123,7 @@ void network::listenForConnection(int numberOfDevices) const
 
 void network::closeConnection() const
 {
-    shutdown(*sockSystemCall, SHUT_RDWR);
+    shutdown(sockSystemCall, SHUT_RDWR);
 }
 
 void network::sendData(unsigned char* data, size_t size)
