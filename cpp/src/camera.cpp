@@ -13,17 +13,26 @@ camera::camera()
 
 }
 
-void camera::getImage(cv::Mat& image)
+cv::Mat camera::captureImage()
+{
+    cv::Mat capture;
+    this ->cameraObject >> capture;
+
+    return capture;
+}
+
+void camera::checkImage(cv::Mat &image)
 {
     bool isThereImage = this ->cameraObject.read(image);
 
     if(!isThereImage)
-        throw("Cannot get data from camera!");
+        //throw("Cannot get data from camera!")
+        exit(0);
 }
 
 void camera::cropImage(cv::Mat& imageToCrop)
 {
-    cv::resize(imageToCrop, this ->croppedImage, cv::Size(COLUMNS, ROWS) );
+    imageToCrop = imageToCrop.reshape(0, 1);
 }
 
 size_t camera::getImageSize(cv::Mat& image) const

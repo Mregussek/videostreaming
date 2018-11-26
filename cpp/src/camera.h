@@ -22,7 +22,8 @@ private:
 
 
 public:
-    void getImage(cv::Mat&);
+    cv::Mat captureImage();
+    void checkImage(cv::Mat &);
     void cropImage(cv::Mat&);
     size_t getImageSize(cv::Mat&) const;
     cv::Mat getImageToReceive() const;

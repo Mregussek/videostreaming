@@ -10,6 +10,7 @@
 #ifndef VIDEOSTREAM_NETWORK_H
 #define VIDEOSTREAM_NETWORK_H
 
+#include <opencv2/opencv.hpp>
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <memory>
@@ -30,12 +31,13 @@ public:
     sockaddr_in clientAddress;
 private:
     socklen_t addressSize;
-    std::string ipAddress;
 public:
+    std::string ipAddress;
     ssize_t receivedData;
 
 
     network();
+    // change this std::move in the case of issue in initializer list
     network(uint16_t, std::string, std::string);
 
     void createSocket();
@@ -48,11 +50,10 @@ public:
     // this int means the amount of devices
     void listenForConnection(int) const;
     void closeConnection() const;
-    void sendData(unsigned char*, size_t);
+    void sendData(cv::Mat&, size_t);
     void receiveData(unsigned char*, size_t);
-
-private:
     void initializeSockaddr(sockaddr_in&, std::string&);
+private:
     int getProtocolNumber(std::string&) const;
 };
 

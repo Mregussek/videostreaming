@@ -1,32 +1,40 @@
-# Video Streaming with Picamera
-# made by Mateusz Rzeczyca
-# This file run on your machine
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
-import socket
 import cv2
+import socket
+import base64
 import numpy as np
 
-clientSocket = socket.socket()
+IP_SERVER = "10.42.0.30"
+PORT_SERVER = 3305
+TIMEOUT_SOCKET = 10
+SIZE_PACKAGE = 4096
 
-# run server
-address = ('10.42.0.30', 7123)
-connection = clientSocket.connect(address)
+IMAGE_HEIGHT = 480
+IMAGE_WIDTH = 640
+COLOR_PIXEL = 3  # RGB
 
-columns = 640
-rows = 480
-resolution = (columns, rows)
+connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+connection.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+connection.settimeout(TIMEOUT_SOCKET)
+connection.connect((IP_SERVER, PORT_SERVER))
 
-cv2.namedWindow('VideoStream')
+while True:
+    try:
+        fileDescriptor = connection.makefile('rb')
+        result = fileDescriptor.readline()
+        fileDescriptor.close()
+        result = base64.b64decode(result)
 
-while 1:
-    data = clientSocket.recv(65507)
+        frame = np.fromstring(result, dtype=np.uint8)
+        frame_matrix = np.array(frame)
+        frame_matrix = np.reshape(frame_matrix, (IMAGE_HEIGHT, IMAGE_WIDTH, COLOR_PIXEL))
+        cv2.imshow('Window title', frame_matrix)
 
-    print("Data length: {}".format(len(data)))
-    if len(data) == 4:
-        break
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+    except:
+        print("[Error]")
 
-    array = np.frombuffer(data, dtype=np.dtype('uint8'))
-    image = cv2.imdecode(array, 1)
-    cv2.imshow("Image", image)
-
-clientSocket.close()
+connection.close()

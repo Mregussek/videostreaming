@@ -4,6 +4,7 @@
 // Tested only with Raspberry Pi to stream video using TCP and UDP protocols
 //
 
+#include <opencv2/opencv.hpp>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <memory>
@@ -20,8 +21,8 @@ network::network()
 
 network::network(uint16_t port, std::string ipAddress, std::string protocol)
 : portNumber( port ),
-    ipAddress( ipAddress ),
-        protocolType( protocol ),
+    ipAddress( std::move(ipAddress) ),
+        protocolType( std::move(protocol) ),
                 addressSize( sizeof(sockaddr_in) )
 {
 
@@ -40,24 +41,24 @@ void network::createSocket()
     int protocolNumber = getProtocolNumber(protocolType);
 
     if(protocolNumber < 0)
-        throw("Badly chosen protocol!");
+        //throw("Badly chosen protocol!");
+        exit(0);
 
     switch(protocolNumber)
     {
         case 1:
-            this ->sockSystemCall =
-                    socket(AF_INET, SOCK_STREAM, 0);
+            this ->sockSystemCall = socket(AF_INET, SOCK_STREAM, 0);
             break;
         case 2:
-            this ->sockSystemCall =
-                    socket(AF_INET, SOCK_DGRAM, 0);
+            this ->sockSystemCall = socket(AF_INET, SOCK_DGRAM, 0);
             break;
         default:
             throw ("Not expected protocol type!");
     }
 
     if(sockSystemCall < 0)
-        throw("Cannot create socket object");
+        //throw("Cannot create socket object");
+        exit(0);
 }
 
 int network::getProtocolNumber(std::string& protocolType) const
@@ -75,26 +76,26 @@ int network::acceptCall(sockaddr_in& clientObject)
     auto address = (sockaddr*) &clientObject;
     auto size = &(this ->addressSize);
 
-    this ->acceptSystemCall =
-            accept(this ->sockSystemCall, address, size);
+    this ->acceptSystemCall = accept(this ->sockSystemCall, address, size);
 
-    delete address;
+    //delete address;
 
     if(acceptSystemCall < 0)
-        throw("Cannot accept connection!");
+        //throw("Cannot accept connection!");
+        exit(0);
 }
 
 int network::bindServer(sockaddr_in& serverObject)
 {
     auto serverPointer = (sockaddr*) &serverObject;
 
-    this ->bindSystemCall =
-            bind(this ->sockSystemCall, serverPointer , addressSize);
+    this ->bindSystemCall = bind(this ->sockSystemCall, serverPointer , this ->addressSize);
 
-    delete serverPointer;
+    //delete serverPointer;
 
     if(bindSystemCall < 0)
-        throw("Cannot bind the server!");
+        //throw("Cannot bind the server!");
+        exit(0);
 
 }
 
@@ -102,13 +103,13 @@ int network::connectServer(sockaddr_in& serverObject)
 {
     auto serverPointer = (sockaddr*) &serverObject;
 
-    this ->connectSystemCall =
-            connect(this ->sockSystemCall, serverPointer, addressSize);
+    this ->connectSystemCall = connect(this ->sockSystemCall, serverPointer, addressSize);
 
-    delete serverPointer;
+    //delete serverPointer;
 
     if(connectSystemCall < 0)
-        throw("Cannot connect to server!");
+        //throw("Cannot connect to server!");
+        exit(0);
 }
 
 void network::listenForConnection() const
@@ -126,13 +127,13 @@ void network::closeConnection() const
     shutdown(sockSystemCall, SHUT_RDWR);
 }
 
-void network::sendData(unsigned char* data, size_t size)
+void network::sendData(cv::Mat& image, size_t size)
 {
-    sentData =
-            send(sockSystemCall, data, size, 0);
+    sentData = send(this ->connectSystemCall, image.data, size, 0);
 
     if(sentData < 0)
-        throw("Cannot send data!");
+        //throw("Cannot send data!");
+        exit(0);
 }
 
 void network::receiveData(unsigned char* socketData, size_t size)

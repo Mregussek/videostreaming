@@ -48,41 +48,38 @@ void menu()
 
 void streaming()
 {
-    std::unique_ptr<network> streamVideo =
-            std::make_unique<network>(7123, "127.0.0.1", "tcp");
+    std::unique_ptr<network> streamVideo = std::make_unique<network>(3305, "127.0.0.1", "tcp");
 
     streamVideo ->createSocket();
+    streamVideo ->initializeSockaddr(streamVideo ->serverAddress, streamVideo ->ipAddress);
     streamVideo ->bindServer( streamVideo ->serverAddress );
     streamVideo ->listenForConnection();
     streamVideo ->acceptCall( streamVideo ->clientAddress );
 
     // now should start streaming
 
-    std::unique_ptr<camera> sendVideo =
-            std::make_unique<camera>();
+    std::unique_ptr<camera> sendVideo = std::make_unique<camera>();
     cv::Mat image;
 
-    sendVideo ->getImage(image);
+    image = sendVideo ->captureImage();
+    sendVideo->checkImage(image);
     sendVideo ->cropImage(image);
 
     size_t imageSize = sendVideo ->getImageSize(image);
-    streamVideo ->sendData(image.data, imageSize);
+    streamVideo ->sendData(image, imageSize);
 
     streamVideo ->closeConnection();
 }
 
 void watching()
 {
-    std::unique_ptr<network> watchVideo =
-            std::make_unique<network>(7123, "127.0.0.1", "tcp");
+    std::unique_ptr<network> watchVideo = std::make_unique<network>(7123, "127.0.0.1", "tcp");
 
     watchVideo ->createSocket();
+    watchVideo ->initializeSockaddr(watchVideo ->serverAddress, watchVideo ->ipAddress);
     watchVideo ->connectServer( watchVideo ->serverAddress );
 
-    // now we should be allowed to see stream
-
-    std::unique_ptr<camera> stream =
-            std::make_unique<camera>();
+    std::unique_ptr<camera> stream = std::make_unique<camera>();
 
     while(true)
     {
@@ -100,8 +97,7 @@ void watching()
         {
             for(int j = 0; j < COLUMNS; j++)
             {
-                image.at<cv::Vec3b>(i, j) =
-                        cv::Vec3b(socketData[pointer + 0], socketData[pointer + 1], socketData[pointer + 2]);
+                image.at<cv::Vec3b>(i, j) = cv::Vec3b(socketData[pointer + 0], socketData[pointer + 1], socketData[pointer + 2]);
 
                 pointer += 3;
             }
