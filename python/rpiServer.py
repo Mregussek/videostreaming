@@ -5,7 +5,7 @@ import socket
 import base64
 from threading import Thread
 
-SERVER_IP = "10.42.0.30"
+SERVER_IP = "127.0.0.1"
 SERVER_PORT = 3305
 MAX_NUM_CONNECTIONS = 20
 DEVICE_NUMBER = 0
@@ -18,7 +18,7 @@ class ConnectionPool(Thread):
         self.port = port_
         self.conn = conn_
         self.device = device_
-        print ("New server socket thread started for " + self.ip + ":" + str(self.port) )
+        print("New server socket thread started for " + self.ip + ":" + str(self.port) )
 
     def run(self):
         try:

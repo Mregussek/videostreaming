@@ -60,20 +60,28 @@ void streaming()
 
     std::unique_ptr<camera> sendVideo = std::make_unique<camera>();
     cv::Mat image;
+    bool checkImage;
 
-    image = sendVideo ->captureImage();
-    sendVideo->checkImage(image);
-    sendVideo ->cropImage(image);
+    while(true)
+    {
+        image = sendVideo ->captureImage();
+        checkImage = sendVideo->checkImage(image);
 
-    size_t imageSize = sendVideo ->getImageSize(image);
-    streamVideo ->sendData(image, imageSize);
+        if(!checkImage)
+            break;
+
+        sendVideo ->cropImage(image);
+
+        size_t imageSize = sendVideo ->getImageSize(image);
+        streamVideo ->sendData(image, imageSize);
+    }
 
     streamVideo ->closeConnection();
 }
 
 void watching()
 {
-    std::unique_ptr<network> watchVideo = std::make_unique<network>(7123, "127.0.0.1", "tcp");
+    std::unique_ptr<network> watchVideo = std::make_unique<network>(3305, "127.0.0.1", "tcp");
 
     watchVideo ->createSocket();
     watchVideo ->initializeSockaddr(watchVideo ->serverAddress, watchVideo ->ipAddress);

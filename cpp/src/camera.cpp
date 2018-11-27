@@ -21,13 +21,11 @@ cv::Mat camera::captureImage()
     return capture;
 }
 
-void camera::checkImage(cv::Mat &image)
+bool camera::checkImage(cv::Mat &image)
 {
     bool isThereImage = this ->cameraObject.read(image);
 
-    if(!isThereImage)
-        //throw("Cannot get data from camera!")
-        exit(0);
+    return isThereImage;
 }
 
 void camera::cropImage(cv::Mat& imageToCrop)
