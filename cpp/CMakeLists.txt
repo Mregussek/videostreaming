@@ -14,7 +14,7 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(SOURCE_FILES src/network.cpp src/network.h main.cpp src/camera.cpp src/camera.h)# src/networkPointers.cpp src/networkPointers.h src/cameraPointers.cpp src/cameraPointers.h)
+set(SOURCE_FILES src/network.cpp src/network.h main.cpp src/camera.cpp src/camera.h src/file.cpp src/file.h src/main.h src/operation.cpp src/base64.cpp src/base64.h)# src/networkPointers.cpp src/networkPointers.h src/cameraPointers.cpp src/cameraPointers.h)
 add_executable(videoStream ${SOURCE_FILES})
 
 target_link_libraries(videoStream ${OpenCV_LIBS})

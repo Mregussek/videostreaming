@@ -1,10 +1,8 @@
 //
 // Created by Mateusz Rzeczyca.
-// Library for networking made with socket.h and inet.h
-// Tested only with Raspberry Pi to stream video using TCP and UDP protocols
+// Library for networking
 //
 
-#include <opencv2/opencv.hpp>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <memory>
@@ -53,7 +51,8 @@ void network::createSocket()
             this ->sockSystemCall = socket(AF_INET, SOCK_DGRAM, 0);
             break;
         default:
-            throw ("Not expected protocol type!");
+            //throw ("Not expected protocol type!");
+            exit(0);
     }
 
     if(sockSystemCall < 0)
@@ -76,6 +75,7 @@ int network::acceptCall(sockaddr_in& clientObject)
     auto address = (sockaddr*) &clientObject;
     auto size = &(this ->addressSize);
 
+    // accept(int, struct sockaddr *, socklen_t *)
     this ->acceptSystemCall = accept(this ->sockSystemCall, address, size);
 
     //delete address;
@@ -89,6 +89,7 @@ int network::bindServer(sockaddr_in& serverObject)
 {
     auto serverPointer = (sockaddr*) &serverObject;
 
+    // bind(int, struct sockaddr *, socklen_t)
     this ->bindSystemCall = bind(this ->sockSystemCall, serverPointer , this ->addressSize);
 
     //delete serverPointer;
@@ -103,6 +104,7 @@ int network::connectServer(sockaddr_in& serverObject)
 {
     auto serverPointer = (sockaddr*) &serverObject;
 
+    // connect(int, struct sockaddr *, socklen_t)
     this ->connectSystemCall = connect(this ->sockSystemCall, serverPointer, addressSize);
 
     //delete serverPointer;
@@ -127,22 +129,22 @@ void network::closeConnection() const
     shutdown(sockSystemCall, SHUT_RDWR);
 }
 
-void network::sendData(cv::Mat& image, size_t size)
+int network::sendData(unsigned char* data, size_t size)
 {
-    sentData = send(this ->connectSystemCall, image.data, size, 0);
+    ssize_t transfer;
+    // send(int, unsigned char *, size_t, int)
+    transfer = send(this ->connectSystemCall, data, size, 0);
+    int result = (int) transfer;
+    return result;
 
-    if(sentData < 0)
-        //throw("Cannot send data!");
-        exit(0);
 }
 
 void network::receiveData(unsigned char* socketData, size_t size)
 {
-    receivedData =
-            recv(sockSystemCall, socketData, size, 0);
+    // recv(int, unsigned char *, size_t, int)
+    receivedData = recv(sockSystemCall, socketData, size, 0);
 
     if(receivedData < 0)
-        throw("Cannot receive data!");
+        //throw("Cannot receive data!");
+        exit(0);
 }
-
-

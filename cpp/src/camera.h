@@ -7,6 +7,7 @@
 
 #include <opencv2/opencv.hpp>
 #include <memory>
+#include "main.h"
 
 #define COLUMNS 640
 #define ROWS 480
@@ -18,15 +19,16 @@ public:
 private:
     cv::VideoCapture cameraObject;
     cv::Mat imageToReceive;
-    cv::Mat croppedImage;
-
 
 public:
     cv::Mat captureImage();
-    bool checkImage(cv::Mat &);
-    void cropImage(cv::Mat&);
+    cv::Mat cropImage(cv::Mat&);
     size_t getImageSize(cv::Mat&) const;
     cv::Mat getImageToReceive() const;
+    int getImageLength(unsigned char *);
+    std::string encodeData(cv::Mat&);
+    cv::Mat decodeData(std::string);
+
 };
 
 

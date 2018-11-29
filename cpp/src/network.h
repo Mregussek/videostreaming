@@ -1,58 +1,54 @@
 //
 // Created by Mateusz Rzeczyca.
 // Library for networking made with socket.h and inet.h
-// Tested only with Raspberry Pi to stream video using TCP and UDP protocols
 //
 // For creating a socket use one of the constructors:
 // networkPointers() which is the default one with port 3305, ip address 127.0.0.1 and tcp protocol
 // networkPointers(uint16_t, std::string, std::string) for port number, ip address and protocol type
+//
 
 #ifndef VIDEOSTREAM_NETWORK_H
 #define VIDEOSTREAM_NETWORK_H
 
-#include <opencv2/opencv.hpp>
 #include <sys/socket.h>
 #include <arpa/inet.h>
-#include <memory>
+#include "main.h"
 
 #define DEVICES 3
 
 class network {
 private:
-    int sockSystemCall;
-    int acceptSystemCall;
-    int bindSystemCall;
-    int connectSystemCall;
-    ssize_t sentData;
-    std::string protocolType;
-    uint16_t portNumber;
+    int sockSystemCall; // default socket for calling
+    int acceptSystemCall; // socket for accepting call
+    int bindSystemCall; // socket for binding the server
+    int connectSystemCall; // socket for ability to connect to the server
+    ssize_t sentData; // as the name says
+    std::string protocolType; // as the name says
+    uint16_t portNumber; // as the name says
 public:
-    sockaddr_in serverAddress;
-    sockaddr_in clientAddress;
+    sockaddr_in serverAddress; // object for server
+    sockaddr_in clientAddress; // object for client
 private:
     socklen_t addressSize;
 public:
-    std::string ipAddress;
-    ssize_t receivedData;
-
+    std::string ipAddress; // as the name says example: '192.168.10.10"
+    ssize_t receivedData; // as the name says
 
     network();
-    // change this std::move in the case of issue in initializer list
     network(uint16_t, std::string, std::string);
 
     void createSocket();
+    void initializeSockaddr(sockaddr_in&, std::string&);
     // use clientAddress
     int acceptCall(sockaddr_in&);
     // for those use serverAddress
     int bindServer(sockaddr_in&);
     int connectServer(sockaddr_in&);
     void listenForConnection() const;
-    // this int means the amount of devices
-    void listenForConnection(int) const;
+    void listenForConnection(int) const; // this int means the amount of devices
     void closeConnection() const;
-    void sendData(cv::Mat&, size_t);
+    int sendData(unsigned char*, size_t);
     void receiveData(unsigned char*, size_t);
-    void initializeSockaddr(sockaddr_in&, std::string&);
 private:
     int getProtocolNumber(std::string&) const;
 };
