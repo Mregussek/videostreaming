@@ -31,7 +31,7 @@ while True:
     frame_matrix = np.reshape(frame_matrix, (IMAGE_HEIGHT, IMAGE_WIDTH, COLOR_PIXEL))
     cv2.imshow('Window title', frame_matrix)
 
-    if cv2.waitKey(5) & 0xFF == ord('q'):
+    if cv2.waitKey(40) & 0xFF == ord('q'):
         break
 
 connection.close()

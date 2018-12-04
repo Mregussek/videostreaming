@@ -6,7 +6,7 @@
 #define VIDEOSTREAM_FILE_H
 
 #include <string>
-#include "main.h"
+#include "operation.h"
 
 class file {
 public:

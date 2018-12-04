@@ -1,32 +1,60 @@
-SET(CMAKE_SYSTEM_NAME Linux)
-SET(CMAKE_SYSTEM_VERSION 1)
+set(RPI_ROOTFS /home/mateusz/raspberrypi/sys)
+set(CMAKE_FIND_ROOT_PATH ${RPI_ROOTFS})
+set(RPI_COMPILER ${RPI_ROOTFS}/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/bin)
 
-SET(DEVROOT $ENV{HOME}/raspberrypi)
-SET(PIROOT ${DEVROOT}/sys)
-SET(PITOOLS ${DEVROOT}/tools)
+# compilers
+set( CMAKE_C_COMPILER   "${RPI_COMPILER}/arm-linux-gnueabihf-gcc"   CACHE FILEPATH "")
+set( CMAKE_CXX_COMPILER "${RPI_COMPILER}/arm-linux-gnueabihf-g++"    CACHE FILEPATH "")
+set( CMAKE_AR           "${RPI_COMPILER}/arm-linux-gnueabihf-ar"     CACHE FILEPATH "")
+set( CMAKE_RANLIB       "${RPI_COMPILER}/arm-linux-gnueabihf-ranlib" CACHE FILEPATH "")
 
-SET(TOOLROOT ${PITOOLS}/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64)
+# Platform
+set( CMAKE_SYSTEM_NAME Linux )
+set( CMAKE_SYSTEM_VERSION 1 )
+set( CMAKE_SYSTEM_PROCESSOR arm )
+set( CMAKE_LIBRARY_ARCHITECTURE arm-linux-gnueabihf )
+set( FLOAT_ABI_SUFFIX "hf" )
+add_definitions( "-mcpu=arm1176jzf-s -mfpu=vfp -mfloat-abi=hard -marm" )
 
-SET(FLAGS "-Wl,-rpath-link,${PIROOT}/opt/vc/lib -Wl,-rpath-link,${PIROOT}/lib/arm-linux-gnueabihf -Wl,-rpath-link,${PIROOT}/usr/lib/arm-linux-gnueabihf -Wl,-rpath-link,${PIROOT}/usr/local/lib")
+# setup RPI include/lib/pkgconfig directories for compiler/pkgconfig
+set( RPI_INCLUDE_DIR "${RPI_INCLUDE_DIR} -isystem ${RPI_ROOTFS}/usr/include/arm-linux-gnueabihf")
+set( RPI_INCLUDE_DIR "${RPI_INCLUDE_DIR} -isystem ${RPI_ROOTFS}/usr/include")
+set( RPI_INCLUDE_DIR "${RPI_INCLUDE_DIR} -isystem ${RPI_ROOTFS}/usr/local/include")
 
-UNSET(CMAKE_C_FLAGS CACHE)
-UNSET(CMAKE_CXX_FLAGS CACHE)
+set( RPI_LIBRARY_DIR "${RPI_LIBRARY_DIR} -Wl,-rpath ${RPI_ROOTFS}/usr/lib/arm-linux-gnueabihf")
+set( RPI_LIBRARY_DIR "${RPI_LIBRARY_DIR} -Wl,-rpath ${RPI_ROOTFS}/lib/arm-linux-gnueabihf")
 
-SET(CMAKE_CXX_FLAGS ${FLAGS} CACHE STRING "" FORCE)
-SET(CMAKE_C_FLAGS ${FLAGS} CACHE STRING "" FORCE)
+set( RPI_PKGCONFIG_LIBDIR "${RPI_PKGCONFIG_LIBDIR}:${RPI_ROOTFS}/usr/lib/arm-linux-gnueabihf/pkgconfig" )
+set( RPI_PKGCONFIG_LIBDIR "${RPI_PKGCONFIG_LIBDIR}:${RPI_ROOTFS}/usr/share/pkgconfig" )
+set( RPI_PKGCONFIG_LIBDIR "${RPI_PKGCONFIG_LIBDIR}:${RPI_ROOTFS}/opt/vc/lib/pkgconfig" )
+set( RPI_PKGCONFIG_LIBDIR "${RPI_PKGCONFIG_LIBDIR}:/home/pi/ros/src_cross/devel_isolated" )
 
-# specify the cross compiler
-SET(CMAKE_C_COMPILER   ${TOOLROOT}/bin/arm-linux-gnueabihf-gcc)
-SET(CMAKE_CXX_COMPILER ${TOOLROOT}/bin/arm-linux-gnueabihf-g++)
+# C/CXX flags
+set( CMAKE_CXX_FLAGS        "${CMAKE_CXX_FLAGS} ${RPI_INCLUDE_DIR}" CACHE STRING "" FORCE)
+set( CMAKE_C_FLAGS          "${CMAKE_CXX_FLAGS} ${RPI_INCLUDE_DIR}" CACHE STRING "" FORCE)
+set( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${RPI_LIBRARY_DIR}" CACHE STRING "" FORCE)
 
-set(CMAKE_CXX_STANDARD 14)
+# Pkg-config settings
+set( PKG_CONFIG_EXECUTABLE "/usr/bin/pkg-config" CACHE FILEPATH "")
+set( ENV{PKG_CONFIG_DIR}         "" CACHE FILEPATH "")
+set( ENV{PKG_CONFIG_LIBDIR}      "${RPI_PKGCONFIG_LIBDIR}" CACHE FILEPATH "")
+set( ENV{PKG_CONFIG_SYSROOT_DIR} "${RPI_ROOTFS}" CACHE FILEPATH "")
 
-SET(CMAKE_SYSROOT ${PIROOT})
-SET(CMAKE_FIND_ROOT_PATH ${PIROOT})
+# Python2.7
+set( PYTHON_EXECUTABLE          "/usr/bin/python2.7" CACHE STRING "")
+set( PYTHON_LIBRARY_DEBUG       "${RPI_ROOTFS}/usr/lib/arm-linux-gnueabihf/libpython2.7.so" CACHE STRING "")
+set( PYTHON_LIBRARY_RELEASE     "${RPI_ROOTFS}/usr/lib/arm-linux-gnueabihf/libpython2.7.so" CACHE STRING "")
+set( PYTHON_LIBRARY             "${RPI_ROOTFS}/usr/lib/arm-linux-gnueabihf/libpython2.7.so" CACHE STRING "")
+set( PYTHON_INCLUDE_DIR         "${RPI_ROOTFS}/usr/include/python2.7" CACHE STRING "")
+set( PYTHON2_NUMPY_INCLUDE_DIRS "${RPI_ROOTFS}/usr/lib/python2.7/dist-packages/numpy/core/include" CACHE STRING "")
+set( PYTHON2_PACKAGES_PATH      "${RPI_ROOTFS}/usr/local/lib/python2.7/site-packages" CACHE STRING "")
 
-# search for programs in the build host directories
-SET(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
-# for libraries and headers in the target directories
-SET(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
-SET(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+# Boost
+set( BOOST_LIBRARYDIR "${RPI_ROOTFS}/usr/lib/arm-linux-gnueabihf/" CACHE STRING "")
+
+# OpenCV
+set( OpenCV_DIR       "${RPI_ROOTFS}/usr/share/OpenCV/" CACHE STRING "")
+
+# Userland / VideoCore
+set( USERLAND_DIR     "${RPI_ROOTFS}/usr/src/userland" CACHE STRING "")
 

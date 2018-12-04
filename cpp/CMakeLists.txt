@@ -2,19 +2,23 @@ cmake_minimum_required(VERSION 3.6)
 
 project(videoStream)
 
-SET(COMPILE_DEFINITIONS -Werror)
+set(COMPILE_DEFINITIONS -Werror)
 
-include_directories(SYSTEM ${PIROOT}/opt/vc/include ${PIROOT}/opt/vc/include/interface/vcos/pthreads ${PIROOT}/opt/vc/include/interface/vmcs_host/linux )
-link_directories( ${PIROOT}/opt/vc/lib )
+if (CMAKE_CXX_COMPILER_ID STREQUAL GNU)
+    set(CXX_FILESYSTEM_LIBRARIES stdc++fs)
+else()
+    set(CXX_FILESYSTEM_LIBRARIES)
+endif()
 
 # Use OpenCV package
 set(OpenCV_DIR "/usr/lib/opencv")
 find_package(OpenCV REQUIRED COMPONENTS core imgproc highgui)
 include_directories(${OpenCV_INCLUDE_DIRS})
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 11)
 
-set(SOURCE_FILES src/network.cpp src/network.h main.cpp src/camera.cpp src/camera.h src/file.cpp src/file.h src/main.h src/operation.cpp src/base64.cpp src/base64.h)# src/networkPointers.cpp src/networkPointers.h src/cameraPointers.cpp src/cameraPointers.h)
+set(SOURCE_FILES src/network.cpp src/network.h operation.cpp src/camera.cpp src/camera.h src/file.cpp src/file.h src/operation.h src/operation.cpp)
 add_executable(videoStream ${SOURCE_FILES})
 
+target_link_libraries(videoStream ${CXX_FILESYSTEM_LIBRARIES})
 target_link_libraries(videoStream ${OpenCV_LIBS})
