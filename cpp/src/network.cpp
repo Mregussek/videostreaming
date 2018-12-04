@@ -55,11 +55,11 @@ network::~network()
     delete clientAddress;
 }
 
-void network::initializeSockaddr(sockaddr_in& sockaddr, std::string& ipAddress)
+void network::initializeSockaddr(sockaddr_in* socketAddr, std::string* ipAddress)
 {
-    sockaddr.sin_family = AF_INET;
-    sockaddr.sin_addr.s_addr = inet_addr( ipAddress.c_str() );
-    sockaddr.sin_port = htons(*portNumber);
+    socketAddr ->sin_family = AF_INET;
+    socketAddr ->sin_addr.s_addr = inet_addr( ipAddress ->c_str() );
+    socketAddr ->sin_port = htons(*portNumber);
 }
 
 void network::createSocket()
@@ -115,9 +115,8 @@ int network::acceptCall(sockaddr_in* clientObject)
 int network::bindServer(sockaddr_in* serverObject)
 {
     auto serverPointer = reinterpret_cast<sockaddr*>(serverObject);
-
     // bind(int, struct sockaddr *, socklen_t)
-    this ->bindSystemCall = bind(*sockSystemCall, serverPointer , *addressSize);
+    *bindSystemCall = bind(*sockSystemCall, serverPointer, *addressSize);
 
     //delete serverPointer;
     if(*bindSystemCall < 0)

@@ -38,7 +38,7 @@ public:
     ~network();
 
     void createSocket();
-    void initializeSockaddr(sockaddr_in&, std::string&);
+    void initializeSockaddr(sockaddr_in*, std::string*);
     // use clientAddress
     int acceptCall(sockaddr_in*);
     // for those use serverAddress
