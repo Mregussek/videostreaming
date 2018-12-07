@@ -11,9 +11,10 @@
 
 void operation::streaming()
 {
+    uint16_t nPro = 7123;
     std::string address = "127.0.0.1";
-    std::string protocol = "tcp";
-    auto server = new network(7123, address, protocol);
+    std::string sPro = "tcp";
+    auto server = new network(nPro, address, sPro);
 
     server ->createSocket();
     server ->initializeSockaddr(server ->serverAddress, server ->ipAddress);

@@ -1,37 +1,22 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+#!usr/bin/env python
+# Written by Mateusz Rzeczyca
 
-import cv2
-import socket
-import base64
-import numpy as np
+from src.network import Network
+from src.camera import Camera
 
-IP_SERVER = "127.0.0.1"
-PORT_SERVER = 3305
-TIMEOUT_SOCKET = 10
-SIZE_PACKAGE = 4096
+client = Network()
+stream = Camera()
 
-IMAGE_HEIGHT = 480
-IMAGE_WIDTH = 640
-COLOR_PIXEL = 3  # RGB
+client.set_address('127.0.0.1', 7123, 'tcp')
+client.create_socket()
+client.connect_to_server()
 
-connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-connection.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-connection.settimeout(TIMEOUT_SOCKET)
-connection.connect((IP_SERVER, PORT_SERVER))
+while (True):
+    data = client.receive_data()
+    encoded = stream.decode_image(data)
+    stream.show_image(encoded)
 
-while True:
-    fileDescriptor = connection.makefile('rb')
-    result = fileDescriptor.readline()
-    fileDescriptor.close()
-    result = base64.b64decode(result)
-
-    frame = np.fromstring(result, dtype=np.uint8)
-    frame_matrix = np.array(frame)
-    frame_matrix = np.reshape(frame_matrix, (IMAGE_HEIGHT, IMAGE_WIDTH, COLOR_PIXEL))
-    cv2.imshow('Window title', frame_matrix)
-
-    if cv2.waitKey(40) & 0xFF == ord('q'):
+    if encoded.data < 0:
         break
 
-connection.close()
+client.close_connection()
