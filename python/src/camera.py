@@ -7,19 +7,24 @@ import cv2
 class Camera(object):
     def __init__(self):
         self.cameraObject = cv2.VideoCapture(0)
+        self.data = b''
 
     def read_frame(self):
-        frame = self.cameraObject.read()
+        is_there_frame, frame = self.cameraObject.read()
+
+        if not is_there_frame:
+            exit(0)
+
         return frame
 
     @staticmethod
     def decode_image(image):
-        decoded = cv2.imdecode(image)
+        decoded = cv2.imdecode(image, cv2.IMREAD_COLOR)
         return decoded
 
     @staticmethod
     def encode_image(image):
-        encoded = cv2.imencode(image)
+        _, encoded = cv2.imencode('.jpg', image)
         return encoded
 
     @staticmethod

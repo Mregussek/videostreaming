@@ -6,9 +6,10 @@ import socket
 
 class Network(object):
     def __init__(self):
-        self.portNumber = 3305
+        self.portNumber = 7123
         self.ipAddress = '127.0.0.1'
         self.protocolType = 'tcp'
+        self.hostAddress = (self.ipAddress, self.portNumber)
         self.sockSystemCall = 0
         self.acceptSystemCall = 0
         self.connectSystemCall = 0
@@ -17,10 +18,9 @@ class Network(object):
         self.portNumber = port
         self.ipAddress = ip
         self.protocolType = protocol
-        self.sockSystemCall.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
     def create_server(self):
-        self.sockSystemCall.bind(self.ipAddress, self.portNumber)
+        self.sockSystemCall.bind(self.hostAddress)
 
     def create_socket(self):
         if self.protocolType == 'tcp':
@@ -30,21 +30,27 @@ class Network(object):
         else:
             exit(0)
 
-    def listen_for_coonnection(self):
+    def listen_for_connection(self):
         self.sockSystemCall.listen(5)
 
     def accept_first(self):
-        self.acceptSystemCall = self.sockSystemCall.accept()
+        self.acceptSystemCall, _ = self.sockSystemCall.accept()
 
     def close_connection(self):
+        self.sockSystemCall.shutdown()
         self.sockSystemCall.close()
 
     def receive_data(self):
-        data = self.connectSystemCall.recv(1024)
+        data = self.sockSystemCall.recv(90456)
+
+        if len(data) == 0:
+            exit(0)
+
         return data
 
     def send_data(self, data):
         self.acceptSystemCall.send(data)
+        self.acceptSystemCall.send(b"END!")
 
     def connect_to_server(self):
-        self.connectSystemCall = self.sockSystemCall.connect(self.ipAddress, self.portNumber)
+        self.sockSystemCall.connect(self.hostAddress)
