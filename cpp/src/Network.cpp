@@ -6,15 +6,15 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <string>
-#include "network.h"
+#include "Network.h"
 
-network::network()
-: network(7123, "127.0.0.1", "tcp")
+Network::Network()
+: Network(7123, "127.0.0.1", "tcp")
 {
 
 }
 
-network::network(uint16_t port, std::string ip, std::string protocol)
+Network::Network(uint16_t port, std::string ip, std::string protocol)
 {
     portNumber = port;
     ipAddress = ip;
@@ -22,14 +22,14 @@ network::network(uint16_t port, std::string ip, std::string protocol)
     addressSize = sizeof(sockaddr_in);
 }
 
-void network::initializeSockaddr(sockaddr_in socketAddr, std::string ipAddress)
+void Network::initializeSockaddr(sockaddr_in socketAddr, std::string ipAddress)
 {
     socketAddr.sin_family = AF_INET;
     socketAddr.sin_addr.s_addr = inet_addr( ipAddress.c_str() );
     socketAddr.sin_port = htons(portNumber);
 }
 
-void network::createSocket()
+void Network::createSocket()
 {
     int protocolNumber = getProtocolNumber(protocolType);
 
@@ -55,7 +55,7 @@ void network::createSocket()
         exit(0);
 }
 
-int network::getProtocolNumber(std::string& protocolType) const
+int Network::getProtocolNumber(std::string& protocolType) const
 {
     if(protocolType == "tcp")
         return 1;
@@ -65,7 +65,7 @@ int network::getProtocolNumber(std::string& protocolType) const
         return -1;
 }
 
-int network::acceptCall(sockaddr_in clientObject)
+int Network::acceptCall(sockaddr_in clientObject)
 {
     auto address = reinterpret_cast<sockaddr*>(&clientObject);
     auto size = reinterpret_cast<socklen_t*>(&addressSize);
@@ -78,7 +78,7 @@ int network::acceptCall(sockaddr_in clientObject)
         exit(0);
 }
 
-int network::bindServer(sockaddr_in serverObject)
+int Network::bindServer(sockaddr_in serverObject)
 {
     auto serverPointer = reinterpret_cast<sockaddr*>(&serverObject);
     // bind(int, struct sockaddr *, socklen_t)
@@ -90,7 +90,7 @@ int network::bindServer(sockaddr_in serverObject)
 
 }
 
-int network::connectServer(sockaddr_in& serverObject)
+int Network::connectServer(sockaddr_in& serverObject)
 {
     auto serverPointer = reinterpret_cast<sockaddr*>(&serverObject);
 
@@ -102,27 +102,26 @@ int network::connectServer(sockaddr_in& serverObject)
         exit(0);
 }
 
-void network::listenForConnection() const
+void Network::listenForConnection() const
 {
     listen(sockSystemCall, DEVICES);
 }
 
-void network::closeConnection() const
+void Network::closeConnection() const
 {
     shutdown(sockSystemCall, SHUT_RDWR);
 }
 
-int network::sendData(unsigned char* data, size_t size)
+int Network::sendData(unsigned char* data, size_t size)
 {
     ssize_t transfer;
     // send(int, unsigned char *, size_t, int)
     transfer = send(connectSystemCall, data, size, 0);
     int result = (int) transfer;
     return result;
-
 }
 
-void network::receiveData(unsigned char* socketData, size_t size)
+void Network::receiveData(unsigned char* socketData, size_t size)
 {
     // recv(int, unsigned char *, size_t, int)
     receivedData = recv(sockSystemCall, socketData, size, 0);

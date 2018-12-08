@@ -3,15 +3,15 @@
 //
 
 #include <opencv2/opencv.hpp>
-#include "camera.h"
+#include "Camera.h"
 
-camera::camera()
+Camera::Camera()
 {
     *cameraObject = cv::VideoCapture(0);
-    *imageToReceive = cv::Mat::zeros(COLUMNS, ROWS, CV_8UC1);
+    *imageToReceive = cv::Mat::zeros(ROWS, COLUMNS, CV_8UC1);
 }
 
-cv::Mat camera::captureImage()
+cv::Mat Camera::captureImage()
 {
     cv::Mat capture;
     *cameraObject >> capture;
@@ -24,35 +24,20 @@ cv::Mat camera::captureImage()
     return capture;
 }
 
-cv::Mat camera::cropImage(cv::Mat& imageToCrop)
+cv::Mat Camera::cropImage(cv::Mat& imageToCrop)
 {
     imageToCrop = imageToCrop.reshape(0, 1);
 
     return imageToCrop;
 }
 
-size_t camera::getImageSize(cv::Mat& image) const
+size_t Camera::getImageSize(cv::Mat& image) const
 {
     size_t imgSize = image.total() * image.elemSize();
     return imgSize;
 }
 
-cv::Mat* camera::getImageToReceive() const
-{
-    return imageToReceive;
-}
-
-int camera::getImageLength(unsigned char * data)
-{
-    int result = 0;
-
-    for(int i = 0; data[i] != '\0'; i++)
-        result++;
-
-    return result;
-}
-
-std::string camera::encodeData(cv::Mat& image)
+std::string Camera::encodeData(cv::Mat& image)
 {
     cv::Mat encoded = cv::imdecode(image, 0);
     std::string encodedString(encoded.begin<unsigned char>(), encoded.end<unsigned char>());
@@ -60,10 +45,7 @@ std::string camera::encodeData(cv::Mat& image)
     return encodedString;
 }
 
-cv::Mat camera::decodeData(std::string encoded)
+void Camera::showImage()
 {
-    cv::Mat read = cv::imread(encoded, 0);
-    cv::Mat decoded = cv::imdecode(read, 0);
-
-    return decoded;
+    cv::imshow("videoStream", *imageToReceive);
 }

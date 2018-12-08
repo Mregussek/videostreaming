@@ -16,7 +16,7 @@
 
 #define DEVICES 3
 
-class network {
+class Network {
 private:
     int sockSystemCall; // default socket for calling
     int acceptSystemCall; // socket for accepting call
@@ -33,8 +33,8 @@ public:
     std::string ipAddress; // as the name says example: '192.168.10.10"
     ssize_t receivedData; // as the name says
 
-    network();
-    network(uint16_t, std::string, std::string);
+    Network();
+    Network(uint16_t, std::string, std::string);
 
     void createSocket();
     void initializeSockaddr(sockaddr_in, std::string);

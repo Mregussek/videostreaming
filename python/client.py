@@ -42,6 +42,10 @@ while (True):
     if isinstance(type(None), type(decoded)):
         break
 
-    Camera.show_image(decoded)
+    print("Showing")
+    try:
+        Camera.show_image(decoded)
+    except:
+        pass
 
 client.close_connection()

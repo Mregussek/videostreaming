@@ -11,23 +11,20 @@
 #define COLUMNS 640
 #define ROWS 480
 
-class camera {
+class Camera {
 public:
-    camera();
+    Camera();
 
 private:
     cv::VideoCapture* cameraObject;
+public:
     cv::Mat* imageToReceive;
 
-public:
     cv::Mat captureImage();
     cv::Mat cropImage(cv::Mat&);
     size_t getImageSize(cv::Mat&) const;
-    cv::Mat* getImageToReceive() const;
-    int getImageLength(unsigned char *);
     std::string encodeData(cv::Mat&);
-    cv::Mat decodeData(std::string);
-
+    void showImage();
 };
 
 
