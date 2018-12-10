@@ -68,7 +68,7 @@ int Network::getProtocolNumber(std::string& protocolType) const
 int Network::acceptCall(sockaddr_in clientObject)
 {
     auto address = reinterpret_cast<sockaddr*>(&clientObject);
-    auto size = reinterpret_cast<socklen_t*>(&addressSize);
+    socklen_t* size = &addressSize;
 
     // accept(int, struct sockaddr *, socklen_t *)
     acceptSystemCall = accept(sockSystemCall, address, size);
@@ -81,6 +81,7 @@ int Network::acceptCall(sockaddr_in clientObject)
 int Network::bindServer(sockaddr_in serverObject)
 {
     auto serverPointer = reinterpret_cast<sockaddr*>(&serverObject);
+
     // bind(int, struct sockaddr *, socklen_t)
     bindSystemCall = bind(sockSystemCall, serverPointer, addressSize);
 

@@ -14,15 +14,16 @@
 class file;
 class Network;
 class Camera;
-class operation;
+class Operation;
 
-class operation
+class Operation
 {
 public:
-    operation() {};
+    Operation() {};
 
     void streaming();
     void watching();
+    void menu();
 };
 
 #endif //VIDEOSTREAM_MAIN_H

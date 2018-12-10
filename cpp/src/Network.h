@@ -12,7 +12,7 @@
 
 #include <sys/socket.h>
 #include <arpa/inet.h>
-#include "operation.h"
+#include "Operation.h"
 
 #define DEVICES 3
 

@@ -7,9 +7,9 @@
 #include "Camera.h"
 #include "Network.h"
 #include "file.h"
-#include "operation.h"
+#include "Operation.h"
 
-void operation::streaming()
+void Operation::streaming()
 {
     uint16_t nPro = 7123;
     std::string address = "127.0.0.1";
@@ -49,7 +49,7 @@ void operation::streaming()
     exit(0);
 }
 
-void operation::watching()
+void Operation::watching()
 {
     uint16_t nPro = 7123;
     std::string address = "127.0.0.1";
@@ -58,7 +58,7 @@ void operation::watching()
 
     client ->createSocket();
     client ->initializeSockaddr(client ->serverAddress, client ->ipAddress);
-    client ->connectServer(client ->serverAddress);
+    client ->connectServer(client ->clientAddress);
 
     std::cout << "Connected to server" << std::endl;
 
@@ -81,4 +81,30 @@ void operation::watching()
     }
 
     client ->closeConnection();
+}
+
+void Operation::menu()
+{
+    std::cout << "1. Streaming" << std::endl;
+    std::cout << "2. Watching" << std::endl;
+    std::cout << "3. Exit" << std::endl;
+    std::cout << "Choice: ";
+    int choice;
+    std::cin >> choice;
+
+    switch(choice)
+    {
+        case 1:
+            streaming();
+            break;
+        case 2:
+            watching();
+            break;
+        case 3:
+            exit(0);
+        default:
+            system("clear");
+            menu();
+            break;
+    }
 }

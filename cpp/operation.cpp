@@ -3,11 +3,11 @@
 //
 
 #include <iostream>
-#include "src/operation.h"
+#include "src/Operation.h"
 
 int main()
 {
-    operation object;
-    object.streaming();
+    Operation object;
+    object.menu();
 }
 

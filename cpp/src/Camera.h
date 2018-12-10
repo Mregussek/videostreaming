@@ -6,7 +6,7 @@
 #define VIDEOSTREAM_CAMERA_H
 
 #include <opencv2/opencv.hpp>
-#include "operation.h"
+#include "Operation.h"
 
 #define COLUMNS 640
 #define ROWS 480
