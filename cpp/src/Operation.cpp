@@ -6,7 +6,6 @@
 #include <sys/socket.h>
 #include "Camera.h"
 #include "Network.h"
-#include "file.h"
 #include "Operation.h"
 
 void Operation::streaming()

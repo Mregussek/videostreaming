@@ -9,9 +9,7 @@
 #include <sys/socket.h>
 #include "Camera.h"
 #include "Network.h"
-#include "file.h"
 
-class file;
 class Network;
 class Camera;
 class Operation;
