@@ -9,7 +9,7 @@ client = Network()
 binary = b''
 
 print("Setting address")
-client.set_address('127.0.0.1', 7123, 'tcp')
+client.set_address('10.42.0.30', 3305, 'tcp')
 
 print("Creating socket")
 client.create_socket()

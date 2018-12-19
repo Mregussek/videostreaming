@@ -18,6 +18,7 @@ class Network(object):
         self.portNumber = port
         self.ipAddress = ip
         self.protocolType = protocol
+        self.hostAddress = (ip, port)
 
     def create_server(self):
         self.sockSystemCall.bind(self.hostAddress)
@@ -53,4 +54,4 @@ class Network(object):
         self.acceptSystemCall.send(b"END!")
 
     def connect_to_server(self):
-        self.sockSystemCall.connect(self.hostAddress)
+        self.connectSystemCall = self.sockSystemCall.connect(self.hostAddress)
