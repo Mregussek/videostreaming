@@ -24,7 +24,7 @@ class Camera(object):
 
     @staticmethod
     def encode_image(image):
-        _, encoded = cv2.imencode('.jpg', image)
+        encoded = cv2.imencode('.jpg', image)[1].tostring()
         return encoded
 
     @staticmethod

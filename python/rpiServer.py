@@ -24,14 +24,17 @@ server.accept_first()
 
 print("Streaming")
 print("-------")
+how_many_frames = 0
+
 while(True):
-    print("Reading frame")
+    print("Reading frame {}".format(how_many_frames))
     image = camera.read_frame()
+    how_many_frames += 1
 
     print("Encodind")
     encoded = camera.encode_image(image)
 
-    if encoded.any() < 0:
+    if encoded == b'':
         break
 
     print("Sending")

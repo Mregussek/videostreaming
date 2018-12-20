@@ -9,7 +9,7 @@ client = Network()
 binary = b''
 
 print("Setting address")
-client.set_address('10.42.0.30', 3305, 'tcp')
+client.set_address('127.0.0.1', 7123, 'tcp')
 
 print("Creating socket")
 client.create_socket()
@@ -19,6 +19,8 @@ client.connect_to_server()
 
 print("Streaming")
 print("---------")
+how_many_frames = 0
+
 while (True):
     binary = b''
 
@@ -34,10 +36,11 @@ while (True):
 
         binary += data
 
-    prepare = np.fromstring(data, np.uint8)
+    prepare = np.fromstring(binary, np.uint8)
 
-    print("Decoding")
+    print("Decoding {}".format(how_many_frames))
     decoded = Camera.decode_image(prepare)
+    how_many_frames += 1
 
     if isinstance(type(None), type(decoded)):
         break
