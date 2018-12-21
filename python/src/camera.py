@@ -19,7 +19,7 @@ class Camera(object):
 
     @staticmethod
     def decode_image(image):
-        decoded = cv2.imdecode(image, cv2.IMREAD_COLOR)
+        decoded = cv2.imdecode(image, 1)
         return decoded
 
     @staticmethod

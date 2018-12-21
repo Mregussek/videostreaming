@@ -36,7 +36,7 @@ while (True):
 
         binary += data
 
-    prepare = np.fromstring(binary, np.uint8)
+    prepare = np.fromstring(binary, dtype=np.dtype("uint8"))
 
     print("Decoding {}".format(how_many_frames))
     decoded = Camera.decode_image(prepare)
