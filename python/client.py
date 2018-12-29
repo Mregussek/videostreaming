@@ -1,43 +1,47 @@
-#!usr/bin/env python
-# Written by Mateusz Rzeczyca
+#import socket
+#import cv2
+#import numpy as np
 
 from src.network import Network
 from src.camera import Camera
-import numpy as np
 
-client = Network()
 camera = Camera()
+client = Network()
+client.set_ip('127.0.0.1')
+#IP = ''
+#PORT = 3305
+#ADDRESS = (IP, PORT)
+#HEIGHT = 480
+#WIDTH = 640
+#CHANNELS = 3
+#RESOLUTION = (HEIGHT, WIDTH, CHANNELS)
 
-print("Setting address")
-client.set_address('127.0.0.1', 7143, 'tcp')
+client.define_tcp()
+client.connect()
+#client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#client_socket.connect(ADDRESS)
 
-print("Creating socket")
-client.create_socket()
+while True:
+    received = client.receive_normal(4096000)
+    #data = client_socket.recv(4096000)
+    converted = Camera.convert_image(received)
+    #converted = np.fromstring(data, dtype=np.uint8)
 
-print("Connecting to server")
-client.connect_to_server()
+    ready_image = camera.reshape(converted)
+    #try:
+    #    image = np.reshape(converted, RESOLUTION)
+    #except Exception:
+    #    image = np.zeros(RESOLUTION)
 
-print("Streaming")
-print("---------")
-how_many_frames = 0
+    Camera.show_image(ready_image)
+    #cv2.imshow("ItWorks", image)
 
-while (True):
-    print("Receving")
-    data = client.receive_data()
+    key = Camera.maybe_end()
 
-    prepare = np.fromstring(data, dtype=np.uint8)
-    try:
-        decoded = np.reshape(prepare, camera.resolution)
-    except Exception:
-        decoded = np.zeros(camera.resolution)
+    if key == 27:
+        client.send_data(b'end')
+        break
+    else:
+        client.send_data(b'continue')
 
-    print("Decoding {}".format(how_many_frames))
-    how_many_frames += 1
 
-    print("Showing")
-    try:
-        Camera.show_image(decoded)
-    except:
-        pass
-
-client.close_connection()

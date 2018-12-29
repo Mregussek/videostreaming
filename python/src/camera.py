@@ -1,39 +1,52 @@
-#!usr/bin/env python
-# Written by Mateusz Rzeczyca
-
 import cv2
+import numpy as np
 
 
 class Camera(object):
     def __init__(self):
-        self.cameraObject = cv2.VideoCapture(0)
-        self.resolution = (480, 640, 3)
+        self.camera = None
+        self.HEIGHT = 480
+        self.WIDTH = 640
+        self.CHANNELS = 3
+        self.RESOLUTION = (self.HEIGHT, self.WIDTH, self.CHANNELS)
+
+    @staticmethod
+    def show_image(image):
+        cv2.imshow("VideoStreamRPi", image)
+
+    @staticmethod
+    def convert_image(image):
+        converted = np.fromstring(image, dtype=np.uint8)
+        return converted
+
+    @staticmethod
+    def release_camera():
+        cv2.VideoCapture(0).release()
+
+    @staticmethod
+    def maybe_end():
+        key = cv2.waitKey(10)
+        return key
 
     def set_camera(self):
-        self.cameraObject.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-        self.cameraObject.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+        self.camera = cv2.VideoCapture(0)
+        self.camera.set(cv2.CAP_PROP_FRAME_HEIGHT, self.HEIGHT)
+        self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, self.WIDTH)
 
     def read_frame(self):
-        is_there_frame, frame = self.cameraObject.read()
+        is_there_frame, frame = self.camera.read()
 
         if not is_there_frame:
             exit(0)
 
-        return frame
+        frame_str = frame.tostring()
+        return frame_str
 
-    def close_camera(self):
-        self.cameraObject.release()
+    def reshape(self, image):
+        try:
+            reshaped = np.reshape(image, self.RESOLUTION)
+        except Exception:
+            reshaped = np.zeros(self.RESOLUTION)
 
-    @staticmethod
-    def decode_image(image):
-        decoded = cv2.imdecode(image, cv2.IMREAD_COLOR)
-        return decoded
+        return reshaped
 
-    @staticmethod
-    def encode_image(image):
-        encoded = cv2.imencode('.jpg', image)[1].tostring()
-        return encoded
-
-    @staticmethod
-    def show_image(image):
-        cv2.imshow('WINDOW', image)
