@@ -25,24 +25,24 @@ class Network(object):
     def set_protocol(self, protocol):
         self.PROTOCOL = protocol
 
-    def define_server(self):
+    def define_server_tcp(self):
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-    def define_client(self):
+    def define_client_tcp(self):
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-    def start_server(self):
+    def start_server_tcp(self):
         self.server_socket.bind(self.HOST)
-        self.server_socket.listen(5)
+        self.server_socket.listen(1)
 
-    def accept_connection(self):
+    def accept_connection_tcp(self):
         if self.client_socket is None:
             self.client_socket, _ = self.server_socket.accept()
 
-    def connect(self):
+    def connect_tcp(self):
         self.client_socket.connect(self.HOST)
 
-    def send_data(self, data):
+    def send_data_tcp(self, data):
         try:
             self.client_socket.send(data)
         except Exception:
@@ -52,7 +52,7 @@ class Network(object):
         data = self.client_socket.recv(amount)
         return data
 
-    def receive_end(self, amount):
+    def receive_end_tcp(self, amount):
         try:
             data = self.client_socket.recv(amount)
             if data == 'end':
@@ -67,3 +67,17 @@ class Network(object):
         self.client_socket.close()
         self.client_socket = None
 
+    def define_server_udp(self):
+        self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+    def define_client_udp(self):
+        self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+    def start_server_udp(self):
+        self.server_socket.bind(self.HOST)
+
+    def send_data_udp(self, data):
+        try:
+            self.server_socket.sendall(data)
+        except Exception:
+            pass
