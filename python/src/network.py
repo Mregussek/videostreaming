@@ -25,8 +25,10 @@ class Network(object):
     def set_protocol(self, protocol):
         self.PROTOCOL = protocol
 
-    def define_tcp(self):
+    def define_server(self):
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    def define_client(self):
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     def start_server(self):
@@ -35,7 +37,7 @@ class Network(object):
 
     def accept_connection(self):
         if self.client_socket is None:
-            self.client_socket = self.server_socket.accept()
+            self.client_socket, _ = self.server_socket.accept()
 
     def connect(self):
         self.client_socket.connect(self.HOST)
@@ -53,12 +55,9 @@ class Network(object):
     def receive_end(self, amount):
         try:
             data = self.client_socket.recv(amount)
-            return data
+            if data == 'end':
+                self.close_client_connection()
         except Exception:
-            pass
-
-    def test_if_end(self, data):
-        if data == 'end':
             self.close_client_connection()
 
     def shutdown_server(self):
