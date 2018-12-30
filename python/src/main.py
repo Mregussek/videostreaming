@@ -17,6 +17,9 @@ class Main(Camera, Network):
 
     def menu(self):
         clear_screen()
+        print("Current Server: {} {} {}".format(self.SERVER_IP, self.PORT, self.PROTOCOL))
+        print("Current Client: {} {} {}".format(self.CLIENT_IP, self.PORT, self.PROTOCOL))
+        print("-"*20)
         print("1. Start watching")
         print("2. Run Server")
         print("3. Configure")
@@ -36,10 +39,10 @@ class Main(Camera, Network):
 
     def configure(self):
         clear_screen()
-        print("1. Change IP for server")
-        print("2. Change IP for client")
-        print("3. Change Port number")
-        print("4. Change protocol")
+        print("1. Change IP for server ({})".format(self.SERVER_IP))
+        print("2. Change IP for client ({})".format(self.CLIENT_IP))
+        print("3. Change Port number ({})".format(self.PORT))
+        print("4. Change protocol ({})".format(self.PROTOCOL))
         print("5. Back")
         choice = input("> ")
 

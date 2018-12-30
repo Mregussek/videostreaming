@@ -3,8 +3,8 @@ import socket
 
 class Network(object):
     def __init__(self):
-        self.CLIENT_IP = ''
-        self.SERVER_IP = ''
+        self.CLIENT_IP = 'None'
+        self.SERVER_IP = 'None'
         self.PORT = 3305
         self.HOST = (self.SERVER_IP, self.PORT)
         self.CLIENT = (self.CLIENT_IP, self.PORT)
