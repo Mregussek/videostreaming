@@ -45,32 +45,28 @@ class Main(Camera, Network):
 
         if choice == '1':
             clear_screen()
-            print("Your IP for server is: {}".format(self.IP))
+            print("Your IP for server is: {}".format(self.SERVER_IP))
 
             ip = user_selects_ip()
             print("Changed successfully!")
-            self.set_ip(ip)
+            self.set_server_ip(ip)
             time.sleep(1)
             self.configure()
 
         elif choice == '2':
             clear_screen()
-            print("Your IP for client is: {}".format(self.IP))
+            print("Your IP for client is: {}".format(self.CLIENT_IP))
 
-            ip = input('Choose the right IP address: ')
-            print("Changed successfully")
-            self.set_ip(ip)
+            self.set_client_ip()
             time.sleep(1)
             self.configure()
 
         elif choice == '3':
             clear_screen()
 
-            print("You PORT is: {}".format(self.PORT))
-            port = input('> ')
-            self.set_port(int(port))
+            print("You PORT number is: {}".format(self.PORT))
+            self.set_port()
 
-            print("Changed successfully!")
             time.sleep(1)
             self.configure()
 

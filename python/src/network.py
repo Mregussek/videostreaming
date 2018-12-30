@@ -3,24 +3,43 @@ import socket
 
 class Network(object):
     def __init__(self):
-        self.IP = ''
+        self.CLIENT_IP = ''
+        self.SERVER_IP = ''
         self.PORT = 3305
-        self.HOST = (self.IP, self.PORT)
+        self.HOST = (self.SERVER_IP, self.PORT)
+        self.CLIENT = (self.CLIENT_IP, self.PORT)
         self.PROTOCOL = 'tcp'
         self.server_socket = None
         self.client_socket = None
 
-    def set_ip(self, ip):
-        self.IP = ip
-        self.HOST = (self.IP, self.PORT)
+    def set_server_ip(self, ip):
+        self.SERVER_IP = ip
+        self.HOST = (self.SERVER_IP, self.PORT)
 
-    def set_port(self, port):
-        self.PORT = port
-        self.HOST = (self.IP, self.PORT)
+    def set_client_ip(self):
+        while True:
+            ip = input("Change it to: ")
+            print("Is this IP address correct: {}".format(ip))
+            correctness = input('[y/n]')
+            if correctness == 'y' or correctness == 'Y':
+                self.CLIENT_IP = ip
+                print("Changed successfully!")
+                break
 
-    def set_address(self, ip, port):
-        self.set_ip(ip)
-        self.set_port(port)
+        self.CLIENT = (self.CLIENT_IP, self.PORT)
+
+    def set_port(self):
+        while True:
+            port = input("Change it to: ")
+            print("Is this PORT number correct: {}".format(port))
+            correctness = input('[y/n]')
+            if correctness == 'y' or correctness == 'Y':
+                self.PORT = port
+                print("Changed successfully!")
+                break
+
+        self.HOST = (self.SERVER_IP, self.PORT)
+        self.CLIENT = (self.CLIENT_IP, self.PORT)
 
     def set_protocol(self, protocol):
         self.PROTOCOL = protocol
@@ -40,7 +59,7 @@ class Network(object):
             self.client_socket, _ = self.server_socket.accept()
 
     def connect_tcp(self):
-        self.client_socket.connect(self.HOST)
+        self.client_socket.connect(self.CLIENT)
 
     def send_data_tcp(self, data):
         try:
