@@ -133,16 +133,19 @@ class Main(Camera, Network):
         self.set_camera()
 
         while True:
-            self.accept_connection_tcp()
+            if not self.is_someone_connected:
+                self.accept_connection_tcp()
+
             frame = self.read_frame()
-            self.send_data_tcp(frame)
+            frame_str = frame.tostring()
+            self.send_data_tcp(frame_str)
             self.receive_end_tcp(1024)
 
             key = Camera.maybe_end()
             if key == 27:
                 break
 
-        Camera.release_camera()
+        self.release_camera()
         self.shutdown_server()
 
     def run_udp_client(self):
@@ -151,7 +154,13 @@ class Main(Camera, Network):
 
         while True:
             frame = self.read_frame()
-            self.send_data_udp(frame)
+            frame_flatten = frame.flatten()
+            frame_str = frame_flatten.tostring()
+
+            for i in range(20):
+                frame_part = frame_str[i*46080:(i+1)*46080]
+                self.send_data_udp(frame_part)
+
             key = Camera.maybe_end()
             if key == 27:
                 break
@@ -161,10 +170,13 @@ class Main(Camera, Network):
         self.start_server_udp()
 
         while True:
-            received = self.receive_normal_udp(2048000)
-            converted = Camera.convert_image(received)
-            ready_image = self.reshape(converted)
-            Camera.show_image(ready_image)
+            self.receive_normal_udp(46080)
+
+            if len(self.udp_receiver) == (46080*20):
+                converted = Camera.convert_image(self.udp_receiver)
+                ready_image = self.reshape(converted)
+                Camera.show_image(ready_image)
+                self.udp_receiver = b''
 
             key = Camera.maybe_end()
             if key == 27:

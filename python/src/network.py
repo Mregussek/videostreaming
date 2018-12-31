@@ -12,6 +12,7 @@ class Network(object):
         self.server_socket = None
         self.client_socket = None
         self.is_someone_connected = False
+        self.udp_receiver = b''
 
     def set_server_ip(self, ip):
         self.SERVER_IP = ip
@@ -118,4 +119,4 @@ class Network(object):
             print("Error in receiving!")
             data = 'None'
 
-        return data
+        self.udp_receiver += data

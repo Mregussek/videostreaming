@@ -20,10 +20,6 @@ class Camera(object):
         return converted
 
     @staticmethod
-    def release_camera():
-        cv2.VideoCapture(0).release()
-
-    @staticmethod
     def maybe_end():
         key = cv2.waitKey(10)
         return key
@@ -39,8 +35,7 @@ class Camera(object):
         if not is_there_frame:
             exit(0)
 
-        frame_str = frame.tostring()
-        return frame_str
+        return frame
 
     def reshape(self, image):
         try:
@@ -49,4 +44,7 @@ class Camera(object):
             reshaped = np.zeros(self.RESOLUTION)
 
         return reshaped
+
+    def release_camera(self):
+        self.camera.release()
 
