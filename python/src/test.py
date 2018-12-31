@@ -27,9 +27,6 @@ def user_selects_ip():
             selected_ip = ip_dictionary[choice]
             break
 
-    if selected_ip == '127.0.0.1':
-        selected_ip = ''
-
     return selected_ip
 
 
