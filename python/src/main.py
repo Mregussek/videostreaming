@@ -2,12 +2,29 @@ from .network import Network
 from .camera import Camera
 from .test import user_selects_ip
 from .test import user_selects_protocol
+#import usage
 import os
 import time
 
 
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
+
+def print_usage():
+    tcp = """ 
+For better usage my proposal for TCP protocol is start with
+creating server (which is 2 option in menu). App will wait for
+correctly configured client and accept connection without 
+athourization. Then you should see a window with video from server. """
+
+    udp = """UDP on the other hand is much more complicated for me. For
+better experience I propose you firstly run a client (1 option)
+on the client machine. It will start waiting for data and if you
+run a server it will open a window for video streaming."""
+    print(tcp)
+    print(60*"-")
+    print(udp)
+
 
 
 class Main(Camera, Network):
@@ -17,13 +34,15 @@ class Main(Camera, Network):
 
     def menu(self):
         clear_screen()
-        print("Current Server: {} {} {}".format(self.SERVER_IP, self.PORT, self.PROTOCOL))
-        print("Current Client: {} {} {}".format(self.CLIENT_IP, self.PORT, self.PROTOCOL))
-        print("-"*20)
+        print(5*"-"+" Current settings "+5*"-")
+        print("Server: {} {} {}".format(self.SERVER_IP, self.PORT, self.PROTOCOL))
+        print("Client: {} {} {}".format(self.CLIENT_IP, self.PORT, self.PROTOCOL))
+        print("-"*28)
         print("1. Start watching")
         print("2. Run Server")
         print("3. Configure")
-        print("4. Exit")
+        print("4. Usage")
+        print("5. Exit")
         choice = input("> ")
 
         if choice == '1':
@@ -33,6 +52,8 @@ class Main(Camera, Network):
         elif choice == '3':
             self.configure()
         elif choice == '4':
+            self.usage()
+        elif choice == '5':
             exit(0)
         else:
             self.menu()
@@ -88,6 +109,13 @@ class Main(Camera, Network):
 
         else:
             self.configure()
+    
+    def usage(self):
+        clear_screen()
+        print("PRESS ENTER TO BACK TO THE MENU!")
+        print_usage()
+        _ = input()
+        self.menu()
 
     def run_client(self):
         if self.PROTOCOL == 'tcp':
@@ -154,8 +182,8 @@ class Main(Camera, Network):
 
         while True:
             frame = self.read_frame()
-            frame_flatten = frame.flatten()
-            frame_str = frame_flatten.tostring()
+            #frame_flatten = frame.flatten()
+            frame_str = frame.tostring()
 
             for i in range(20):
                 frame_part = frame_str[i*46080:(i+1)*46080]

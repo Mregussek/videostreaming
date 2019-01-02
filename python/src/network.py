@@ -8,7 +8,7 @@ class Network(object):
         self.PORT = 3305
         self.HOST = (self.SERVER_IP, self.PORT)
         self.CLIENT = (self.CLIENT_IP, self.PORT)
-        self.PROTOCOL = 'tcp'
+        self.PROTOCOL = 'udp'
         self.server_socket = None
         self.client_socket = None
         self.is_someone_connected = False
