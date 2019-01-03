@@ -1,22 +1,61 @@
-import socket
+import zmq
+import numpy as np
 
 
 class Network(object):
     def __init__(self):
-        self.CLIENT_IP = '127.0.0.1'
-        self.SERVER_IP = '127.0.0.1'
-        self.PORT = 3305
-        self.HOST = (self.SERVER_IP, self.PORT)
-        self.CLIENT = (self.CLIENT_IP, self.PORT)
+        self.PORT = '3305'
+        self.CLIENT_IP = 'localhost'
+        self.SERVER_IP = '*'
         self.PROTOCOL = 'udp'
-        self.server_socket = None
+        self.HOST = '{}://{}:{}'.format(self.PROTOCOL, self.SERVER_IP, self.PORT)
+        self.CLIENT = '{}://{}:{}'.format(self.PROTOCOL, self.CLIENT_IP, self.PORT)
+        self.context = None
+        self.footage_socket = None
         self.client_socket = None
-        self.is_someone_connected = False
-        self.udp_receiver = b''
+
+    def define_tcp_server(self):
+        self.context = zmq.Context.instance()
+        self.footage_socket = self.context.socket(zmq.SUB)
+
+    def tcp_start_server(self):
+        self.footage_socket.bind(self.HOST)
+        self.footage_socket.setsockopt_string(zmq.SUBSCRIBE, np.unicode(''))
+        print("SERVER STARTED!")
+
+    def receive_from_rpi(self):
+        data = self.footage_socket.recv_string()
+        return data
+
+    def define_tcp_client(self):
+        self.context = zmq.Context()
+        self.client_socket = self.context.socket(zmq.PUB)
+
+    def connect_to_server(self):
+        self.client_socket.connect(self.CLIENT)
+        print("Got Connection!")
+
+    def tcp_send_data(self, data):
+        self.client_socket.send(data)
+
+    def define_udp_server(self):
+        self.context = zmq.Context()
+        self.footage_socket = self.context.socket(15)
+
+    def udp_server_start(self):
+        self.footage_socket.bind(self.HOST)
+        print("SERVER STARTED!")
+
+    def define_udp_client(self):
+        self.context = zmq.Context()
+        self.client_socket = self.context.socket(14)
+
+    def udp_send_data(self, data):
+        self.client_socket.send(data)
 
     def set_server_ip(self, ip):
         self.SERVER_IP = ip
-        self.HOST = (self.SERVER_IP, self.PORT)
+        self.HOST = '{}://{}:{}'.format(self.PROTOCOL, self.SERVER_IP, self.PORT)
 
     def set_client_ip(self):
         while True:
@@ -28,7 +67,7 @@ class Network(object):
                 print("Changed successfully!")
                 break
 
-        self.CLIENT = (self.CLIENT_IP, self.PORT)
+        self.CLIENT = '{}://{}:{}'.format(self.PROTOCOL, self.CLIENT_IP, self.PORT)
 
     def set_port(self):
         while True:
@@ -40,83 +79,11 @@ class Network(object):
                 print("Changed successfully!")
                 break
 
-        self.HOST = (self.SERVER_IP, self.PORT)
-        self.CLIENT = (self.CLIENT_IP, self.PORT)
+        self.HOST = '{}://{}:{}'.format(self.PROTOCOL, self.SERVER_IP, self.PORT)
+        self.CLIENT = '{}://{}:{}'.format(self.PROTOCOL, self.CLIENT_IP, self.PORT)
 
     def set_protocol(self, protocol):
         self.PROTOCOL = protocol
+        self.HOST = '{}://{}:{}'.format(self.PROTOCOL, self.SERVER_IP, self.PORT)
+        self.CLIENT = '{}://{}:{}'.format(self.PROTOCOL, self.CLIENT_IP, self.PORT)
 
-    def define_server_tcp(self):
-        self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-    def define_client_tcp(self):
-        self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-    def start_server_tcp(self):
-        self.server_socket.bind(self.HOST)
-        print("TCP server finally started, waiting for connections...")
-        self.server_socket.listen(1)
-
-    def accept_connection_tcp(self):
-        if self.client_socket is None:
-            self.client_socket, _ = self.server_socket.accept()
-            print("{} is connected!".format(_))
-            self.is_someone_connected = True
-
-    def connect_tcp(self):
-        self.client_socket.connect(self.CLIENT)
-        print("Connected!")
-
-    def send_data_tcp(self, data):
-        try:
-            self.client_socket.send(data)
-        except Exception:
-            print("Error in sending!")
-            pass
-
-    def receive_tcp(self, amount):
-        data = self.client_socket.recv(amount)
-        return data
-
-    def receive_end_tcp(self, amount):
-        try:
-            data = self.client_socket.recv(amount)
-            if data == 'end':
-                self.close_client_connection()
-        except Exception:
-            print("Error in receiving!")
-            self.close_client_connection()
-
-    def shutdown_server(self):
-        self.server_socket.close()
-
-    def close_client_connection(self):
-        self.is_someone_connected = False
-        self.client_socket.close()
-        self.client_socket = None
-
-    def define_server_udp(self):
-        self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
-    def define_client_udp(self):
-        self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
-    def start_server_udp(self):
-        self.server_socket.bind(self.HOST)
-        print("UDP server started, waiting for receiver...")
-
-    def send_data_udp(self, data):
-        try:
-            self.client_socket.sendto(data, self.CLIENT)
-        except Exception:
-            print("Error in sending!")
-            pass
-
-    def receive_normal_udp(self, amount):
-        try:
-            data, _ = self.server_socket.recvfrom(amount)
-        except Exception:
-            print("Error in receiving!")
-            data = 'None'
-
-        self.udp_receiver += data

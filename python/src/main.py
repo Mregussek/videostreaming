@@ -2,7 +2,6 @@ from .network import Network
 from .camera import Camera
 from .test import user_selects_ip
 from .test import user_selects_protocol
-#import usage
 import os
 import time
 
@@ -10,21 +9,19 @@ import time
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
+
 def print_usage():
     tcp = """ 
-For better usage my proposal for TCP protocol is start with
-creating server (which is 2 option in menu). App will wait for
-correctly configured client and accept connection without 
-athourization. Then you should see a window with video from server. """
+For TCP you should firstly run the highest option in the menu
+(1. Start watching on client). Here it will run the server which
+will wait for connection from RPi. After that it should run
+without any hesitation. """
 
-    udp = """UDP on the other hand is much more complicated for me. For
-better experience I propose you firstly run a client (1 option)
-on the client machine. It will start waiting for data and if you
-run a server it will open a window for video streaming."""
+    udp = """UDP is not done already so after choosing this
+option app will crush. """
     print(tcp)
     print(60*"-")
     print(udp)
-
 
 
 class Main(Camera, Network):
@@ -38,8 +35,8 @@ class Main(Camera, Network):
         print("Server: {} {} {}".format(self.SERVER_IP, self.PORT, self.PROTOCOL))
         print("Client: {} {} {}".format(self.CLIENT_IP, self.PORT, self.PROTOCOL))
         print("-"*28)
-        print("1. Start watching")
-        print("2. Run Server")
+        print("1. Start watching on client")
+        print("2. RPi start streaming")
         print("3. Configure")
         print("4. Usage")
         print("5. Exit")
@@ -136,76 +133,65 @@ class Main(Camera, Network):
             self.configure()
 
     def run_tcp_client(self):
-        self.define_client_tcp()
-        self.connect_tcp()
+        self.define_tcp_server()
+        self.tcp_start_server()
 
         while True:
-            received = self.receive_tcp(2048000)
-            converted = Camera.convert_image(received)
-            ready_image = self.reshape(converted)
-            Camera.show_image(ready_image)
+            try:
+                frame = self.receive_from_rpi()
+                ready_image = self.decode_image(frame)
+                self.show_image(ready_image)
 
-            key = Camera.maybe_end()
-            if key == 27:
-                self.send_data_tcp(b'end')
+            except KeyboardInterrupt:
+                self.destroy_window()
                 break
-            else:
-                self.send_data_tcp(b'continue')
-
-        self.close_client_connection()
 
     def run_tcp_server(self):
-        self.define_server_tcp()
-        self.start_server_tcp()
+        self.define_tcp_client()
+        self.connect_to_server()
 
         self.set_camera()
 
         while True:
-            if not self.is_someone_connected:
-                self.accept_connection_tcp()
+            try:
+                frame = self.read_frame()
+                resized = self.resize_frame(frame)
+                encoded = self.encode_image(resized)
+                self.tcp_send_data(encoded)
 
-            frame = self.read_frame()
-            frame_str = frame.tostring()
-            self.send_data_tcp(frame_str)
-            self.receive_end_tcp(1024)
-
-            key = Camera.maybe_end()
-            if key == 27:
+            except KeyboardInterrupt:
+                self.release_camera()
+                self.destroy_window()
                 break
 
-        self.release_camera()
-        self.shutdown_server()
-
     def run_udp_client(self):
-        self.define_client_udp()
-        self.set_camera()
+        self.define_udp_server()
+        self.udp_server_start()
 
         while True:
-            frame = self.read_frame()
-            #frame_flatten = frame.flatten()
-            frame_str = frame.tostring()
+            try:
+                frame = self.receive_from_rpi()
+                ready_image = self.decode_image(frame)
+                self.show_image(ready_image)
 
-            for i in range(20):
-                frame_part = frame_str[i*46080:(i+1)*46080]
-                self.send_data_udp(frame_part)
-
-            key = Camera.maybe_end()
-            if key == 27:
+            except KeyboardInterrupt:
+                self.destroy_window()
                 break
 
     def run_udp_server(self):
-        self.define_server_udp()
-        self.start_server_udp()
+        self.define_udp_client()
+        self.connect_to_server()
+
+        self.set_camera()
 
         while True:
-            self.receive_normal_udp(46080)
+            try:
+                frame = self.read_frame()
+                resized = self.resize_frame(frame)
+                encoded = self.encode_image(resized)
+                self.udp_send_data(encoded)
 
-            if len(self.udp_receiver) == (46080*20):
-                converted = Camera.convert_image(self.udp_receiver)
-                ready_image = self.reshape(converted)
-                Camera.show_image(ready_image)
-                self.udp_receiver = b''
-
-            key = Camera.maybe_end()
-            if key == 27:
+            except KeyboardInterrupt:
+                self.release_camera()
+                self.destroy_window()
                 break

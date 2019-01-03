@@ -1,50 +1,49 @@
 import cv2
 import numpy as np
+import base64
 
 
 class Camera(object):
     def __init__(self):
         self.camera = None
-        self.HEIGHT = 480
-        self.WIDTH = 640
-        self.CHANNELS = 3
-        self.RESOLUTION = (self.HEIGHT, self.WIDTH, self.CHANNELS)
+        self.RESOLUTION = (640, 480)
+
+    @staticmethod
+    def encode_image(image):
+        _, encoded = cv2.imencode('.jpg', image)
+        as_text = base64.b64encode(encoded)
+        return as_text
+
+    @staticmethod
+    def decode_image(data):
+        decoded_b64 = base64.b64decode(data)
+        from_string = np.fromstring(decoded_b64, dtype=np.uint8)
+        decoded_cv2 = cv2.imdecode(from_string, 1)
+        return decoded_cv2
 
     @staticmethod
     def show_image(image):
-        cv2.imshow("VideoStreamRPi", image)
+        cv2.imshow('RPi - Video Transmission', image)
+        cv2.waitKey(1)
 
     @staticmethod
-    def convert_image(image):
-        converted = np.fromstring(image, dtype=np.uint8)
-        return converted
-
-    @staticmethod
-    def maybe_end():
-        key = cv2.waitKey(10)
-        return key
+    def destroy_window():
+        cv2.destroyAllWindows()
 
     def set_camera(self):
         self.camera = cv2.VideoCapture(0)
-        self.camera.set(cv2.CAP_PROP_FRAME_HEIGHT, self.HEIGHT)
-        self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, self.WIDTH)
 
     def read_frame(self):
         is_there_frame, frame = self.camera.read()
 
         if not is_there_frame:
-            exit(0)
+            print("Cannot read data from camera!")
 
         return frame
 
-    def reshape(self, image):
-        try:
-            reshaped = np.reshape(image, self.RESOLUTION)
-        except Exception:
-            reshaped = np.zeros(self.RESOLUTION)
-
-        return reshaped
+    def resize_frame(self, frame):
+        res = cv2.resize(frame, self.RESOLUTION)
+        return res
 
     def release_camera(self):
         self.camera.release()
-
