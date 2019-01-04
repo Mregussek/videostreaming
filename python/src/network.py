@@ -58,6 +58,7 @@ class Network(object):
 
     def udp_connect_to_server(self):
         self.client_socket.connect(self.CLIENT_UDP)
+        print("Got connection!")
 
     def udp_send_data(self, data):
         self.client_socket.sendall(data)
@@ -67,6 +68,7 @@ class Network(object):
 
     def udp_start_server(self):
         self.footage_socket.bind(self.HOST_UDP)
+        print('SERVER STARTED!')
 
     def udp_receive_data(self):
         data = self.footage_socket.recv(30000)

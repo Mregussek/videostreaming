@@ -27,22 +27,13 @@ TCP Instruction:
 3. Run first option in the menu (1. Start watching on client)
     on client machine.
 4. Run second option (2. RPi start streaming) on RPi
-TCP should work properly.
+TCP should work properly. The same instructions are for UDP protocol!
+
+Remember that (1. Start watching on client) will always start server, so in that case
+RPi is just client, which connects to server.
 """
 
-    udp = """
-UDP Instruction:
-1. Make sure that UDP protocol is set on server and client.
-2. Check IP address and port on client and RPi (must be the same).
-3. Run second option (2. RPi start streaming) on RPi
-4. Run first option in the menu (1. Start watching on client)
-    on client machine.
-UDP should work properly.
-"""
     print(tcp)
-    print(60*"-")
-    print(udp)
-
 
 class Main(Camera, Network):
     def __init__(self):
@@ -55,30 +46,51 @@ class Main(Camera, Network):
         print("Server: {} {} {}".format(self.SERVER_UDP, self.PORT_TCP, self.PROTOCOL))
         print("Client: {} {} {}".format(self.CLIENT_ADDR_UDP, self.PORT_TCP, self.PROTOCOL))
         print("-"*28)
-        print("1. Start watching on client")
-        print("2. RPi start streaming")
-        print("3. Configure")
-        print("4. Usage")
-        print("5. Exit")
-        choice = input("> ")
+        if self.PROTOCOL == 'tcp':
+            print("1. Start watching on client")
+            print("2. RPi start streaming")
+            print("3. Configure")
+            print("4. Usage")
+            print("5. Exit")
+            choice = input("> ")
 
-        if choice == '1':
-            self.run_client()
-        elif choice == '2':
-            self.run_server()
-        elif choice == '3':
-            self.configure()
-        elif choice == '4':
-            self.usage()
-        elif choice == '5':
-            exit(0)
+            if choice == '1':
+                self.run_client()
+            elif choice == '2':
+                self.run_server()
+            elif choice == '3':
+                self.configure()
+            elif choice == '4':
+                self.usage()
+            elif choice == '5':
+                exit(0)
+            else:
+                self.menu()
         else:
-            self.menu()
+            print("1. Start watching on client")
+            print("2. RPi start streaming")
+            print("3. Configure")
+            print("4. Usage")
+            print("5. Exit")
+            choice = input("> ")
 
+            if choice == '1':
+                self.run_server()
+            elif choice == '2':
+                self.run_client()
+            elif choice == '3':
+                self.configure()
+            elif choice == '4':
+                self.usage()
+            elif choice == '5':
+                exit(0)
+            else:
+                self.menu()
+                
     def configure(self):
         clear_screen()
         print("1. Change IP for server ({})".format(self.SERVER_UDP))
-        print("2. Change IP for client ({})".format(self.CLIENT_UDP))
+        print("2. Change IP for client ({})".format(self.CLIENT_ADDR_UDP))
         print("3. Change Port number ({})".format(self.PORT_TCP))
         print("4. Change protocol ({})".format(self.PROTOCOL))
         print("5. Back")
