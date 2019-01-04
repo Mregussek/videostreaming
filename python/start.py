@@ -1,3 +1,11 @@
+"""
+
+Written by Mateusz Rzeczyca.
+Student - AGH University of Science and Technology
+info@mateuszrzeczyca.pl
+04.01.2019
+
+"""
 
 print("Checking if all packages can be imported")
 meter = 0
@@ -12,7 +20,13 @@ try:
     import zmq
 except:
     meter += 1
-    print("Cannot import zmq for networking")
+    print("Cannot import zmq for TCP networking")
+
+try:
+    import socket
+except:
+    meter += 1
+    print("Cannot import socket for UDP networking")
 
 try:
     import netifaces

@@ -1,5 +1,11 @@
-# Made by Mateusz Rzeczyca
-# on rpi
+"""
+
+Written by Mateusz Rzeczyca.
+Student - AGH University of Science and Technology
+info@mateuszrzeczyca.pl
+04.01.2019
+
+"""
 
 import socket
 

@@ -1,3 +1,12 @@
+"""
+
+Written by Mateusz Rzeczyca.
+Student - AGH University of Science and Technology
+info@mateuszrzeczyca.pl
+04.01.2019
+
+"""
+
 from .network import Network
 from .camera import Camera
 from .test import user_selects_ip
@@ -12,13 +21,24 @@ def clear_screen():
 
 def print_usage():
     tcp = """ 
-For TCP you should firstly run the highest option in the menu
-(1. Start watching on client). Here it will run the server which
-will wait for connection from RPi. After that it should run
-without any hesitation. """
+TCP Instruction:
+1. Make sure that TCP protocol is set on server and client.
+2. Check IP address and port on client and RPi (must be the same).
+3. Run first option in the menu (1. Start watching on client)
+    on client machine.
+4. Run second option (2. RPi start streaming) on RPi
+TCP should work properly.
+"""
 
-    udp = """UDP is not done already so after choosing this
-option app will crush. """
+    udp = """
+UDP Instruction:
+1. Make sure that UDP protocol is set on server and client.
+2. Check IP address and port on client and RPi (must be the same).
+3. Run second option (2. RPi start streaming) on RPi
+4. Run first option in the menu (1. Start watching on client)
+    on client machine.
+UDP should work properly.
+"""
     print(tcp)
     print(60*"-")
     print(udp)

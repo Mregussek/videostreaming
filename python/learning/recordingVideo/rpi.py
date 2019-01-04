@@ -1,5 +1,11 @@
-# Records video from RPi camera
-# Made by Mateusz Rzeczyca
+"""
+
+Written by Mateusz Rzeczyca.
+Student - AGH University of Science and Technology
+info@mateuszrzeczyca.pl
+04.01.2019
+
+"""
 
 from picamera import PiCamera
 
