@@ -32,8 +32,8 @@ class Main(Camera, Network):
     def menu(self):
         clear_screen()
         print(5*"-"+" Current settings "+5*"-")
-        print("Server: {} {} {}".format(self.SERVER_IP, self.PORT, self.PROTOCOL))
-        print("Client: {} {} {}".format(self.CLIENT_IP, self.PORT, self.PROTOCOL))
+        print("Server: {} {} {}".format(self.SERVER_UDP, self.PORT_TCP, self.PROTOCOL))
+        print("Client: {} {} {}".format(self.CLIENT_ADDR_UDP, self.PORT_TCP, self.PROTOCOL))
         print("-"*28)
         print("1. Start watching on client")
         print("2. RPi start streaming")
@@ -57,16 +57,16 @@ class Main(Camera, Network):
 
     def configure(self):
         clear_screen()
-        print("1. Change IP for server ({})".format(self.SERVER_IP))
-        print("2. Change IP for client ({})".format(self.CLIENT_IP))
-        print("3. Change Port number ({})".format(self.PORT))
+        print("1. Change IP for server ({})".format(self.SERVER_UDP))
+        print("2. Change IP for client ({})".format(self.CLIENT_UDP))
+        print("3. Change Port number ({})".format(self.PORT_TCP))
         print("4. Change protocol ({})".format(self.PROTOCOL))
         print("5. Back")
         choice = input("> ")
 
         if choice == '1':
             clear_screen()
-            print("Your IP for server is: {}".format(self.SERVER_IP))
+            print("Your IP for server is: {}".format(self.SERVER_UDP))
 
             ip = user_selects_ip()
             print("Changed successfully!")
@@ -76,7 +76,7 @@ class Main(Camera, Network):
 
         elif choice == '2':
             clear_screen()
-            print("Your IP for client is: {}".format(self.CLIENT_IP))
+            print("Your IP for client is: {}".format(self.CLIENT_UDP))
 
             self.set_client_ip()
             time.sleep(1)
@@ -85,7 +85,7 @@ class Main(Camera, Network):
         elif choice == '3':
             clear_screen()
 
-            print("You PORT number is: {}".format(self.PORT))
+            print("You PORT number is: {}".format(self.PORT_TCP))
             self.set_port()
 
             time.sleep(1)
@@ -118,6 +118,7 @@ class Main(Camera, Network):
         if self.PROTOCOL == 'tcp':
             self.run_tcp_client()
         elif self.PROTOCOL == 'udp':
+            self.RESOLUTION = (320, 240)
             self.run_udp_client()
         else:
             print("You must change protocol type!")
@@ -148,7 +149,7 @@ class Main(Camera, Network):
 
     def run_tcp_server(self):
         self.define_tcp_client()
-        self.connect_to_server()
+        self.tcp_connect_to_server()
 
         self.set_camera()
 
@@ -165,33 +166,21 @@ class Main(Camera, Network):
                 break
 
     def run_udp_client(self):
-        self.define_udp_server()
-        self.udp_server_start()
+        self.set_camera()
+        self.define_udp_client()
+        self.udp_connect_to_server()
 
         while True:
-            try:
-                frame = self.receive_from_rpi()
-                ready_image = self.decode_image(frame)
-                self.show_image(ready_image)
-
-            except KeyboardInterrupt:
-                self.destroy_window()
-                break
+            frame = self.read_frame()
+            resized = self.resize_frame(frame)
+            encoded = self.encode_image(resized)
+            self.udp_send_data(encoded)
 
     def run_udp_server(self):
-        self.define_udp_client()
-        self.connect_to_server()
-
-        self.set_camera()
+        self.define_udp_server()
+        self.udp_start_server()
 
         while True:
-            try:
-                frame = self.read_frame()
-                resized = self.resize_frame(frame)
-                encoded = self.encode_image(resized)
-                self.udp_send_data(encoded)
-
-            except KeyboardInterrupt:
-                self.release_camera()
-                self.destroy_window()
-                break
+            data = self.udp_receive_data()
+            read_image = self.decode_image(data)
+            self.show_image(read_image)
