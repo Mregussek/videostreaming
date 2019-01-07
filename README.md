@@ -17,17 +17,18 @@ For TCP in Python I have used 640x480 resolution. It can work without any proble
 On the other hand UDP is set to 320x240 in order to send data properly.
 
 ### Requirenments
-[cv2](https://pypi.org/project/opencv-python/)
-[base64](https://docs.python.org/3.7/library/base64.html)
-[numpy](http://www.numpy.org/)
-[zmq](http://zeromq.org/)
-[socket](https://docs.python.org/3/library/socket.html)
-[netifaces](https://pypi.org/project/netifaces/)
+- [cv2](https://pypi.org/project/opencv-python/)
+- [base6](https://docs.python.org/3.7/library/base64.html)
+- [numpy](http://www.numpy.org/)
+- [zmq](http://zeromq.org/)
+- [socket](https://docs.python.org/3/library/socket.html)
+- [netifaces](https://pypi.org/project/netifaces/)
     
 ### Possible bugs:
 - Cannot open PiCamera by the 0 index.
+
 It may happen, because for this project I used OpenCV. Creating camera-like object by cv2.VideoCapture(0) don't recognize PiCamera so, you must enable it manually:
-'''
+'''bash
 sudo modprobe bcm2835-v4l2
 '''
 
