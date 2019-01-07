@@ -10,19 +10,23 @@ Observations:
 Since I used only Python for streaming data, I have seen that this app
 sometimes losses data. For checking this up I have written scripts in bash. It runs correctly. My charger has low voltage to make RPi run correctly. Now I am using another one to keep it better.
 
-C++ Explanation:
-
 Python:
     For TCP in Python I have used 640x480 resolution. It can work without any problems.
     On the other hand UDP is set to 320x240 in order to send data properly.
 
+    Requirenments: (Here is my version which I used)
+    cv2 (3.4.5.20)
+    base64
+    numpy (1.15.3)
+    zmq (17.1.2)
+    socket
+    netifaces (0.10.7)
+    
     Possible bugs:
         1. Cannot open PiCamera by the 0 index.
-         It may happen, because for this project I used OpenCV. Creating camera-like object by cv2.VideoCapture(0) don't recognize PiCamera so, you must enable it manually:
+        It may happen, because for this project I used OpenCV. Creating camera-like object by cv2.VideoCapture(0) don't recognize PiCamera so, you must enable it manually:
 
-         sudo modprobe bcm2835-v4l2
-
-Bash Explanation:
+        sudo modprobe bcm2835-v4l2
 
 Written by Mateusz Rzeczyca.
 Student - AGH University of Science and Technology
