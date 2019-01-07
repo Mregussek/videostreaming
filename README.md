@@ -16,7 +16,7 @@ sometimes losses data. For checking this up I have written scripts in bash. It r
 For TCP in Python I have used 640x480 resolution. It can work without any problems.
 On the other hand UDP is set to 320x240 in order to send data properly.
 
-### Requirenments
+### Requirements
 - [cv2](https://pypi.org/project/opencv-python/)
 - [base6](https://docs.python.org/3.7/library/base64.html)
 - [numpy](http://www.numpy.org/)
@@ -27,13 +27,15 @@ On the other hand UDP is set to 320x240 in order to send data properly.
 ### Possible bugs:
 - Cannot open PiCamera by the 0 index.
 
-It may happen, because for this project I used OpenCV. Creating camera-like object by cv2.VideoCapture(0) don't recognize PiCamera so, you must enable it manually:
-'''bash
+  It may happen, because for this project I used OpenCV. Creating camera-like object by cv2.VideoCapture(0) don't recognize PiCamera so, you must enable it manually:
+```bash
 sudo modprobe bcm2835-v4l2
-'''
+```
 
 ## Author
 Mateusz Rzeczyca
+
 Student - AGH University of Science and Technology
 info@mateuszrzeczyca.pl
+
 04.01.2019
