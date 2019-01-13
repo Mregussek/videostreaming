@@ -3,10 +3,13 @@
 
 #include "Network.h"
 #include "Camera.h"
+#include <unistd.h>
 
-class Menu
+
+class Menu : public Camera, public Network
 {
 public:
+    Menu();
     void menu();
     void startStreaming();
     void usage();
@@ -15,6 +18,5 @@ public:
 
     void changePort();
 };
-
 
 #endif //VIDEOSTREAM_MENU_H

@@ -54,3 +54,23 @@ void Network::closeConnection()
 {
     close(this ->sockSystemCall);
 }
+
+uint16_t Network::getPort()
+{
+    return this ->serverPort;
+}
+
+void Network::setPort(uint16_t newPort)
+{
+    this ->serverPort = newPort;
+}
+
+char* Network::getServerIp()
+{
+    return this ->serverIP;
+}
+
+void Network::setServerIp(char* newIp)
+{
+    this ->serverIP = newIp;
+}

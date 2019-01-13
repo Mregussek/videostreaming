@@ -1,15 +1,15 @@
 #include "Menu.h"
 
 Menu::Menu()
-: Network(), Camera()
+: Network(), Displayer()
 {}
 
 void Menu::menu()
 {
     clearScreen();
     std::cout << "Current Settings" << std::endl;
-    std::cout << "Port: " << getPort() << std::endl;
-    std::cout << "1. Start streaming" << std::endl;
+    std::cout << "IP: " << getServerIp() << "Port: "<< getPort() << std::endl;
+    std::cout << "1. Start watching" << std::endl;
     std::cout << "2. Configure" << std::endl;
     std::cout << "3. Usage" << std::endl;
     std::cout << "4. Exit" << std::endl;
@@ -20,7 +20,7 @@ void Menu::menu()
     switch(choice)
     {
         case 1:
-            startStreaming();
+            startWatching();
             break;
         case 2:
             configure();
@@ -36,28 +36,35 @@ void Menu::menu()
     }
 }
 
-void Menu::startStreaming()
+void Menu::startWatching()
 {
-    defServerSocket();
-    defSockaddr( getPort() );
-    createServerAndListen();
+    defSocket();
+    defSockaddr();
+    connectToServer();
 
-    checkContinuous();
-    acceptFirstConnection();
+    checkIfContinuous();
+    createWindow();
 
-    while(true)
+    uchar* metadata = getMetadata();
+
+    while (getKey() != 'q')
     {
-        readFrame();
-        proccessImage();
+        receiveData(metadata, getImageSize());
 
-        sendData(grayImage, getImageSize());
+        showImage();
+
+        if (wait() >= 0)
+            break;
     }
+
+    closeConnection();
 }
 
 void Menu::configure()
 {
-    std::cout << "1. Change port (" << getPort() << ")" << std::endl;
-    std::cout << "2. Back" << std::endl;
+    std::cout << "1. Change server ip (" << getServerIp() << ")" << std::endl;
+    std::cout << "2. Change port (" << getPort() << ")" << std::endl;
+    std::cout << "3. Back" << std::endl;
 
     int choice;
 
@@ -68,9 +75,12 @@ void Menu::configure()
 
         switch (choice) {
             case 1:
-                changePort();
+                changeIp();
                 break;
             case 2:
+                changePort();
+                break;
+            case 3:
                 menu();
                 break;
             default:
@@ -84,22 +94,38 @@ void Menu::usage()
     clearScreen();
     std::cout << "WAIT 5 SECONDS TO CONTINUE!" << std::endl << std::endl;
     std::cout << "Firstly you are supposed to run server,\n"
-                 << "which is the app in \"rpi\" directory.\n"
-                 << "Afterwards run client and that\'s it!\n"
-                 << "Please remember to set correct port!" << std::endl;
+              << "which is the app in \"rpi\" directory.\n"
+              << "Afterwards run client and that\'s it!\n"
+              << "Please remember to set correct ip and port!" << std::endl;
 
-    std::cout << "\nThankfully to socket package we can start\n"
-              << "start server on every available interface.\n"
-              << "In that case don\'t worry, you will be able\n"
-              << "to connect!" << std::endl;
     sleep(5);
     menu();
 }
 
-void Menu::clearScreen()
+void Menu::changeIp()
 {
-    if (system( "cls" ))
-        system( "clear" );
+    clearScreen();
+    char* newIp;
+    char choice;
+
+    while(true)
+    {
+        clearScreen();
+        std::cout << "Choose new ip: ";
+        std::cin >> newIp;
+        std::cout << "Is this ip correct?" << std::endl;
+        std::cout << "[y/n] ";
+        std::cin >> choice;
+
+        if (choice == 'y' || choice == 'Y')
+        {
+            setServerIp(newIp);
+            std::cout << "Changed successfully!" << std::endl;
+            break;
+        }
+    }
+
+    configure();
 }
 
 void Menu::changePort()
@@ -126,4 +152,10 @@ void Menu::changePort()
     }
 
     configure();
+}
+
+void Menu::clearScreen()
+{
+    if (system( "cls" ))
+        system( "clear" );
 }

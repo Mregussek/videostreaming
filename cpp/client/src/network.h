@@ -17,12 +17,19 @@ class Network {
     ssize_t receivedBytes;
 
 public:
+    // for networking
     Network();
     void defSocket();
     void defSockaddr();
     void connectToServer();
     void receiveData(uchar*, size_t);
     void closeConnection();
+
+    // for menu
+    uint16_t getPort();
+    void setPort(uint16_t);
+    char* getServerIp();
+    void setServerIp(char*);
 };
 
 #endif //VIDEOSTREAM_NETWORK_H

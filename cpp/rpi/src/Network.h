@@ -15,11 +15,17 @@ class Network {
 
 public:
     Network();
+    // for networking
     void defServerSocket();
-    void defSockaddr();
+    void defSockaddr(uint16_t);
     void createServerAndListen();
     void acceptFirstConnection();
     void sendData(cv::Mat, size_t);
+
+    // for the menu class
+    uint16_t getPort();
+    void setPort(uint16_t);
+
 };
 
 

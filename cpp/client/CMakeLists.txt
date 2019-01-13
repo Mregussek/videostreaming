@@ -11,6 +11,6 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(SOURCE_SERVER client.cpp src/network.cpp src/network.h src/displayer.cpp src/displayer.h)
+set(SOURCE_SERVER client.cpp src/network.cpp src/network.h src/displayer.cpp src/displayer.h src/Menu.cpp src/Menu.h)
 add_executable(client ${SOURCE_SERVER})
 target_link_libraries(client ${OpenCV_LIBS})

@@ -16,11 +16,11 @@ void Network::defServerSocket()
     }
 }
 
-void Network::defSockaddr()
+void Network::defSockaddr(uint16_t anyPort)
 {
     this ->server.sin_family = AF_INET;
     this ->server.sin_addr.s_addr = INADDR_ANY;
-    this ->server.sin_port = htons(this ->port);
+    this ->server.sin_port = htons(anyPort);
 }
 
 void Network::createServerAndListen()
@@ -66,4 +66,14 @@ void Network::sendData(cv::Mat image, size_t size)
     {
         std::cerr << "bytes = " << resultOfSend << std::endl;
     }
+}
+
+uint16_t Network::getPort()
+{
+    return this ->port;
+}
+
+void Network::setPort(uint16_t newPort)
+{
+    this ->port = newPort;
 }
