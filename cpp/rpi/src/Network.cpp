@@ -2,7 +2,7 @@
 
 Network::Network()
 {
-    this ->port = 4097;
+    this ->port = 3305;
     this ->addressLength = sizeof(sockaddr_in);
 }
 

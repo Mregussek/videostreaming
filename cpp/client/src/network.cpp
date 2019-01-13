@@ -3,7 +3,7 @@
 Network::Network()
 {
     this ->serverIP = (char*)"127.0.0.1";
-    this ->serverPort = 4097;
+    this ->serverPort = 3305;
     this ->addressLength = sizeof(sockaddr_in);
     this ->receivedBytes = 0;
 }
