@@ -1,0 +1,26 @@
+#ifndef VIDEOSTREAM_NETWORK_H
+#define VIDEOSTREAM_NETWORK_H
+
+#include <iostream>
+#include <arpa/inet.h>
+#include <opencv2/opencv.hpp>
+
+class Network {
+    int serverSocket;
+    int clientSocket;
+    uint16_t port;
+    sockaddr_in server;
+    sockaddr_in client;
+    socklen_t addressLength;
+
+public:
+    Network();
+    void defServerSocket();
+    void defSockaddr();
+    void createServerAndListen();
+    void acceptFirstConnection();
+    void sendData(cv::Mat, size_t);
+};
+
+
+#endif //VIDEOSTREAM_NETWORK_H
