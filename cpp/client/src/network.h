@@ -10,7 +10,7 @@
 
 class Network {
     int sockSystemCall;
-    char* serverIP;
+    std::string serverIP;
     uint16_t serverPort;
     sockaddr_in server;
     socklen_t addressLength;
@@ -28,8 +28,8 @@ public:
     // for menu
     uint16_t getPort();
     void setPort(uint16_t);
-    char* getServerIp();
-    void setServerIp(char*);
+    std::string getServerIp();
+    void setServerIp(std::string);
 };
 
 #endif //VIDEOSTREAM_NETWORK_H

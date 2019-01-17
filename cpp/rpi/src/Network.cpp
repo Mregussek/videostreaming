@@ -10,10 +10,12 @@ void Network::defServerSocket()
 {
     this ->serverSocket = socket(AF_INET , SOCK_STREAM , 0);
 
-    if (this ->serverSocket == -1)
+    if (this ->serverSocket < 0)
     {
-        perror("Creating socket failed!");
+        std::cout << "Cannot create a socket!" << std::endl;
+        exit(1);
     }
+    
 }
 
 void Network::defSockaddr(uint16_t anyPort)
@@ -25,14 +27,14 @@ void Network::defSockaddr(uint16_t anyPort)
 
 void Network::createServerAndListen()
 {
-    auto conversionToSockaddr = (sockaddr*) &(this ->server);
+    auto conversionToSockaddr = reinterpret_cast<sockaddr*>(&(this ->server));
 
     int resultOfBind = bind(this ->serverSocket,
                     conversionToSockaddr, this ->addressLength);
 
     if(resultOfBind < 0)
     {
-        perror("Cannot bind socket!");
+        std::cout << "Cannot bind a server!" << std::endl;
         exit(1);
     }
 
@@ -43,7 +45,7 @@ void Network::createServerAndListen()
 
 void Network::acceptFirstConnection()
 {
-    auto conversionToSockaddr = (sockaddr*) &(this ->client);
+    auto conversionToSockaddr = reinterpret_cast<sockaddr*>(&(this ->client));
     auto conversionToPointer = &(this ->addressLength);
 
     this ->clientSocket = accept(this ->serverSocket,
@@ -51,7 +53,7 @@ void Network::acceptFirstConnection()
 
     if(this ->clientSocket < 0)
     {
-        perror("Accepting request failed!");
+        std::cout << "Cannot accept a connection!" << std::endl;
         exit(1);
     }
 
@@ -64,7 +66,7 @@ void Network::sendData(cv::Mat image, size_t size)
 
     if (resultOfSend < 0)
     {
-        std::cerr << "bytes = " << resultOfSend << std::endl;
+        std::cout << "bytes = " << resultOfSend << std::endl;
     }
 }
 

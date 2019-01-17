@@ -8,7 +8,7 @@ void Menu::menu()
 {
     clearScreen();
     std::cout << "Current Settings" << std::endl;
-    std::cout << "IP: " << getServerIp() << "Port: "<< getPort() << std::endl;
+    std::cout << "IP: " << getServerIp() << " Port: "<< getPort() << std::endl;
     std::cout << "1. Start watching" << std::endl;
     std::cout << "2. Configure" << std::endl;
     std::cout << "3. Usage" << std::endl;
@@ -38,8 +38,11 @@ void Menu::menu()
 
 void Menu::startWatching()
 {
+    std::cout << "Defining socket..." << std::endl;
     defSocket();
+    std::cout << "Defining sockaddr..." << std::endl;
     defSockaddr();
+    std::cout << "Connecting to " << getServerIp() << " " << getPort() << std::endl;
     connectToServer();
 
     checkIfContinuous();
@@ -57,11 +60,13 @@ void Menu::startWatching()
             break;
     }
 
+    delete metadata;
     closeConnection();
 }
 
 void Menu::configure()
 {
+    clearScreen();
     std::cout << "1. Change server ip (" << getServerIp() << ")" << std::endl;
     std::cout << "2. Change port (" << getPort() << ")" << std::endl;
     std::cout << "3. Back" << std::endl;
@@ -75,9 +80,11 @@ void Menu::configure()
 
         switch (choice) {
             case 1:
+                clearScreen();
                 changeIp();
                 break;
             case 2:
+                clearScreen();
                 changePort();
                 break;
             case 3:
@@ -105,7 +112,7 @@ void Menu::usage()
 void Menu::changeIp()
 {
     clearScreen();
-    char* newIp;
+    std::string newIp;
     char choice;
 
     while(true)

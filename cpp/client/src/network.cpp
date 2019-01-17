@@ -2,7 +2,7 @@
 
 Network::Network()
 {
-    this ->serverIP = (char*)"127.0.0.1";
+    this ->serverIP = "127.0.0.1";
     this ->serverPort = 3305;
     this ->addressLength = sizeof(sockaddr_in);
     this ->receivedBytes = 0;
@@ -21,15 +21,20 @@ void Network::defSocket()
 
 void Network::defSockaddr()
 {
+    char* charIp = new char[this ->serverIP.length() + 1];
+    strcpy(charIp, this ->serverIP.c_str());
+
     this ->server.sin_family = PF_INET;
-    this ->server.sin_addr.s_addr = inet_addr(this ->serverIP);
+    this ->server.sin_addr.s_addr = inet_addr(charIp);
     this ->server.sin_port = htons(this ->serverPort);
+
+    delete [] charIp;
 }
 
 void Network::connectToServer()
 {
     int resultOfConnection;
-    auto conversionToSockaddr = (sockaddr*) &(this ->server);
+    auto conversionToSockaddr = reinterpret_cast<sockaddr*>(&(this ->server));
 
     resultOfConnection = connect(this ->sockSystemCall,
             conversionToSockaddr, this ->addressLength);
@@ -47,7 +52,7 @@ void Network::receiveData(uchar* metadata, size_t sizeOfImage)
                         sizeOfImage, MSG_WAITALL);
 
     if(receivedBytes == -1)
-        std::cerr << "Failed in receiving data, received = " << this ->receivedBytes << std::endl;
+         std::cout << "Failed when receiving data!" << std::endl;
 }
 
 void Network::closeConnection()
@@ -57,7 +62,7 @@ void Network::closeConnection()
 
 uint16_t Network::getPort()
 {
-    return this ->serverPort;
+    return (this ->serverPort);
 }
 
 void Network::setPort(uint16_t newPort)
@@ -65,12 +70,12 @@ void Network::setPort(uint16_t newPort)
     this ->serverPort = newPort;
 }
 
-char* Network::getServerIp()
+std::string Network::getServerIp()
 {
-    return this ->serverIP;
+    return (this ->serverIP);
 }
 
-void Network::setServerIp(char* newIp)
+void Network::setServerIp(std::string newIp)
 {
-    this ->serverIP = newIp;
+    this ->serverIP = std::move(newIp);
 }

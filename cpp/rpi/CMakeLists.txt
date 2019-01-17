@@ -10,7 +10,10 @@ find_package(OpenCV REQUIRED COMPONENTS core imgproc highgui)
 include_directories(${OpenCV_INCLUDE_DIRS})
 
 set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(SOURCE_SERVER server.cpp src/Network.cpp src/Network.h src/Camera.cpp src/Camera.h src/Menu.cpp src/Menu.h)
 add_executable(server ${SOURCE_SERVER})
 target_link_libraries(server ${OpenCV_LIBS})
+target_link_libraries(server -static-libgcc -static-libstdc++)

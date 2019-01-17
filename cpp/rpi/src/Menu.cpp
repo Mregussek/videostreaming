@@ -38,10 +38,14 @@ void Menu::menu()
 
 void Menu::startStreaming()
 {
+    std::cout << "1" << std::endl;
     defServerSocket();
+    std::cout << "1" << std::endl;
     defSockaddr( getPort() );
+    std::cout << "1" << std::endl;
     createServerAndListen();
 
+    std::cout << "1" << std::endl;
     checkContinuous();
     acceptFirstConnection();
 
@@ -56,6 +60,7 @@ void Menu::startStreaming()
 
 void Menu::configure()
 {
+    clearScreen();
     std::cout << "1. Change port (" << getPort() << ")" << std::endl;
     std::cout << "2. Back" << std::endl;
 
@@ -68,6 +73,7 @@ void Menu::configure()
 
         switch (choice) {
             case 1:
+                clearScreen();
                 changePort();
                 break;
             case 2:
