@@ -2,7 +2,10 @@
 
 Menu::Menu()
 : Network(), Camera()
-{}
+{
+    this ->resOfSending = false;
+    this ->resultOfReadingFrame = false;
+}
 
 void Menu::menu()
 {
@@ -51,11 +54,19 @@ void Menu::startStreaming()
 
     while(true)
     {
-        readFrame();
+        this ->resultOfReadingFrame = readFrame();
+        if(!resultOfReadingFrame)
+            break;
+
         proccessImage();
 
-        sendData(grayImage, getImageSize());
+        this ->resOfSending = sendData(grayImage, getImageSize());
+        if(!resOfSending)
+            break;
     }
+
+    closeConnection();
+    exit(1);
 }
 
 void Menu::configure()
@@ -71,17 +82,21 @@ void Menu::configure()
         std::cout << "> ";
         std::cin >> choice;
 
-        switch (choice) {
-            case 1:
-                clearScreen();
-                changePort();
-                break;
-            case 2:
-                menu();
-                break;
-            default:
-                continue;
-        }
+        if(choice == 1 || choice == 2)
+            break;
+    }
+
+    switch(choice)
+    {
+        case 1:
+            clearScreen();
+            changePort();
+            break;
+        case 2:
+            menu();
+            break;
+        default:
+            configure();
     }
 }
 

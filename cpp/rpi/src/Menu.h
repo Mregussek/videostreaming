@@ -8,6 +8,9 @@
 
 class Menu : public Camera, public Network
 {
+private:
+    bool resultOfReadingFrame;
+    bool resOfSending;
 public:
     Menu();
     void menu();

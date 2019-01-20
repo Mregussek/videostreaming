@@ -21,9 +21,14 @@ size_t Camera::getImageSize()
     return this ->imageSize;
 }
 
-void Camera::readFrame()
+bool Camera::readFrame()
 {
     this ->camera >> this ->image;
+
+    if(!image.data)
+        return false;
+
+    return true;
 }
 
 void Camera::proccessImage()

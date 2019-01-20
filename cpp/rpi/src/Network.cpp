@@ -60,14 +60,23 @@ void Network::acceptFirstConnection()
     std::cout << "Connection accepted" << std::endl;
 }
 
-void Network::sendData(cv::Mat image, size_t size)
+bool Network::sendData(cv::Mat image, size_t size)
 {
     ssize_t resultOfSend = send(this ->clientSocket, image.data, size, 0);
 
     if (resultOfSend < 0)
     {
         std::cout << "bytes = " << resultOfSend << std::endl;
+        return false;
     }
+
+    return true;
+}
+
+void Network::closeConnection()
+{
+    close(this ->clientSocket);
+    close(this ->serverSocket);
 }
 
 uint16_t Network::getPort()

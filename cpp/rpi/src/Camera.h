@@ -13,7 +13,7 @@ public:
     Camera();
     void checkContinuous();
     size_t getImageSize();
-    void readFrame();
+    bool readFrame();
     void proccessImage();
 
 };

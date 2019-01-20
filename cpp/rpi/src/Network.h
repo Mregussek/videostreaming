@@ -2,6 +2,7 @@
 #define VIDEOSTREAM_NETWORK_H
 
 #include <iostream>
+#include <unistd.h>
 #include <arpa/inet.h>
 #include <opencv2/opencv.hpp>
 
@@ -20,7 +21,8 @@ public:
     void defSockaddr(uint16_t);
     void createServerAndListen();
     void acceptFirstConnection();
-    void sendData(cv::Mat, size_t);
+    bool sendData(cv::Mat, size_t);
+    void closeConnection();
 
     // for the menu class
     uint16_t getPort();
