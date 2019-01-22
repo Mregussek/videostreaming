@@ -36,7 +36,7 @@ class Network(object):
     def tcp_start_server(self):
         self.footage_socket.bind(self.HOST_TCP)
         self.footage_socket.setsockopt_string(zmq.SUBSCRIBE, np.unicode(''))
-        print("SERVER STARTED!")
+        print("Server Started!")
 
     def receive_from_rpi(self):
         data = self.footage_socket.recv_string()
@@ -68,7 +68,7 @@ class Network(object):
 
     def udp_start_server(self):
         self.footage_socket.bind(self.HOST_UDP)
-        print('SERVER STARTED!')
+        print('Server started!')
 
     def udp_receive_data(self):
         data = self.footage_socket.recv(30000)

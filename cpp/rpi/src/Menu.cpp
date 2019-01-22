@@ -1,3 +1,12 @@
+/*
+
+Written by Mateusz Rzeczyca.
+Student - AGH University of Science and Technology
+info@mateuszrzeczyca.pl
+20.01.2019
+
+*/
+
 #include "Menu.h"
 
 Menu::Menu()
@@ -41,14 +50,10 @@ void Menu::menu()
 
 void Menu::startStreaming()
 {
-    std::cout << "1" << std::endl;
     defServerSocket();
-    std::cout << "1" << std::endl;
     defSockaddr( getPort() );
-    std::cout << "1" << std::endl;
     createServerAndListen();
 
-    std::cout << "1" << std::endl;
     checkContinuous();
     acceptFirstConnection();
 

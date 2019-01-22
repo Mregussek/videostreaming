@@ -20,20 +20,18 @@ def clear_screen():
 
 
 def print_usage():
-    tcp = """ 
-TCP Instruction:
-1. Make sure that TCP protocol is set on server and client.
-2. Check IP address and port on client and RPi (must be the same).
-3. Run first option in the menu (1. Start watching on client)
-    on client machine.
-4. Run second option (2. RPi start streaming) on RPi
-TCP should work properly. The same instructions are for UDP protocol!
+    instruction = """ 
+Instruction:
+1. Make sure that the same port and protocol are the same on RPi and client machine!
+2. Also resolution must be the same on RPi and client.
+3. On RPi set client IP / on client machine set server IP.
+4. Firstly start server on client machine (First option on the menu).
+5. Finally start streaming by choosing second option on RPi.
 
-Remember that (1. Start watching on client) will always start server, so in that case
-RPi is just client, which connects to server.
+Enjoy!
 """
 
-    print(tcp)
+    print(instruction)
 
 class Main(Camera, Network):
     def __init__(self):
@@ -108,7 +106,7 @@ class Main(Camera, Network):
 
         elif choice == '2':
             clear_screen()
-            print("Your IP for client is: {}".format(self.CLIENT_UDP))
+            print("Your IP for client is: {}".format(self.CLIENT_ADDR_UDP))
 
             self.set_client_ip()
             time.sleep(1)
