@@ -16,7 +16,7 @@ namespace mrz
         this ->server_socket = socket(AF_INET, SOCK_STREAM, 0);
 
         if(this ->server_socket < 0)
-            error_creating_socket();
+            Error::error_creating_socket();
     }
 
     void TCPserver::define_sockaddr()
@@ -34,7 +34,7 @@ namespace mrz
         *result = bind(this ->server_socket, conv_sock, this ->address_length);
 
         if(*result < 0)
-            error_bind_server();
+            Error::error_bind_server();
 
         delete result;
 
@@ -53,7 +53,7 @@ namespace mrz
         this ->client_socket = accept(this ->server_socket, conv_sock, conv_point);
 
         if(this ->client_socket < 0)
-            error_accept_connection();
+            Error::error_accept_connection();
 
         std::cout << "Connection Accepted!\n";
     }
@@ -64,7 +64,7 @@ namespace mrz
         *result = send(this ->client_socket, image.data, size, 0);
 
         if(*result < 0)
-            error_sending_data();
+            Error::error_sending_data();
 
         delete result;
     }

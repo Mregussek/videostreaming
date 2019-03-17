@@ -22,8 +22,4 @@
 // opencv
 #include <opencv2/opencv.hpp>
 
-// my files
-#include "networking/TCPserver.h"
-#include "networking/TCPclient.h"
-
 #endif //VIDEOSTREAMING_INC_DEF_H

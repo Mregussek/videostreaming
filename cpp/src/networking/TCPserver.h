@@ -14,12 +14,16 @@ namespace mrz
     public:
         TCPserver();
 
-        void define_socket() override;
+        void define_socket();
         void define_sockaddr() override;
-        void create_server_then_listen() override;
-        void accept_incoming_connection() override;
-        void send_data(cv::Mat, size_t) override;
-        void close_connection() override;
+        void create_server_then_listen();
+        void accept_incoming_connection();
+        void send_data(cv::Mat, size_t);
+        void close_connection();
+
+        // just for inheriting
+        void connect_to_server() {}
+        void receive_data(unsigned char*, size_t) {}
 
     private:
         int server_socket;

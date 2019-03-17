@@ -7,6 +7,9 @@
 
 #include "inc_def.h"
 
+#include "networking/TCPserver.h"
+#include "networking/TCPclient.h"
+
 namespace mrz
 {
     class menu;

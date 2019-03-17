@@ -20,6 +20,11 @@ namespace mrz
         void receive_data(unsigned char*, size_t) override;
         void close_connection() override;
 
+        //just for inheriting
+        void send_data(cv::Mat, size_t) {}
+        void accept_incoming_connection() {}
+        void create_server_then_listen() {}
+
     private:
         int sock_system_call;
         std::string ip;
@@ -29,7 +34,6 @@ namespace mrz
         ssize_t received_bytes;
     };
 }
-
 
 
 

@@ -9,56 +9,53 @@
 
 namespace mrz
 {
-    class TCP;
+    class TCP
+    {
+    public:
+        //TCP();
+        //virtual ~TCP();
+
+        virtual void define_socket() = 0;
+        virtual void define_sockaddr() = 0;
+        virtual void close_connection() = 0;
+
+        // for client
+        virtual void connect_to_server() = 0;
+        virtual void receive_data(unsigned char*, size_t) = 0;
+
+        // for server
+        virtual void create_server_then_listen() = 0;
+        virtual void accept_incoming_connection() = 0;
+        virtual void send_data(cv::Mat, size_t) = 0;
+    };
+
+    class Error
+    {
+    public:
+        static void error_creating_socket() {}
+        static void error_connecting_to_server() {}
+        static void error_bind_server() {}
+        static void error_accept_connection() {}
+        static void error_sending_data() {}
+    };
 }
 
-class mrz::TCP
-{
-public:
-    virtual void define_socket();
-    virtual void define_sockaddr();
-    virtual void close_connection() ;
+/*
+void mrz::TCP::define_socket() {}
+void mrz::TCP::define_sockaddr() {}
+void mrz::TCP::close_connection() {}
 
-    // for client
-    virtual void connect_to_server();
-    virtual void receive_data(unsigned char*, size_t);
+// for client
+void mrz::TCP::connect_to_server() {}
+void mrz::TCP::receive_data(unsigned char*, size_t) {}
 
-    // for server
-    virtual void create_server_then_listen();
-    virtual void accept_incoming_connection();
-    virtual void send_data(cv::Mat, size_t);
+// for server
+void mrz::TCP::create_server_then_listen() {}
+void mrz::TCP::accept_incoming_connection() {}
+void mrz::TCP::send_data(cv::Mat, size_t) {}
+ */
 
-protected:
-    void error_creating_socket();
-    void error_connecting_to_server();
-    void error_bind_server();
-    void error_accept_connection();
-    void error_sending_data();
-};
-
-void mrz::TCP::error_creating_socket()
-{
-
-}
-
-void mrz::TCP::error_connecting_to_server()
-{
-
-}
-
-void mrz::TCP::error_bind_server()
-{
-
-}
-
-void mrz::TCP::error_accept_connection()
-{
-
-}
-
-void mrz::TCP::error_sending_data()
-{
-
-}
+//mrz::TCP::TCP() {}
+//mrz::TCP::~TCP() {}
 
 #endif //VIDEOSTREAMING_TCP_H

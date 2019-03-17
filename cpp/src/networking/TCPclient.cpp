@@ -18,7 +18,7 @@ namespace mrz
         this ->sock_system_call = socket(PF_INET, SOCK_STREAM, 0);
 
         if(this ->sock_system_call < 0)
-            error_creating_socket();
+            Error::error_creating_socket();
     }
 
     void TCPclient::define_sockaddr()
@@ -41,7 +41,7 @@ namespace mrz
         *result = connect(this ->sock_system_call, conv_sock, this ->address_length);
 
         if(*result < 0)
-            error_connecting_to_server();
+            Error::error_connecting_to_server();
 
         delete result;
     }
