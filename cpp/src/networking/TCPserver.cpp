@@ -8,8 +8,10 @@ namespace mrz
 {
     TCPserver::TCPserver() :
     port(3305),
-    address_length(sizeof(sockaddr_in))
+    address_length(sizeof(sockaddr_in)),
+    sent_data( false )
     {}
+
 
     void TCPserver::define_socket()
     {
@@ -58,15 +60,20 @@ namespace mrz
         std::cout << "Connection Accepted!\n";
     }
 
-    void TCPserver::send_data(cv::Mat image, size_t size)
+    bool TCPserver::send_data(cv::Mat image, size_t size)
     {
         ssize_t* result = new ssize_t;
         *result = send(this ->client_socket, image.data, size, 0);
 
         if(*result < 0)
+        {
             Error::error_sending_data();
+            delete result;
+            return false;
+        }
 
         delete result;
+        return true;
     }
 
     void TCPserver::close_connection()

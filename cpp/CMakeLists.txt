@@ -23,7 +23,7 @@ set(NET_FILES ${NET_DIR}/TCP.h ${NET_DIR}/TCPclient.h ${NET_DIR}/TCPclient.cpp
         ${NET_DIR}/TCPserver.cpp ${NET_DIR}/TCPserver.h)
 
 set(VID_DIR src/videoprocessing)
-set(VID_FILES ${VID_DIR}/VIDEO.h)
+set(VID_FILES ${VID_DIR}/VIDEO.h src/videoprocessing/VIDEOclient.cpp src/videoprocessing/VIDEOclient.h src/videoprocessing/VIDEOserver.cpp src/videoprocessing/VIDEOserver.h)
 
 set(SOURCE_FILES ${MAIN_FILES} ${NET_FILES} ${VID_FILES})
 

@@ -21,9 +21,9 @@ namespace mrz
         void close_connection() override;
 
         //just for inheriting
-        void send_data(cv::Mat, size_t) {}
-        void accept_incoming_connection() {}
-        void create_server_then_listen() {}
+        bool send_data(cv::Mat, size_t) override { return false; }
+        void accept_incoming_connection() override { return; }
+        void create_server_then_listen() override { return; }
 
     private:
         int sock_system_call;

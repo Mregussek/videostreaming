@@ -12,9 +12,6 @@ namespace mrz
     class TCP
     {
     public:
-        //TCP();
-        //virtual ~TCP();
-
         virtual void define_socket() = 0;
         virtual void define_sockaddr() = 0;
         virtual void close_connection() = 0;
@@ -26,7 +23,7 @@ namespace mrz
         // for server
         virtual void create_server_then_listen() = 0;
         virtual void accept_incoming_connection() = 0;
-        virtual void send_data(cv::Mat, size_t) = 0;
+        virtual bool send_data(cv::Mat, size_t) = 0;
     };
 
     class Error

@@ -51,6 +51,7 @@ namespace mrz
         this ->received_bytes = recv(this ->sock_system_call, metadata, image_size, MSG_WAITALL);
     }
 
+
     void TCPclient::close_connection()
     {
         close(this ->sock_system_call);
