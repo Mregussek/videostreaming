@@ -6,24 +6,19 @@
 #define VIDEOSTREAMING_TCPCLIENT_H
 
 // inheriting from TCP
-#include "TCP.h"
+#include "../inc_def.h"
 
 namespace mrz
 {
-    class TCPclient : public TCP {
+    class TCPclient {
     public:
         TCPclient();
 
-        void define_socket() override;
-        void define_sockaddr() override;
-        void connect_to_server() override;
-        void receive_data(unsigned char*, size_t) override;
-        void close_connection() override;
-
-        //just for inheriting
-        bool send_data(cv::Mat, size_t) override { return false; }
-        void accept_incoming_connection() override { return; }
-        void create_server_then_listen() override { return; }
+        void define_socket();
+        void define_sockaddr();
+        void connect_to_server();
+        void receive_data(unsigned char*, size_t);
+        void close_connection();
 
     private:
         int sock_system_call;

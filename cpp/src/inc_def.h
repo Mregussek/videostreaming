@@ -22,4 +22,7 @@
 // opencv
 #include <opencv2/opencv.hpp>
 
+// error handling
+#include "ERROR.h"
+
 #endif //VIDEOSTREAMING_INC_DEF_H

@@ -6,24 +6,20 @@
 #define VIDEOSTREAMING_TCPSERVER_H
 
 // inheriting from TCP
-#include "TCP.h"
+#include "../inc_def.h"
 
 namespace mrz
 {
-    class TCPserver : public TCP {
+    class TCPserver {
     public:
         TCPserver();
 
-        void define_socket() override;
-        void define_sockaddr() override;
-        void create_server_then_listen() override;
-        void accept_incoming_connection() override;
+        void define_socket();
+        void define_sockaddr();
+        void create_server_then_listen();
+        void accept_incoming_connection();
         bool send_data(cv::Mat, size_t);
         void close_connection();
-
-        // just for inheriting
-        void connect_to_server() override { return; }
-        void receive_data(unsigned char*, size_t) override { return; }
 
         bool sent_data;
     private:
@@ -35,7 +31,5 @@ namespace mrz
         socklen_t address_length;
     };
 }
-
-
 
 #endif //VIDEOSTREAMING_TCPSERVER_H

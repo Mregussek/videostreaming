@@ -5,28 +5,24 @@
 #ifndef VIDEOSTREAMING_VIDEOSERVER_H
 #define VIDEOSTREAMING_VIDEOSERVER_H
 
-#include "VIDEO.h"
+#include "../inc_def.h"
 
 namespace mrz
 {
     class VIDEOserver;
 }
 
-class mrz::VIDEOserver : public mrz::VIDEO {
+class mrz::VIDEOserver{
 public:
     VIDEOserver();
 
-    void check_if_continuous() override;
-    size_t get_image_size() override;
-    void create_window() override;
-    int get_key() override;
-    int wait() override;
-    uchar* get_metadata() override;
-    void show_image() override;
-
-    // for inheriting
-    bool read_frame() override { return false; }
-    void process_image() override { return; }
+    void check_if_continuous();
+    size_t get_image_size();
+    void create_window();
+    int get_key();
+    int wait();
+    uchar* get_metadata();
+    void show_image();
 
 private:
     cv::Mat image;
