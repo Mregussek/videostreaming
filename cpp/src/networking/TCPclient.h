@@ -17,8 +17,14 @@ namespace mrz
         void define_socket();
         void define_sockaddr();
         void connect_to_server();
-        void receive_data(unsigned char*, size_t);
+        void receive_data(unsigned char*, size_t&);
         void close_connection();
+
+        void set_port(uint16_t);
+        uint16_t get_port() const;
+
+        void set_ip(std::string);
+        std::string get_ip() const;
 
     private:
         int sock_system_call;

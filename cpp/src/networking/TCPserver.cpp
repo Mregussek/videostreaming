@@ -60,7 +60,7 @@ namespace mrz
         std::cout << "Connection Accepted!\n";
     }
 
-    bool TCPserver::send_data(cv::Mat image, size_t size)
+    bool TCPserver::send_data(cv::Mat& image, size_t& size)
     {
         ssize_t* result = new ssize_t;
         *result = send(this ->client_socket, image.data, size, 0);
@@ -80,5 +80,15 @@ namespace mrz
     {
         close(this ->server_socket);
         close(this ->client_socket);
+    }
+
+    uint16_t TCPserver::get_port() const
+    {
+        return this ->port;
+    }
+
+    void TCPserver::set_port(uint16_t new_port)
+    {
+        this ->port = new_port;
     }
 }

@@ -16,6 +16,9 @@
 // strcpy
 #include <cstring>
 
+// string
+#include <string>
+
 // close
 #include <zconf.h>
 

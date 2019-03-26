@@ -18,8 +18,12 @@ namespace mrz
         void define_sockaddr();
         void create_server_then_listen();
         void accept_incoming_connection();
-        bool send_data(cv::Mat, size_t);
+        bool send_data(cv::Mat&, size_t&);
         void close_connection();
+
+        // get / set
+        uint16_t get_port() const;
+        void set_port(uint16_t);
 
         bool sent_data;
     private:

@@ -17,7 +17,7 @@ public:
     VIDEOserver();
 
     void check_if_continuous();
-    size_t get_image_size();
+    size_t& get_image_size();
     void create_window();
     int get_key();
     int wait();

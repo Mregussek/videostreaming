@@ -46,7 +46,7 @@ namespace mrz
         delete result;
     }
 
-    void TCPclient::receive_data(unsigned char* metadata, size_t image_size)
+    void TCPclient::receive_data(unsigned char* metadata, size_t& image_size)
     {
         this ->received_bytes = recv(this ->sock_system_call, metadata, image_size, MSG_WAITALL);
     }
@@ -55,5 +55,25 @@ namespace mrz
     void TCPclient::close_connection()
     {
         close(this ->sock_system_call);
+    }
+
+    uint16_t TCPclient::get_port() const
+    {
+        return this ->port;
+    }
+
+    void TCPclient::set_port(uint16_t new_port)
+    {
+        this ->port = new_port;
+    }
+
+    std::string TCPclient::get_ip() const
+    {
+        return this ->ip;
+    }
+
+    void TCPclient::set_ip(std::string new_ip)
+    {
+        this ->ip = new_ip;
     }
 }

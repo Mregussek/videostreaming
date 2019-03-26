@@ -17,7 +17,7 @@ public:
     VIDEOclient();
 
     void check_if_continuous();
-    size_t get_image_size();
+    size_t& get_image_size();
     bool read_frame();
     void process_image();
 

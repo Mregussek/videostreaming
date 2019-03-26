@@ -22,7 +22,7 @@ namespace mrz
         }
     }
 
-    size_t VIDEOclient::get_image_size()
+    size_t& VIDEOclient::get_image_size()
     {
         return this ->image_size;
     }

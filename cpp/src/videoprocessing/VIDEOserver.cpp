@@ -17,7 +17,7 @@ namespace mrz
             this ->image = this ->image.clone();
     }
 
-    size_t VIDEOserver::get_image_size()
+    size_t& VIDEOserver::get_image_size()
     {
         return this ->image_size;
     }
