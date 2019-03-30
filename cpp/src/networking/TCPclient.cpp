@@ -1,6 +1,7 @@
-//
-// Created by mateusz on 16.03.19.
-//
+//   Written by Mateusz Rzeczyca.
+//   Student - AGH University of Science and Technology
+//   info@mateuszrzeczyca.pl
+//   30.03.2019
 
 #include "TCPclient.h"
 

@@ -1,11 +1,11 @@
-//
-// Created by mateusz on 16.03.19.
-//
+//   Written by Mateusz Rzeczyca.
+//   Student - AGH University of Science and Technology
+//   info@mateuszrzeczyca.pl
+//   30.03.2019
 
 #ifndef VIDEOSTREAMING_TCPCLIENT_H
 #define VIDEOSTREAMING_TCPCLIENT_H
 
-// inheriting from TCP
 #include "../inc_def.h"
 
 namespace mrz

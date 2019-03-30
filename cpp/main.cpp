@@ -1,13 +1,23 @@
-//
-// Created by mateusz on 16.03.19.
-//
+//   Written by Mateusz Rzeczyca.
+//   Student - AGH University of Science and Technology
+//   info@mateuszrzeczyca.pl
+//   30.03.2019
 
-#include "src/main.h"
+//#define CLI
+#define SER
 
-auto main() ->int
+#ifdef CLI
+#include "src/client.h"
+mrz::CLIENT object;
+#endif
+
+#ifdef SER
+#include "src/server.h"
+mrz::SERVER object;
+#endif
+
+int main()
 {
-    mrz::menu object;
-    object.start();
-
+    object.menu();
     return 0;
 }
