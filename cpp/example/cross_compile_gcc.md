@@ -67,6 +67,8 @@ pi@raspberrypi:~ $ ./hw_cross
 Hello World
 ```
 
+Now you are allowed to go the second part of my cross-compilation tutorial! You're gonna know how to use cmake, prepare build files, then make binary file ready to run on RPi!
+
 ## Author
 
 Mateusz Rzeczyca
