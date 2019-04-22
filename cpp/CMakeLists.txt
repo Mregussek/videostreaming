@@ -16,18 +16,7 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(MAIN_FILES main.cpp src/inc_def.h src/ERROR.h)
 
-set(NET_DIR src/networking)
-set(NET_FILES ${NET_DIR}/TCPclient.h ${NET_DIR}/TCPclient.cpp
-        ${NET_DIR}/TCPserver.cpp ${NET_DIR}/TCPserver.h)
-
-set(VID_DIR src/videoprocessing)
-set(VID_FILES ${VID_DIR}/VIDEOclient.cpp ${VID_DIR}/VIDEOclient.h ${VID_DIR}/VIDEOserver.cpp
-        ${VID_DIR}/VIDEOserver.h)
-
-set(SOURCE_FILES ${MAIN_FILES} ${NET_FILES} ${VID_FILES} src/client.h src/server.h)
-
-add_executable(video ${SOURCE_FILES})
+add_executable(video ${SOURCE_FILES} src/networking/client/TCPClient.cpp src/networking/client/TCPClient.h)
 
 target_link_libraries(video ${OpenCV_LIBS})

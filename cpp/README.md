@@ -13,7 +13,7 @@ Since I used only Python for streaming data, I have seen that this app sometimes
 I used Raspbian Jessie Lite for to test this app. In the RPiConfiguration directory you have the files, which must be put on your RPi. ***ssh*** file enables connection through 22 port and ***wpa_supplicant.conf*** allows you to connect RPi to WiFi. 
 
 ## C++
-For TCP I have used 640x480 resolution. It can work without any problems. 
+For TCPClient I have used 640x480 resolution. It can work without any problems.
 
 In **rpi_app** directory you can find code, which have to be run on RPi. You have prepared **CMakeLists.txt** file for building this app and **toolchain.cmake** for cross compiling with cmake.
 

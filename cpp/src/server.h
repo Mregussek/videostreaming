@@ -6,7 +6,7 @@
 #ifndef VIDEOSTREAMING_SERVER_H
 #define VIDEOSTREAMING_SERVER_H
 
-#include "networking/TCPserver.h"
+#include "networking/server/TCPserver.h"
 #include "videoprocessing/VIDEOclient.h"
 #include "inc_def.h"
 

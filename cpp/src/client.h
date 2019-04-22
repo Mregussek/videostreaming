@@ -6,7 +6,7 @@
 #ifndef VIDEOSTREAMING_CLIENT_H
 #define VIDEOSTREAMING_CLIENT_H
 
-#include "networking/TCPclient.h"
+#include "networking/client/TCPclient.h"
 #include "videoprocessing/VIDEOserver.h"
 #include "inc_def.h"
 
@@ -21,17 +21,6 @@ namespace mrz
         void run();
         void change_port();
         void change_ip();
-
-        void clear_screen()
-        {
-            std::cout << "\033[2J\033[1;1H";
-        }
-
-        void write_line()
-        {
-            std::cout << std::string(20, '-');
-            std::cout << "\n";
-        }
 
         TCPclient client;
         VIDEOserver display;

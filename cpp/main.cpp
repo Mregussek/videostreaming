@@ -3,21 +3,56 @@
 //   info@mateuszrzeczyca.pl
 //   30.03.2019
 
-#define CLI
-//#define SER
+#include "src/Facade.h"
 
-#ifdef CLI
-#include "src/client.h"
-mrz::CLIENT object;
-#endif
+void give_right_arguments();
 
-#ifdef SER
-#include "src/server.h"
-mrz::SERVER object;
-#endif
-
-int main()
+int main(int argc, char* argv[])
 {
-    object.menu();
+    // server
+    if(argc == 3)
+        if(argv[2] == "tcp")
+        {
+            mrz::TCPServer* tcp = new mrz::TCPServer(argv[1]);
+            mrz::Facade* server = new mrz::Facade( reinterpret_cast<ServerStrategy*>(tcp) );
+
+            delete tcp;
+            delete server;
+
+        }
+        else if(argv[2] == "udp")
+        {
+            mrz::UDPServer* udp = new mrz::UDPServer(argv[1]);
+            mrz::Facade* server = new mrz::Facade( reinterpret_cast<ServerStrategy*>(udp) );
+
+            delete udp;
+            delete server;
+        }
+        else
+            give_right_arguments();
+    // client
+    else if(argc == 4)
+    {
+
+    }
+    else
+        give_right_arguments();
+
     return 0;
+}
+
+void give_right_arguments()
+{
+    std::cout << "For Client App: "
+    std::cout << "<Server Address> <Server Port> <Protocol>\n";
+    std::cout << "For Server App: ";
+    std::cout << "<Server Port> <Protocol>\n";
+    std::cout << "\n\n Example:\n";
+    std::cout << "video 3305 tcp\t\t (This will run server on 3305 "
+        << "port with TCP protocol\n";
+    std::cout << "video 192.168.201.78 3305 udp\t\t "
+        << "(This will run client which connects to "
+        << "192.168.201.78 on 3305 port with UDP protocol\n";
+
+    exit(1);
 }
