@@ -84,6 +84,9 @@ pi@raspberrypi:~ $ ./hw_cmake
 Hello World
 ```
 
+Work is a little bit complicated when our plan is to add arm_sysroot to cmake. I will find out what
+to do asap!
+
 ## Author
 
 Mateusz Rzeczyca

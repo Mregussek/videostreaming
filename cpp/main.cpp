@@ -3,8 +3,8 @@
 //   info@mateuszrzeczyca.pl
 //   30.03.2019
 
-//#define CLI
-#define SER
+#define CLI
+//#define SER
 
 #ifdef CLI
 #include "src/client.h"

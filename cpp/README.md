@@ -17,28 +17,6 @@ For TCP I have used 640x480 resolution. It can work without any problems.
 
 In **rpi_app** directory you can find code, which have to be run on RPi. You have prepared **CMakeLists.txt** file for building this app and **toolchain.cmake** for cross compiling with cmake.
 
-### Cross Compiling
-You have to download toolchain for ARM-like processors.
-
-[Toolchain](https://github.com/raspberrypi/tools)
-```bash
-git clone https://github.com/raspberrypi/tools.git
-```
-And of course you must have root files and libraries from your RPi in case of correct compiling. If you don't use them, you will see some errors for sure. **toolchain.cmake** is prepared for RPi files in
-```
-~/rpi/rootfs
-```
- directory in your main machine and for toolchain in 
-```
-~/rpi/tools
-```
- directory.
-
-You can get every library installed on your RPi using rsync:
-```
-rsync -rl --delete-after --safe-links pi@<ip_address>:/{bin,etc,lib,usr} ~/rpi/rootfs
-```
-
 ### Requirements
 - [cv2](https://opencv.org/)
 - [socket](http://www.linuxhowtos.org/C_C++/socket.htm)

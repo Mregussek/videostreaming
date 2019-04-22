@@ -8,7 +8,7 @@
 namespace mrz
 {
     TCPclient::TCPclient() :
-    ip("127.0.0.1"),
+    ip("192.168.201.78"),
     port(3305),
     address_length(sizeof(sockaddr_in)),
     received_bytes(0)
