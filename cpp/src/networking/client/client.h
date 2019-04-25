@@ -32,15 +32,10 @@ namespace mrz
         virtual void connect_to_server() = 0;
         virtual void receive_data() = 0;
         virtual void close_connection() = 0;
+
+        unsigned char* recv_data;
+        size_t* recv_data_size;
     };
-
-    void handle_create_socket_client() { }
-
-    void handle_connect_to_server() { }
-
-    void handle_receive_data() { }
-
-    void handle_str_to_uint16() { }
 }
 
 #endif //VIDEOSTREAMING_CLIENT_H

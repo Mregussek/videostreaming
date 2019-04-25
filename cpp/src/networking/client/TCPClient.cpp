@@ -42,7 +42,8 @@ namespace mrz
         *sock_system_call = socket(PF_INET, SOCK_STREAM, 0);
 
         if(*sock_system_call < 0)
-            handle_create_socket_client();
+            //handle_create_socket_client();
+            exit(1);
 
         server->sin_family = PF_INET;
         server->sin_addr.s_addr = inet_addr(ip);
@@ -57,7 +58,8 @@ namespace mrz
         *result = connect(*sock_system_call, converted, *addr_length);
 
         if(*result < 0)
-            handle_connect_to_server();
+            //handle_connect_to_server();
+            exit(1);
 
         delete result;
     }
@@ -67,7 +69,8 @@ namespace mrz
         *recv_bytes = recv(*sock_system_call, recv_data, *recv_data_size, MSG_WAITALL);
 
         if(*recv_bytes < 0)
-            handle_receive_data();
+            //handle_receive_data();
+            exit(1);
     }
 
     void TCPClient::close_connection()
@@ -82,7 +85,8 @@ namespace mrz
         long val = strtol(str, &end, 10);
 
         if (errno || end == str || *end != '\0' || val < 0 || val >= 0x10000)
-            handle_str_to_uint16();
+            //handle_str_to_uint16();
+            exit(1);
 
         *res = (uint16_t)val;
     }

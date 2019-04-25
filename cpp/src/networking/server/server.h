@@ -30,18 +30,9 @@ namespace mrz
         virtual void send_data() = 0;
         virtual void close_connection() = 0;
 
-        virtual void set_port(uint16_t*) = 0;
+        unsigned char* data_to_send;
+        size_t* data_to_send_size;
     };
-
-    void handle_create_socket_server() { }
-
-    void handle_create_server() { }
-
-    void handle_accept_connection() { }
-
-    void handle_send_data() { }
-
-    void handle_str_to_uint16() { }
 }
 
 #endif //VIDEOSTREAMING_SERVER_H

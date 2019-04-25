@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
         if(argv[2] == "tcp")
         {
             mrz::TCPServer* tcp = new mrz::TCPServer(argv[1]);
-            mrz::Facade* server = new mrz::Facade( reinterpret_cast<ServerStrategy*>(tcp) );
+            mrz::Facade* server = new mrz::Facade( reinterpret_cast<mrz::ServerStrategy*>(tcp) );
 
             delete tcp;
             delete server;
@@ -22,19 +22,36 @@ int main(int argc, char* argv[])
         }
         else if(argv[2] == "udp")
         {
-            mrz::UDPServer* udp = new mrz::UDPServer(argv[1]);
-            mrz::Facade* server = new mrz::Facade( reinterpret_cast<ServerStrategy*>(udp) );
+            return 0;
+            //mrz::UDPServer* udp = new mrz::UDPServer(argv[1]);
+            //mrz::Facade* server = new mrz::Facade( reinterpret_cast<mrz::ServerStrategy*>(udp) );
 
-            delete udp;
-            delete server;
+            //delete udp;
+            //delete server;
         }
         else
             give_right_arguments();
     // client
     else if(argc == 4)
-    {
+        if(argv[3] == "tcp")
+        {
+            mrz::TCPClient* tcp = new mrz::TCPClient(argv[1], argv[2]);
+            mrz::Facade* client = new mrz::Facade( reinterpret_cast<mrz::ClientStrategy*>(tcp) );
 
-    }
+            delete tcp;
+            delete client;
+        }
+        else if(argv[3] == "udp")
+        {
+            return 0;
+            //mrz::UDPClient* udp = new mrz::UDPClient(argv[1], argv[2]);
+            //mrz::Facade* client = new mrz::Facade( reinterpret_cast<mrz::ClientStrategy*>(udp) );
+
+            //delete udp;
+            //delete client;
+        }
+        else
+            give_right_arguments();
     else
         give_right_arguments();
 
@@ -43,7 +60,7 @@ int main(int argc, char* argv[])
 
 void give_right_arguments()
 {
-    std::cout << "For Client App: "
+    std::cout << "For Client App: ";
     std::cout << "<Server Address> <Server Port> <Protocol>\n";
     std::cout << "For Server App: ";
     std::cout << "<Server Port> <Protocol>\n";

@@ -15,6 +15,7 @@
  */
 #include "networking/client/UDPClient.h"
 #include "networking/server/UDPServer.h"
+#include "videoprocessing/Displayer.h"
 
 #include <iostream>
 
@@ -32,6 +33,8 @@ namespace mrz
     private:
         ClientStrategy* client;
         ServerStrategy* server;
+        Camera* cam;
+        Displayer* display;
     };
 }
 

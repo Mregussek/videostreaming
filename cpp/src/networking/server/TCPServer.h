@@ -13,7 +13,7 @@ namespace mrz
     {
     public:
         TCPServer();
-        TCPServer(char*);
+        explicit TCPServer(char*);
         ~TCPServer();
 
         void create_socket() override;
@@ -35,6 +35,5 @@ namespace mrz
         socklen_t* addr_length;
     };
 }
-
 
 #endif //VIDEOSTREAMING_TCPSERVER_H

@@ -40,8 +40,10 @@ namespace mrz
     {
         *server_sock = socket(AF_INET, SOCK_STREAM, 0);
 
-        if(server_sock < 0)
-            handle_create_socket_server();
+        if(*server_sock < 0)
+            //handle_create_socket_server();
+            exit(1);
+
 
         server ->sin_family = AF_INET;
         server ->sin_addr.s_addr = INADDR_ANY;
@@ -56,18 +58,20 @@ namespace mrz
         *result = bind(*server_sock, converted, *addr_length);
 
         if(*result < 0)
-            handle_create_server();
+            //handle_create_server();
+            exit(1);
 
         delete result;
 
         listen(*server_sock, 1);
 
-        auto converted = reinterpret_cast<sockaddr*>(client);
+        converted = reinterpret_cast<sockaddr*>(client);
 
         *client_sock = accept(*server_sock, converted, addr_length);
 
         if(*client_sock < 0)
-            handle_accept_connection();
+            //handle_accept_connection();
+            exit(1);
     }
 
     void TCPServer::send_data()
@@ -77,7 +81,7 @@ namespace mrz
         *result = send(*client_sock, data_to_send, *data_to_send_size, 0);
 
         if(*result < 0)
-            handle_send_data();
+            //handle_send_data();
 
         delete result;
     }
@@ -88,19 +92,16 @@ namespace mrz
         close(*server_sock);
     }
 
-    void TCPServer::set_port(uint16_t* new_port)
-    {
-        *port = *new_port;
-    }
 
-    void TCPClient::str_to_uint16(const char *str, uint16_t *res)
+    void TCPServer::str_to_uint16(const char *str, uint16_t *res)
     {
         char *end;
         errno = 0;
         long val = strtol(str, &end, 10);
 
         if (errno || end == str || *end != '\0' || val < 0 || val >= 0x10000)
-            handle_str_to_uint16();
+            //handle_str_to_uint16t();
+            exit(1);
 
         *res = (uint16_t)val;
     }
