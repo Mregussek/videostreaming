@@ -11,7 +11,7 @@ namespace mrz
     ip( new char[sizeof "123.123.123.123"] ),
     port( new uint16_t(3305) ),
     server( new sockaddr_in() ),
-    addr_length( new socklen_t() ),
+    addr_length( new socklen_t( sizeof(sockaddr_in) ) ),
     recv_bytes( new ssize_t() )
     {
         strcpy(ip, "127.0.0.1");
@@ -19,8 +19,10 @@ namespace mrz
 
     TCPClient::TCPClient(char* i, char* p) :
     sock_system_call( new int() ),
+    ip( new char[sizeof "123.123.123.123"] ),
     server( new sockaddr_in() ),
-    addr_length( new socklen_t() ),
+    port( new uint16_t() ),
+    addr_length( new socklen_t( sizeof(sockaddr_in) ) ),
     recv_bytes( new ssize_t() )
     {
         ip = i;
@@ -43,7 +45,7 @@ namespace mrz
 
         if(*sock_system_call < 0)
             //handle_create_socket_client();
-            exit(1);
+            exit(7);
 
         server->sin_family = PF_INET;
         server->sin_addr.s_addr = inet_addr(ip);
@@ -59,7 +61,7 @@ namespace mrz
 
         if(*result < 0)
             //handle_connect_to_server();
-            exit(1);
+            exit(8);
 
         delete result;
     }
@@ -70,7 +72,7 @@ namespace mrz
 
         if(*recv_bytes < 0)
             //handle_receive_data();
-            exit(1);
+            exit(9);
     }
 
     void TCPClient::close_connection()
@@ -86,7 +88,7 @@ namespace mrz
 
         if (errno || end == str || *end != '\0' || val < 0 || val >= 0x10000)
             //handle_str_to_uint16();
-            exit(1);
+            exit(10);
 
         *res = (uint16_t)val;
     }

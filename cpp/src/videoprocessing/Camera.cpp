@@ -10,8 +10,11 @@ namespace mrz
     camera( new cv::VideoCapture(0) ),
     image( new cv::Mat( cv::Mat::zeros(480, 640, CV_8UC1) )),
     gray_image( new cv::Mat() ),
-    image_size( new size_t(image ->total() * image ->elemSize()) )
-    { }
+    image_size( new size_t() )
+    {
+        *image_size = image->total() * image->elemSize();
+        std::cout << *image_size;
+    }
 
     Camera::~Camera()
     {
@@ -42,5 +45,10 @@ namespace mrz
     void Camera::process_frame()
     {
         cv::cvtColor(*image, *gray_image, cv::COLOR_BGR2GRAY);
+    }
+
+    uchar* Camera::get_metadata()
+    {
+        return gray_image ->data;
     }
 }

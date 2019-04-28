@@ -19,8 +19,9 @@ namespace mrz
         void read_frame();
         void process_frame();
 
+        uchar* get_metadata();
+
         cv::Mat* gray_image;
-        unsigned char* image_metadata;
         size_t* image_size;
 
     private:

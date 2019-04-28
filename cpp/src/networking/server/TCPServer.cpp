@@ -12,7 +12,7 @@ namespace mrz
     server( new sockaddr_in() ),
     client( new sockaddr_in() ),
     port( new uint16_t(3305) ),
-    addr_length( new socklen_t() )
+    addr_length( new socklen_t( sizeof(sockaddr_in) ) )
     {}
 
     TCPServer::TCPServer(char* p) :
@@ -21,7 +21,7 @@ namespace mrz
     server( new sockaddr_in() ),
     client( new sockaddr_in() ),
     port( new uint16_t() ),
-    addr_length( new socklen_t() )
+    addr_length( new socklen_t( sizeof(sockaddr_in) ) )
     {
         str_to_uint16(p, port);
     }
@@ -42,8 +42,7 @@ namespace mrz
 
         if(*server_sock < 0)
             //handle_create_socket_server();
-            exit(1);
-
+            exit(2);
 
         server ->sin_family = AF_INET;
         server ->sin_addr.s_addr = INADDR_ANY;
@@ -59,7 +58,7 @@ namespace mrz
 
         if(*result < 0)
             //handle_create_server();
-            exit(1);
+            exit(3);
 
         delete result;
 
@@ -71,7 +70,7 @@ namespace mrz
 
         if(*client_sock < 0)
             //handle_accept_connection();
-            exit(1);
+            exit(4);
     }
 
     void TCPServer::send_data()
@@ -82,6 +81,7 @@ namespace mrz
 
         if(*result < 0)
             //handle_send_data();
+            exit(5);
 
         delete result;
     }
@@ -92,7 +92,6 @@ namespace mrz
         close(*server_sock);
     }
 
-
     void TCPServer::str_to_uint16(const char *str, uint16_t *res)
     {
         char *end;
@@ -101,7 +100,7 @@ namespace mrz
 
         if (errno || end == str || *end != '\0' || val < 0 || val >= 0x10000)
             //handle_str_to_uint16t();
-            exit(1);
+            exit(6);
 
         *res = (uint16_t)val;
     }

@@ -19,7 +19,8 @@ namespace mrz
         void show_image();
         int wait();
 
-        unsigned char* image_metadata;
+        uchar* get_metadata();
+
         size_t* image_size;
         int* key;
 

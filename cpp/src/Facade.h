@@ -35,6 +35,7 @@ namespace mrz
         ServerStrategy* server;
         Camera* cam;
         Displayer* display;
+        int test;
     };
 }
 
