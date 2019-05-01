@@ -1,45 +1,46 @@
-//
-// Created by mateusz on 23.04.19.
-//
+//   Written by Mateusz Rzeczyca.
+//   Student - AGH University of Science and Technology
+//   info@mateuszrzeczyca.pl
+//   30.03.2019
 
 #include "Displayer.h"
 
 namespace mrz
 {
     Displayer::Displayer() :
-    image(new cv::Mat( cv::Mat::zeros(480, 640, CV_8UC1) )),
-    image_size( new size_t() ),
-    key( new int() )
+    image( cv::Mat::zeros(480, 640, CV_8UC1) ),
+    image_size( image.total() * image.elemSize() )
+    {}
+
+    void Displayer::check_if_continuous()
     {
-        *image_size = image->total() * image->elemSize();
+        if( this ->image.isContinuous() )
+            this ->image = this ->image.clone();
     }
 
-    Displayer::~Displayer()
+    size_t& Displayer::get_image_size()
     {
-        delete image;
-        delete image_size;
-        delete key;
+        return this ->image_size;
     }
 
-    void Displayer::if_continuous()
+    int Displayer::get_key()
     {
-        if( image ->isContinuous() )
-            *image = image ->clone();
+        return this ->key;
     }
 
     int Displayer::wait()
     {
-        *key = cv::waitKey(10);
-        return *key;
-    }
-
-    void Displayer::show_image()
-    {
-        cv::imshow("Video Streaming", *image);
+        this ->key = cv::waitKey(10);
+        return this ->key;
     }
 
     uchar* Displayer::get_metadata()
     {
-        return image ->data;
+        return this ->image.data;
+    }
+
+    void Displayer::show_image()
+    {
+        cv::imshow("Video Streaming", this ->image);
     }
 }

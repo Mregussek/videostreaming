@@ -1,82 +1,72 @@
-//
-// Created by mateusz on 22.04.19.
-//
+//   Written by Mateusz Rzeczyca.
+//   Student - AGH University of Science and Technology
+//   info@mateuszrzeczyca.pl
+//   1.05.2019
 
 #include "Facade.h"
 
 namespace mrz
 {
-    Facade::Facade(ClientStrategy* c)
-    : client(c), test(0)
+    Facade::Facade(ServerStrategy* server)
     {
-        run_client();
+        run_server(server);
     }
 
-    Facade::Facade(ServerStrategy* s)
-    : server(s), test(0)
+    Facade::Facade(ClientStrategy* client)
     {
-        run_server();
+        run_client(client);
     }
 
-    void Facade::run_client()
+    void Facade::run_server(ServerStrategy* server)
     {
-        std::cout << test++ << "\n"; // 0
-        client ->create_socket();
-        std::cout << test++ << "\n"; // 1
-        client ->connect_to_server();
+        Camera camera;
 
-        std::cout << test++ << "\n"; // 2
-        display = new Displayer();
-        std::cout << test++ << "\n"; // 3
-        display ->if_continuous();
+        server ->define_socket();
+        server ->create_server_then_listen();
 
-        std::cout << test++ << "\n"; // 4
-        client ->recv_data = display ->get_metadata();
-        std::cout << test++ << "\n"; // 5
-        client ->recv_data_size = display ->image_size;
-        
-        while(*(display ->key) != 'q')
-        {
-            std::cout << test++ << "\n"; // 6...
-            client ->receive_data();
-            std::cout << test++ << "\n"; //7...
-            display ->show_image();
-            
-            if(display ->wait() >= 0)
-                break;
-        }
-        
-        client ->close_connection();
-    }
+        camera.check_if_continuous();
 
-    void Facade::run_server()
-    {
-        std::cout << test++ << "\n"; // 0
-        server ->create_socket();
-        std::cout << test++ << "\n"; // 1
-        server ->create_server();
-
-        std::cout << test++ << "\n"; // 2
-        cam = new Camera();
-        std::cout << test++ << "\n"; // 3
-        cam ->if_continuous();
-
-        std::cout << test++ << "\n"; // 4
-        server ->data_to_send = cam ->get_metadata();
-        std::cout << test++ << "\n"; // 5
-        server ->data_to_send_size = cam ->image_size;
-        
         while(true)
         {
-            std::cout << test++ << "\n"; // 6...
-            cam ->read_frame();
-            std::cout << test++ << "\n"; // 7...
-            cam ->process_frame();
+            camera.got_frame = camera.read_frame();
 
-            std::cout << test++ << "\n"; // 8...
-            server ->send_data();
+            if(!camera.got_frame)
+                break;
+
+            camera.process_image();
+
+            server ->refresh_metadata(camera.gray_image.data);
+            server ->sent_data = server ->send_data(camera.get_image_size());
+
+            if(!server ->sent_data)
+                break;
         }
-        
+
         server ->close_connection();
+    }
+
+    void Facade::run_client(ClientStrategy* client)
+    {
+        Displayer display;
+
+        client ->define_socket();
+        client ->connect_to_server();
+
+        display.check_if_continuous();
+
+        uchar* metadata = display.get_metadata();
+
+        while (display.get_key() != 'q')
+        {
+            client ->receive_data(metadata, display.get_image_size());
+
+            display.show_image();
+
+            if (display.wait() >= 0)
+                break;
+        }
+
+        delete metadata;
+        client ->close_connection();
     }
 }

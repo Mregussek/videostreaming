@@ -1,54 +1,46 @@
-//
-// Created by mateusz on 23.04.19.
-//
+
+//   Written by Mateusz Rzeczyca.
+//   Student - AGH University of Science and Technology
+//   info@mateuszrzeczyca.pl
+//   30.03.2019
 
 #include "Camera.h"
 
 namespace mrz
 {
     Camera::Camera() :
-    camera( new cv::VideoCapture(0) ),
-    image( new cv::Mat( cv::Mat::zeros(480, 640, CV_8UC1) )),
-    gray_image( new cv::Mat() ),
-    image_size( new size_t() )
-    {
-        *image_size = image->total() * image->elemSize();
-        std::cout << *image_size;
-    }
+    camera( cv::VideoCapture(0) ),
+    image( cv::Mat::zeros(480, 640, CV_8UC1)),
+    image_size( image.total() * image.elemSize() ),
+    got_frame( false )
+    {}
 
-    Camera::~Camera()
+    void Camera::check_if_continuous()
     {
-        delete camera;
-        delete image;
-        delete gray_image;
-        delete image_size;
-    }
-
-    void Camera::if_continuous()
-    {
-        if(! (image ->isContinuous() ))
+        if(! (this ->image.isContinuous()) )
         {
-            *image = image ->clone();
-            *gray_image = image ->clone();
+            this ->image = this ->image.clone();
+            this ->gray_image = this ->image.clone();
         }
     }
 
-    void Camera::read_frame()
+    size_t& Camera::get_image_size()
     {
-        *camera >> *image;
-
-        if(! image ->data)
-            //handle_read_frame();
-            exit(1);
+        return this ->image_size;
     }
 
-    void Camera::process_frame()
+    bool Camera::read_frame()
     {
-        cv::cvtColor(*image, *gray_image, cv::COLOR_BGR2GRAY);
+        this ->camera >> this ->image;
+
+        if(!image.data)
+            return false;
+
+        return true;
     }
 
-    uchar* Camera::get_metadata()
+    void Camera::process_image()
     {
-        return gray_image ->data;
+        cv::cvtColor(this ->image, this ->gray_image, cv::COLOR_BGR2GRAY);
     }
 }

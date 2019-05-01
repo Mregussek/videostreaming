@@ -1,33 +1,31 @@
-//
-// Created by mateusz on 23.04.19.
-//
+//   Written by Mateusz Rzeczyca.
+//   Student - AGH University of Science and Technology
+//   info@mateuszrzeczyca.pl
+//   30.03.2019
 
 #ifndef VIDEOSTREAMING_DISPLAYER_H
 #define VIDEOSTREAMING_DISPLAYER_H
 
-#include "Camera.h"
+#include "Strategy.h"
 
 namespace mrz
 {
-    class Displayer
-    {
+    class Displayer{
     public:
         Displayer();
-        ~Displayer();
 
-        void if_continuous();
-        void show_image();
+        void check_if_continuous();
+        size_t& get_image_size();
+        int get_key();
         int wait();
-
         uchar* get_metadata();
-
-        size_t* image_size;
-        int* key;
+        void show_image();
 
     private:
-        cv::Mat* image;
+        cv::Mat image;
+        size_t image_size;
+        int key;
     };
 }
-
 
 #endif //VIDEOSTREAMING_DISPLAYER_H

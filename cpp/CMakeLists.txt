@@ -21,11 +21,11 @@ set(NET_PATH src/networking)
 set(CLIENT_PATH ${NET_PATH}/client)
 set(SERVER_PATH ${NET_PATH}/server)
 
-set(CLIENT_FILES ${CLIENT_PATH}/TCPClient.h ${CLIENT_PATH}/TCPClient.cpp ${CLIENT_PATH}/UDPClient.cpp
-        ${CLIENT_PATH}/UDPClient.h ${CLIENT_PATH}/client.h)
+set(CLIENT_FILES ${CLIENT_PATH}/TCP.h ${CLIENT_PATH}/TCP.cpp ${CLIENT_PATH}/UDP.cpp
+        ${CLIENT_PATH}/UDP.h ${CLIENT_PATH}/ClientStrategy.h)
 
-set(SERVER_FILES ${SERVER_PATH}/TCPServer.h ${SERVER_PATH}/TCPServer.cpp ${SERVER_PATH}/UDPServer.cpp
-        ${SERVER_PATH}/UDPServer.h ${SERVER_PATH}/server.h)
+set(SERVER_FILES ${SERVER_PATH}/TCP.h ${SERVER_PATH}/TCP.cpp ${SERVER_PATH}/UDP.cpp
+        ${SERVER_PATH}/UDP.h ${SERVER_PATH}/ServerStrategy.h)
 
 set(NET_FILES ${CLIENT_FILES} ${SERVER_FILES})
 
