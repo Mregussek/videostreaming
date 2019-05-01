@@ -58,9 +58,14 @@ namespace mrz
         delete result;
     }
 
-    void TCPclient::receive_data(unsigned char* metadata, size_t& image_size)
+    void TCPclient::pair_metadata(uchar* recv_data)
     {
-        *(this ->received_bytes) = recv(*(this ->sock_system_call), metadata, image_size, MSG_WAITALL);
+        this ->metadata = recv_data;
+    }
+
+    void TCPclient::receive_data(size_t* image_size)
+    {
+        *(this ->received_bytes) = recv(*(this ->sock_system_call), metadata, *image_size, MSG_WAITALL);
 
         if(*received_bytes < 0)
             // handle_receive_data

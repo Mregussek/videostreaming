@@ -13,7 +13,8 @@ namespace mrz
     public:
         virtual void define_socket() {}
         virtual void connect_to_server() {}
-        virtual void receive_data(unsigned char*, size_t&) {}
+        virtual void pair_metadata(uchar*) {}
+        virtual void receive_data(size_t*) {}
         virtual void close_connection() {}
         virtual void char_to_uint16(const char *str, uint16_t *res)
         {

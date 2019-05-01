@@ -72,10 +72,10 @@ namespace mrz
         std::cout << "Connection Accepted!\n";
     }
 
-    bool TCPserver::send_data(size_t& size)
+    bool TCPserver::send_data(size_t* size)
     {
         auto result = new ssize_t;
-        *result = send(*(this ->client_socket), metadata, size, 0);
+        *result = send(*(this ->client_socket), metadata, *size, 0);
 
         if(*result < 0)
         {

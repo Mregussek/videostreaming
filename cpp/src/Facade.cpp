@@ -19,24 +19,24 @@ namespace mrz
 
     void Facade::run_server(ServerStrategy* server)
     {
-        Camera camera;
+        auto camera = new Camera();
 
         server ->define_socket();
         server ->create_server_then_listen();
 
-        camera.check_if_continuous();
+        camera ->check_if_continuous();
 
         while(true)
         {
-            camera.got_frame = camera.read_frame();
+            camera ->got_frame = camera ->read_frame();
 
-            if(!camera.got_frame)
+            if(!camera ->got_frame)
                 break;
 
-            camera.process_image();
+            camera ->process_image();
 
-            server ->refresh_metadata(camera.gray_image.data);
-            server ->sent_data = server ->send_data(camera.get_image_size());
+            server ->refresh_metadata(camera ->gray_image ->data);
+            server ->sent_data = server ->send_data(camera ->get_image_size());
 
             if(!server ->sent_data)
                 break;
@@ -47,26 +47,26 @@ namespace mrz
 
     void Facade::run_client(ClientStrategy* client)
     {
-        Displayer display;
+        auto display = new Displayer();
 
         client ->define_socket();
         client ->connect_to_server();
 
-        display.check_if_continuous();
+        display ->check_if_continuous();
 
-        uchar* metadata = display.get_metadata();
+        client ->pair_metadata(display ->get_metadata());
 
-        while (display.get_key() != 'q')
+        while (display ->get_key() != 'q')
         {
-            client ->receive_data(metadata, display.get_image_size());
+            client ->receive_data(display ->get_image_size());
 
-            display.show_image();
+            display ->show_image();
 
-            if (display.wait() >= 0)
+            if (display ->wait() >= 0)
                 break;
         }
 
-        delete metadata;
+        delete display;
         client ->close_connection();
     }
 }

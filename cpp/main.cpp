@@ -39,6 +39,8 @@ int main(int argc, char** argv)
         }
         else
             give_right_arguments();
+    else
+        give_right_arguments();
 
     return 0;
 }
@@ -49,7 +51,7 @@ void give_right_arguments()
     std::cout << "<Server Address> <Server Port> <Protocol>\n";
     std::cout << "For Server App: ";
     std::cout << "<Server Port> <Protocol>\n";
-    std::cout << "\n\nExample:\n";
+    std::cout << "\nExample:\n";
     std::cout << "./video 3305 tcp\n";
     std::cout << "./video 192.168.201.78 3305 udp\n";
 

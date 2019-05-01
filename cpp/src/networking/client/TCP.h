@@ -18,7 +18,8 @@ namespace mrz
 
         void define_socket() override;
         void connect_to_server() override;
-        void receive_data(unsigned char*, size_t&) override;
+        void pair_metadata(uchar*) override;
+        void receive_data(size_t*) override;
         void close_connection() override;
 
     private:
@@ -28,6 +29,7 @@ namespace mrz
         sockaddr_in* server;
         socklen_t* address_length;
         ssize_t* received_bytes;
+        unsigned char* metadata;
     };
 }
 

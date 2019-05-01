@@ -16,7 +16,7 @@ namespace mrz
         virtual void define_socket() {}
         virtual void create_server_then_listen() {}
         virtual void refresh_metadata(unsigned char*) {}
-        virtual bool send_data(size_t&) { return true; }
+        virtual bool send_data(size_t*) { return true; }
         virtual void close_connection() {}
         virtual void char_to_uint16(const char *str, uint16_t *res)
         {

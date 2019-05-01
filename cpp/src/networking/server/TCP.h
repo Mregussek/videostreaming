@@ -19,7 +19,7 @@ namespace mrz
         void define_socket() override;
         void create_server_then_listen() override;
         void refresh_metadata(unsigned char*) override;
-        bool send_data(size_t&) override;
+        bool send_data(size_t*) override;
         void close_connection() override;
 
         bool sent_data;
