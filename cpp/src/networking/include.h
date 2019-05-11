@@ -7,14 +7,18 @@
 #define VIDEOSTREAMING_INCLUDE_H
 
 // for networking
-#include <sys/socket.h>
-#include <arpa/inet.h>
+#include <sys/socket.h> // sockets
+#include <arpa/inet.h> // sockaddr_in
+#include <netdb.h> // hostent
 
 // close
 #include <zconf.h>
 
 // opencv
 #include <opencv2/opencv.hpp>
+
+// vector
+#include <vector>
 
 namespace mrz
 {

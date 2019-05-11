@@ -9,7 +9,7 @@
 #include <iostream>
 
 // include all files to Facade
-#include "networking/client/TCP.h"
+#include "networking/client/UDP.h"
 #include "networking/server/UDP.h"
 #include "videoprocessing/Camera.h"
 #include "videoprocessing/Displayer.h"
@@ -21,10 +21,10 @@ namespace mrz
         explicit Facade(TCPserver*);
         explicit Facade(TCPclient*);
         explicit Facade(UDPserver*);
-        //explicit Facade(TCPclient*);
+        explicit Facade(UDPclient*);
         void run_client_tcp(TCPclient*);
         void run_server_tcp(TCPserver*);
-        //void run_client_udp(UDPclient*);
+        void run_client_udp(UDPclient*);
         void run_server_udp(UDPserver*);
     };
 }

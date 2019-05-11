@@ -22,6 +22,12 @@ namespace mrz
         run_server_udp(server);
     }
 
+    Facade::Facade(UDPclient* client)
+    {
+        run_client_udp(client);
+    }
+
+
     void Facade::run_server_tcp(TCPserver* server)
     {
         auto camera = new Camera();
@@ -75,8 +81,29 @@ namespace mrz
         client ->close_connection();
     }
 
-    //void Facade::run_client_udp(UDPclient* client)
-    //{ }
+    void Facade::run_client_udp(UDPclient* client)
+    {
+        client ->define_socket();
+
+        auto cam = new Camera;
+
+        while(*(cam ->key) != 'q')
+        {
+            if(! cam ->read_frame() )
+                continue;
+
+            cam ->encode_image();
+
+            int* total_pack = new int(1 + (cam ->encoded.size() - 1) / 4096);
+
+            client ->send_data(total_pack, sizeof(int));
+
+            for(int i = 0; i < *total_pack; i++)
+                client ->send_data(&cam ->encoded[i * 4096], 4096);
+
+            cam ->wait();
+        }
+    }
 
     void Facade::run_server_udp(UDPserver* server)
     {

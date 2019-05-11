@@ -19,9 +19,13 @@ namespace mrz
         size_t* get_image_size();
         bool read_frame();
         void process_image();
+        void encode_image();
+        void wait();
 
         bool got_frame;
         cv::Mat* gray_image;
+        std::vector<uchar> encoded;
+        int* key;
     private:
         cv::VideoCapture* camera;
         cv::Mat* image;

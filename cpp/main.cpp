@@ -37,7 +37,9 @@ int main(int argc, char** argv)
         }
         else if(strcmp(argv[3], "udp") == 0)
         {
-            return 0;
+            auto server = new mrz::Facade
+                    ( new mrz::UDPclient(argv[1], argv[2]) );
+            delete server;
         }
         else
             give_right_arguments();

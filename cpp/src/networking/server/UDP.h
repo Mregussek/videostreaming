@@ -3,8 +3,8 @@
 //   info@mateuszrzeczyca.pl
 //   09.05.2019
 
-#ifndef VIDEOSTREAMING_UDP_H
-#define VIDEOSTREAMING_UDP_H
+#ifndef VIDEOSTREAMING_UDPSERVER_H
+#define VIDEOSTREAMING_UDPSERVER_H
 
 #include "TCP.h"
 
@@ -33,4 +33,4 @@ namespace mrz
     };
 }
 
-#endif //VIDEOSTREAMING_UDP_H
+#endif //VIDEOSTREAMING_UDPSERVER_H
