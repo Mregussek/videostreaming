@@ -7,20 +7,19 @@
 #define VIDEOSTREAMING_TCPCLIENT_H
 
 #include "../include.h"
-#include "ClientStrategy.h"
 
 namespace mrz
 {
-    class TCPclient : ClientStrategy {
+    class TCPclient {
     public:
         TCPclient(char*, char*);
         ~TCPclient();
 
-        void define_socket() override;
-        void connect_to_server() override;
-        void pair_metadata(uchar*) override;
-        void receive_data(size_t*) override;
-        void close_connection() override;
+        void define_socket();
+        void connect_to_server();
+        void pair_metadata(uchar*);
+        void receive_data(const size_t*);
+        void close_connection();
 
     private:
         int* sock_system_call;

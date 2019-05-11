@@ -63,7 +63,7 @@ namespace mrz
         this ->metadata = recv_data;
     }
 
-    void TCPclient::receive_data(size_t* image_size)
+    void TCPclient::receive_data(const size_t* image_size)
     {
         *(this ->received_bytes) = recv(*(this ->sock_system_call), metadata, *image_size, MSG_WAITALL);
 

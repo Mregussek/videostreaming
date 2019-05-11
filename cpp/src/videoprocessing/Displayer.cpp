@@ -9,15 +9,24 @@ namespace mrz
 {
     Displayer::Displayer() :
     image( new cv::Mat( cv::Mat::zeros(480, 640, CV_8UC1) ) ),
+    raw_data( new cv::Mat ),
     image_size( new size_t( image ->total() * image ->elemSize() )),
+    key( new int )
+    {}
+
+    Displayer::Displayer(int pack, char* image_metadata) :
+    image( new cv::Mat ),
+    raw_data( new cv::Mat(1, 4096 * pack, CV_8UC1, image_metadata) ),
+    image_size( new size_t ),
     key( new int )
     {}
 
     Displayer::~Displayer()
     {
-        delete image;
         delete image_size;
+        delete image;
         delete key;
+        delete raw_data;
     }
 
     void Displayer::check_if_continuous()
@@ -31,6 +40,15 @@ namespace mrz
         return this ->image_size;
     }
 
+    void Displayer::decode_image()
+    {
+        *image = imdecode(*raw_data, CV_HAL_DFT_STAGE_COLS);
+
+        if (image ->size().width == 0)
+            exit(435);
+    }
+
+
     int Displayer::get_key()
     {
         return *(this ->key);
@@ -38,7 +56,7 @@ namespace mrz
 
     int Displayer::wait()
     {
-        *(this ->key) = cv::waitKey(10);
+        *(this ->key) = cv::waitKey(1);
         return *(this ->key);
     }
 

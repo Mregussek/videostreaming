@@ -13,16 +13,19 @@ namespace mrz
     class Displayer{
     public:
         Displayer();
+        Displayer(int, char*);
         ~Displayer();
 
         void check_if_continuous();
         size_t* get_image_size();
+        void decode_image();
         int get_key();
         int wait();
         uchar* get_metadata();
         void show_image();
 
     private:
+        cv::Mat* raw_data;
         cv::Mat* image;
         size_t* image_size;
         int* key;

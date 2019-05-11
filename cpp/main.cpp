@@ -15,12 +15,14 @@ int main(int argc, char** argv)
         if(strcmp(argv[2], "tcp") == 0)
         {
             auto server = new mrz::Facade
-                    (reinterpret_cast<mrz::ServerStrategy*>( new mrz::TCPserver(argv[1]) ));
+                    ( new mrz::TCPserver(argv[1]) );
             delete server;
         }
         else if(strcmp(argv[2], "udp") == 0)
         {
-            return 0;
+            auto server = new mrz::Facade
+                    ( new mrz::UDPserver(argv[1]) );
+            delete server;
         }
         else
             give_right_arguments();
@@ -30,7 +32,7 @@ int main(int argc, char** argv)
         if(strcmp(argv[3], "tcp") == 0)
         {
             auto client = new mrz::Facade
-                    (reinterpret_cast<mrz::ClientStrategy*>( new mrz::TCPclient(argv[1], argv[2]) ));
+                    ( new mrz::TCPclient(argv[1], argv[2]) );
             delete client;
         }
         else if(strcmp(argv[3], "udp") == 0)

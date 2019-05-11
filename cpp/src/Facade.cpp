@@ -7,17 +7,22 @@
 
 namespace mrz
 {
-    Facade::Facade(ServerStrategy* server)
+    Facade::Facade(TCPserver* server)
     {
-        run_server(server);
+        run_server_tcp(server);
     }
 
-    Facade::Facade(ClientStrategy* client)
+    Facade::Facade(TCPclient* client)
     {
-        run_client(client);
+        run_client_tcp(client);
     }
 
-    void Facade::run_server(ServerStrategy* server)
+    Facade::Facade(UDPserver* server)
+    {
+        run_server_udp(server);
+    }
+
+    void Facade::run_server_tcp(TCPserver* server)
     {
         auto camera = new Camera();
 
@@ -45,7 +50,7 @@ namespace mrz
         server ->close_connection();
     }
 
-    void Facade::run_client(ClientStrategy* client)
+    void Facade::run_client_tcp(TCPclient* client)
     {
         auto display = new Displayer();
 
@@ -68,5 +73,53 @@ namespace mrz
 
         delete display;
         client ->close_connection();
+    }
+
+    //void Facade::run_client_udp(UDPclient* client)
+    //{ }
+
+    void Facade::run_server_udp(UDPserver* server)
+    {
+        server ->define_socket();
+        server ->create_server_then_listen();
+
+        int* buffer_length = new int(65540);
+        char buffer[*buffer_length];
+        int* key = new int;
+
+        while(*key != 'q')
+        {
+            do
+            {
+                server ->receive_data(buffer, *buffer_length);
+            } while( *(server ->recv_message) > sizeof(int));
+
+            int total_pack = ((int*) buffer)[0];
+            char* long_buffer = new char[*(server ->max_recv_message) * total_pack];
+
+            for(int i = 0; i < total_pack; i++)
+            {
+                server ->receive_data(buffer, *buffer_length);
+
+                if( *(server ->recv_message) != *(server ->max_recv_message))
+                    continue;
+
+                memcpy(&long_buffer[i * *(server ->max_recv_message)],
+                       buffer, *(server ->max_recv_message));
+            }
+
+            auto display = new Displayer(total_pack, long_buffer);
+            display ->decode_image();
+            display ->show_image();
+
+            delete [] long_buffer;
+
+            *key = display ->wait();
+
+            delete display;
+        }
+
+        server ->close_connection();
+        delete key;
     }
 }
