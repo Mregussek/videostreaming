@@ -42,7 +42,7 @@ namespace mrz
 
     void Displayer::decode_image()
     {
-        *image = imdecode(*raw_data, CV_HAL_DFT_STAGE_COLS);
+        *image = imdecode(*raw_data, 0);
 
         if (image ->size().width == 0)
             exit(435);
