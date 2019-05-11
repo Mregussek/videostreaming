@@ -22,7 +22,6 @@ namespace mrz
         void encode_image();
         void wait();
 
-        bool got_frame;
         cv::Mat* gray_image;
         std::vector<uchar> encoded;
         int* key;

@@ -13,8 +13,7 @@ namespace mrz
     server( new sockaddr_in ),
     client( new sockaddr_in ),
     port( new uint16_t ),
-    address_length( new socklen_t( sizeof(sockaddr_in)) ),
-    sent_data( false )
+    address_length( new socklen_t( sizeof(sockaddr_in)) )
     {
         char_to_uint16(set_port, this ->port);
     }
@@ -72,10 +71,10 @@ namespace mrz
         std::cout << "Connection Accepted!\n";
     }
 
-    bool TCPserver::send_data(size_t* size)
+    bool TCPserver::send_data(const size_t* size)
     {
         auto result = new ssize_t;
-        *result = send(*(this ->client_socket), metadata, *size, 0);
+        *result = send(*(this ->client_socket), this ->metadata, *size, 0);
 
         if(*result < 0)
         {

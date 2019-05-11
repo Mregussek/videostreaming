@@ -1,6 +1,7 @@
-//
-// Created by mateusz on 01.05.19.
-//
+//   Written by Mateusz Rzeczyca.
+//   Student - AGH University of Science and Technology
+//   info@mateuszrzeczyca.pl
+//   11.05.2019
 
 #ifndef VIDEOSTREAMING_STRATEGY_H
 #define VIDEOSTREAMING_STRATEGY_H

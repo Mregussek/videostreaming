@@ -48,12 +48,6 @@ namespace mrz
             exit(435);
     }
 
-
-    int Displayer::get_key()
-    {
-        return *(this ->key);
-    }
-
     int Displayer::wait()
     {
         *(this ->key) = cv::waitKey(1);

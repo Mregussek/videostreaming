@@ -14,14 +14,12 @@ int main(int argc, char** argv)
         // ./video <port> = argv[1] <protocol> = argv[2]
         if(strcmp(argv[2], "tcp") == 0)
         {
-            auto server = new mrz::Facade
-                    ( new mrz::TCPserver(argv[1]) );
+            auto server = new mrz::Facade( new mrz::TCPserver(argv[1]) );
             delete server;
         }
         else if(strcmp(argv[2], "udp") == 0)
         {
-            auto server = new mrz::Facade
-                    ( new mrz::UDPserver(argv[1]) );
+            auto server = new mrz::Facade( new mrz::UDPserver(argv[1]) );
             delete server;
         }
         else
@@ -31,14 +29,12 @@ int main(int argc, char** argv)
         // ./video <server> = argv[1] <port> = argv[2] <protocol> = argv[3]
         if(strcmp(argv[3], "tcp") == 0)
         {
-            auto client = new mrz::Facade
-                    ( new mrz::TCPclient(argv[1], argv[2]) );
+            auto client = new mrz::Facade( new mrz::TCPclient(argv[1], argv[2]) );
             delete client;
         }
         else if(strcmp(argv[3], "udp") == 0)
         {
-            auto server = new mrz::Facade
-                    ( new mrz::UDPclient(argv[1], argv[2]) );
+            auto server = new mrz::Facade( new mrz::UDPclient(argv[1], argv[2]) );
             delete server;
         }
         else

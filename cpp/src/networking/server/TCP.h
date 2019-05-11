@@ -12,16 +12,15 @@ namespace mrz
 {
     class TCPserver {
     public:
-        TCPserver(char*);
+        explicit TCPserver(char*);
         ~TCPserver();
 
         void define_socket();
         void create_server_then_listen();
         void refresh_metadata(unsigned char*);
-        bool send_data(size_t*);
+        bool send_data(const size_t*);
         void close_connection();
 
-        bool sent_data;
     private:
         unsigned char* metadata;
         int* server_socket;

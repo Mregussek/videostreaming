@@ -13,7 +13,7 @@ namespace mrz
     port( new uint16_t ),
     server( new sockaddr_in ),
     address_length( new socklen_t( sizeof(sockaddr_in)) ),
-    received_bytes( new ssize_t(0))
+    received_bytes( new ssize_t(0) )
     {
         char_to_uint16(set_port, this ->port);
     }
