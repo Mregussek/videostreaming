@@ -37,14 +37,24 @@ namespace mrz
 
         while(true)
         {
+<<<<<<< HEAD
             if(! camera ->read_frame() )
+=======
+            camera ->got_frame = camera ->read_frame();
+
+            if(! camera ->got_frame )
+>>>>>>> dev-cpp
                 break;
 
             camera ->process_image();
 
             server ->refresh_metadata(camera ->gray_image ->data);
 
+<<<<<<< HEAD
             if(! server ->send_data(camera ->get_image_size()) )
+=======
+            if(! server ->sent_data )
+>>>>>>> dev-cpp
                 break;
         }
 
@@ -89,12 +99,12 @@ namespace mrz
 
             cam ->encode_image();
 
-            int* total_pack = new int(1 + (cam ->encoded.size() - 1) / 4096);
+            int* total_pack = new int(cam ->encoded.capacity() / *(client ->packet_size));
 
             client ->send_data(total_pack, sizeof(int));
 
             for(int i = 0; i < *total_pack; i++)
-                client ->send_data(&cam ->encoded[i * 4096], 4096);
+                client ->send_data(&cam ->encoded[i * *(client ->packet_size)], *(client ->packet_size));
 
             delete total_pack;
 

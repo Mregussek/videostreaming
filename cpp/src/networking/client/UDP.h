@@ -18,7 +18,8 @@ namespace mrz
 
         void define_socket();
         void send_data(const void*, int);
-
+	
+	    int* packet_size;
     private:
         int* sock_system_call;
         char* ip;

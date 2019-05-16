@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 2.8)
+find_package( OpenCV REQUIRED )
+add_executable( mat mat_size.cpp )
+target_link_libraries( mat ${OpenCV_LIBS} )
+add_executable( com compress.cpp )
+target_link_libraries( com ${OpenCV_LIBS} )
