@@ -46,7 +46,7 @@ namespace mrz
     {
         *(this ->camera) >> *(this ->image);
 
-        if(!image ->data)
+        if( image ->empty() )
             return false;
 
         return true;

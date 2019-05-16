@@ -11,7 +11,8 @@ namespace mrz
     port( new uint16_t ),
     server( new sockaddr_in ),
     sock_system_call( new int ),
-    ip( set_ip )
+    ip( set_ip ),
+    packet_size( new int(4096) )
     {
         char_to_uint16(set_port, port);
     }
@@ -22,6 +23,7 @@ namespace mrz
         delete port;
         delete server;
         delete sock_system_call;
+	    delete packet_size;
     }
 
     void UDPclient::define_socket()
