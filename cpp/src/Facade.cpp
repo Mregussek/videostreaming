@@ -37,24 +37,14 @@ namespace mrz
 
         while(true)
         {
-<<<<<<< HEAD
             if(! camera ->read_frame() )
-=======
-            camera ->got_frame = camera ->read_frame();
-
-            if(! camera ->got_frame )
->>>>>>> dev-cpp
                 break;
 
             camera ->process_image();
 
             server ->refresh_metadata(camera ->gray_image ->data);
 
-<<<<<<< HEAD
             if(! server ->send_data(camera ->get_image_size()) )
-=======
-            if(! server ->sent_data )
->>>>>>> dev-cpp
                 break;
         }
 
