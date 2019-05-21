@@ -1,27 +1,59 @@
-# RPi Camera stream
-## Getting Started
-This is video streaming app written for Raspberry Pi.
+# C++ Version
 
-Of course you can use this app to work with another WebCam, other than RPi.
+In **rpi_app** directory you can find code, which have to be run on RPi. You have prepared **CMakeLists.txt** file for building this app.
 
-Package for getting frames is OpenCV so it should work correctly only when you have it installed.
-
-## Observations
-Since I used only Python for streaming data, I have seen that this app sometimes losses data. To check this I have written scripts in bash and tested it. It ran correctly. Also I saw that my charger has low voltage to make RPi run properly. We could see an icon about low voltage. Now I am using another one and everything is fine.
-
-## Prepare RPi
-I used Raspbian Jessie Lite for to test this app. In the RPiConfiguration directory you have the files, which must be put on your RPi. ***ssh*** file enables connection through 22 port and ***wpa_supplicant.conf*** allows you to connect RPi to WiFi. 
-
-## C++
-For TCPClient I have used 640x480 resolution. It can work without any problems.
-
-In **rpi_app** directory you can find code, which have to be run on RPi. You have prepared **CMakeLists.txt** file for building this app and **toolchain.cmake** for cross compiling with cmake.
-
-### Requirements
-- [cv2](https://opencv.org/)
+## Requirements
+- [OpenCV](https://opencv.org/)
 - [socket](http://www.linuxhowtos.org/C_C++/socket.htm)
+- [CMake](https://cmake.org/)
 
-### Possible bugs:
+## Installation
+
+### Dependiences
+
+```bash
+sudo apt-get install cmake git
+```
+
+For installing OpenCV I recommend this
+[guide](https://www.pyimagesearch.com/2018/08/15/how-to-install-opencv-4-on-ubuntu/). Socket should be installed manually by the system.
+
+### App
+For this I have prepared ***CMakeLists.txt*** file.
+
+```bash
+git clone https://github.com/mregussek/videostreaming.git
+cd videostreaming/cpp
+mkdir build
+cd build
+cmake ..
+```
+
+You can check how cores your CPU has by ***nproc*** and then run ***make*** command.
+
+```bash
+nproc
+Example Output: 8
+
+make -j8
+```
+After that you should be able to ***video*** file in this directory.
+
+```bash
+ls
+
+CMakeCache.txt  cmake_install.cmake  video
+CMakeFiles      Makefile             VideoStreaming.cbp
+```
+
+Now you are able to run it! Examples:
+
+```bash
+./video 3305 tcp
+./video 10.42.0.30 udp
+```
+
+## Possible bugs:
 - Cannot open PiCamera by the 0 index.
 
   It may happen, because for this project I used OpenCV. Creating camera-like object by cv2.VideoCapture(0) don't recognize PiCamera so, you must enable it manually:

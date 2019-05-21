@@ -25,7 +25,7 @@ int main(int, char**)
         //total_pack = 1 + (encoded.size() - 1) / 4096;
         total_pack = encoded.capacity() / 4096;
         std::cout << "encoded.size(): " << encoded.size() << " total_pack: " << total_pack
-             << " encoded.capacity(): " << encoded.capacity() << "\n"
+             << " encoded.capacity(): " << encoded.capacity() << "\n";
 
         if(cv::waitKey(30) >= 0)
             break;
