@@ -6,7 +6,7 @@
 #ifndef VIDEOSTREAMING_DISPLAYER_H
 #define VIDEOSTREAMING_DISPLAYER_H
 
-#include "Strategy.h"
+#include <opencv2/opencv.hpp>
 
 namespace mrz
 {
@@ -21,7 +21,7 @@ namespace mrz
         void decode_image();
         int wait();
         uchar* get_metadata();
-        void show_image();
+        void show_image(const std::string);
 
         int* key;
     private:

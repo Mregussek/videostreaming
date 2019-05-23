@@ -37,7 +37,11 @@ namespace mrz
         *sock_system_call = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
 
         if(*sock_system_call < 0)
-            exit(2);
+        {
+            std::cerr << "Cannot create UDP server socket!" << std::endl;
+            exit(1);
+        }
+
 
         server ->sin_family = AF_INET;
         server ->sin_addr.s_addr = htonl(INADDR_ANY);
@@ -51,14 +55,17 @@ namespace mrz
         int result = bind(*sock_system_call, conv, *address_length);
 
         if(result < 0)
-            exit(3);
+        {
+            std::cerr << "Cannot bind UDP server socket!" << std::endl;
+            exit(1);
+        }
 
         setsockopt(*sock_system_call, SOL_SOCKET, SO_BROADCAST,
                    (void*) broadcast_permission, sizeof(int) );
 
-        std::cout << "Waiting for connections...\n" <<
+        std::cout << "UDP-based Server Started!\n" <<
                   "Server Address: " << inet_ntoa(this ->server ->sin_addr) <<
-                  " Server Port:" << *(this ->port) << "\n";
+                  " Server Port: " << *(this ->port) << "\n";
     }
 
     void UDPserver::receive_data(void* buffer, int buffer_length)
@@ -66,10 +73,13 @@ namespace mrz
         auto conv = reinterpret_cast<sockaddr*>(client);
 
         *recv_message = recvfrom(*sock_system_call, buffer,
-                                 buffer_length, 0, conv, address_length);
+                                     buffer_length, 0, conv, address_length);
 
         if(*recv_message < 0)
-            exit(4);
+        {
+            std::cerr << "Cannot receive data from client!" << std::endl;
+            exit(1);
+        }
     }
 
     void UDPserver::close_connection()

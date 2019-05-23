@@ -33,8 +33,10 @@ namespace mrz
         *(this ->server_socket) = socket(AF_INET, SOCK_STREAM, 0);
 
         if(*(this ->server_socket) < 0)
-            //Error::error_creating_socket();
-            exit(3);
+        {
+            std::cerr << "Cannot create TCP server socket!" << std::endl;
+            exit(1);
+        }
 
         this ->server ->sin_family = AF_INET;
         this ->server ->sin_addr.s_addr = INADDR_ANY;
@@ -49,14 +51,16 @@ namespace mrz
         *result = bind(*(this ->server_socket), conv_sock, *(this ->address_length));
 
         if(*result < 0)
-            //Error::error_bind_server();
-            exit(4);
+        {
+            std::cerr << "Cannot bind TCP server socket!" << std::endl;
+            exit(1);
+        }
 
         delete result;
 
         listen(*(this ->server_socket), 1);
 
-        std::cout << "Waiting for connections...\n" <<
+        std::cout << "TCP-based Server Started!\n" <<
                   "Server Address: " << inet_ntoa(this ->server ->sin_addr) <<
                   " Server Port:" << *(this ->port) << "\n";
 
@@ -65,8 +69,10 @@ namespace mrz
         *(this ->client_socket) = accept(*(this ->server_socket), conv_sock, address_length);
 
         if(*(this ->client_socket) < 0)
-            //Error::error_accept_connection();
-            exit(5);
+        {
+            std::cerr << "Cannot accept connection from client" << std::endl;
+            exit(1);
+        }
 
         std::cout << "Connection Accepted!\n";
     }
@@ -78,7 +84,7 @@ namespace mrz
 
         if(*result < 0)
         {
-            //Error::error_sending_data();
+            std::cerr << "Cannot send data to the client!" << std::endl;
             delete result;
             return false;
         }

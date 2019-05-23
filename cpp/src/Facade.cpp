@@ -29,7 +29,9 @@ namespace mrz
 
     void Facade::run_server_tcp(TCPserver* server)
     {
+
         auto camera = new Camera();
+        camera ->open_camera();
 
         server ->define_socket();
         server ->create_server_then_listen();
@@ -66,7 +68,7 @@ namespace mrz
         {
             client ->receive_data(display ->get_image_size());
 
-            display ->show_image();
+            display ->show_image("TCP");
 
             if (display ->wait() >= 0)
                 break;
@@ -81,6 +83,8 @@ namespace mrz
         client ->define_socket();
 
         auto cam = new Camera;
+        cam ->open_camera();
+        bool* connection = new bool(false);
 
         while(*(cam ->key) != 'q')
         {
@@ -92,6 +96,12 @@ namespace mrz
             int* total_pack = new int(cam ->encoded.capacity() / *(client ->packet_size));
 
             client ->send_data(total_pack, sizeof(int));
+
+            if(! *connection)
+            {
+                std::cout << "Started sending packets!" << std::endl;
+                *connection = true;
+            }
 
             for(int i = 0; i < *total_pack; i++)
                 client ->send_data(&cam ->encoded[i * *(client ->packet_size)], *(client ->packet_size));
@@ -134,7 +144,7 @@ namespace mrz
 
             auto display = new Displayer(total_pack, long_buffer);
             display ->decode_image();
-            display ->show_image();
+            display ->show_image("UDP");
 
             delete [] long_buffer;
 

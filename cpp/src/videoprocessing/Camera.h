@@ -6,7 +6,7 @@
 #ifndef VIDEOSTREAMING_CAMERA_H
 #define VIDEOSTREAMING_CAMERA_H
 
-#include "Strategy.h"
+#include "Displayer.h"
 
 namespace mrz
 {
@@ -15,6 +15,7 @@ namespace mrz
         Camera();
         ~Camera();
 
+        void open_camera();
         void check_if_continuous();
         size_t* get_image_size();
         bool read_frame();

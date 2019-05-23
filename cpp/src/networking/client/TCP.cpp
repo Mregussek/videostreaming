@@ -32,8 +32,10 @@ namespace mrz
         *(this ->sock_system_call) = socket(PF_INET, SOCK_STREAM, 0);
 
         if(*(this ->sock_system_call) < 0)
-            //Error::error_creating_socket();
+        {
+            std::cerr << "Cannot create TCP client socket!" << std::endl;
             exit(1);
+        }
 
         server ->sin_family = PF_INET;
         server ->sin_addr.s_addr = inet_addr(ip);
@@ -52,8 +54,12 @@ namespace mrz
         *result = connect(*(this ->sock_system_call), conv_sock, *(this ->address_length));
 
         if(*result < 0)
-            //Error::error_connecting_to_server();
-            exit(2);
+        {
+            std::cerr << "Cannot connect to server!" << std::endl;
+            exit(1);
+        }
+
+        std::cout << "Connected!" << std::endl;
 
         delete result;
     }
@@ -68,8 +74,10 @@ namespace mrz
         *(this ->received_bytes) = recv(*(this ->sock_system_call), metadata, *image_size, MSG_WAITALL);
 
         if(*received_bytes < 0)
-            // handle_receive_data
-            exit(15);
+        {
+            std::cerr << "Cannot receive data from server!" << std::endl;
+            exit(1);
+        }
     }
 
     void TCPclient::close_connection()

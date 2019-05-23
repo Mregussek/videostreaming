@@ -25,12 +25,13 @@ namespace mrz
     inline void char_to_uint16(const char *str, uint16_t *res)
     {
         char *end;
-        errno = 0;
         long val = strtol(str, &end, 10);
 
-        if (errno || end == str || *end != '\0' || val < 0 || val >= 0x10000)
-            //handle_str_to_uint16();
-            exit(10);
+        if (end == str || *end != '\0' || val < 0 || val >= 0x10000)
+        {
+            std::cerr << "Cannot convert char* to uint16_t! Wrong Port!" << std::endl;
+            exit(1);
+        }
 
         *res = (uint16_t)val;
     }

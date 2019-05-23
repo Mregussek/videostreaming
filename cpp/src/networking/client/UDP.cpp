@@ -32,7 +32,10 @@ namespace mrz
         *sock_system_call = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
 
         if(*sock_system_call < 0)
-            exit(2);
+        {
+            std::cerr << "Cannot create UDP client socket!" << std::endl;
+            exit(1);
+        }
 
         server ->sin_family = AF_INET;
         server ->sin_addr.s_addr = inet_addr(ip);
@@ -47,7 +50,10 @@ namespace mrz
         *result = sendto(*sock_system_call, buffer, buffer_length, 0, conv, *address_length);
 
         if(*result != buffer_length)
-            exit(5);
+        {
+            std::cerr << "Sent data does not match buffer length!" << std::endl;
+            exit(1);
+        }
 
         delete result;
     }

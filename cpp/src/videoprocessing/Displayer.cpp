@@ -59,8 +59,8 @@ namespace mrz
         return this ->image ->data;
     }
 
-    void Displayer::show_image()
+    void Displayer::show_image(const std::string protocol)
     {
-        cv::imshow("Video Streaming", *(this ->image));
+        cv::imshow("Video Streaming " + protocol, *(this ->image));
     }
 }

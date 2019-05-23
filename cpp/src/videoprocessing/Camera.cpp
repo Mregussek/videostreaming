@@ -8,15 +8,11 @@
 namespace mrz
 {
     Camera::Camera() :
-    camera( new cv::VideoCapture(0) ),
     image( new cv::Mat( cv::Mat::zeros(480, 640, CV_8UC1)) ),
     gray_image( new cv::Mat() ),
     image_size( new size_t(image ->total() * image ->elemSize()) ),
     key( new int )
-    {
-        if(! camera ->isOpened() )
-            exit(11);
-    }
+    {}
 
     Camera::~Camera()
     {
@@ -25,6 +21,17 @@ namespace mrz
         delete gray_image;
         delete image_size;
         delete key;
+    }
+
+    void Camera::open_camera()
+    {
+        camera = new cv::VideoCapture(0);
+
+        if(! camera ->isOpened())
+        {
+            std::cerr << "Cannot open camera by 0 index!" << std::endl;
+            exit(1);
+        }
     }
 
     void Camera::check_if_continuous()
@@ -46,7 +53,10 @@ namespace mrz
         *(this ->camera) >> *(this ->image);
 
         if( image ->empty() )
+        {
+            std::cerr << "Frame data is empty!" << std::endl;
             return false;
+        }
 
         return true;
     }
@@ -59,7 +69,6 @@ namespace mrz
     void Camera::encode_image()
     {
         cv::resize(*image, *gray_image, cv::Size(640, 480), 0, 0, cv::INTER_LINEAR);
-        // For JPEG, it can be a quality ( CV_IMWRITE_JPEG_QUALITY ) from 0 to 100 (the higher is the better). Default value is 95.
         std::vector<int> compression;
         compression.push_back(cv::IMWRITE_JPEG_QUALITY);
         compression.push_back(80);
