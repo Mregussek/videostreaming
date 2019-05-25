@@ -29,12 +29,12 @@ namespace mrz
 
     void Facade::run_server_tcp(TCPserver* server)
     {
-
         auto camera = new Camera();
         camera ->open_camera();
 
         server ->define_socket();
         server ->create_server_then_listen();
+
         camera ->check_if_continuous();
 
         while(true)
@@ -50,6 +50,7 @@ namespace mrz
                 break;
         }
 
+        delete camera;
         server ->close_connection();
     }
 
@@ -84,9 +85,10 @@ namespace mrz
 
         auto cam = new Camera;
         cam ->open_camera();
-        bool* connection = new bool(false);
+        std::cout << "Started sending packets!" << std::endl;
+        int j = 0;
 
-        while(*(cam ->key) != 'q')
+        while(j != 2000)
         {
             if(! cam ->read_frame() )
                 continue;
@@ -97,19 +99,14 @@ namespace mrz
 
             client ->send_data(total_pack, sizeof(int));
 
-            if(! *connection)
-            {
-                std::cout << "Started sending packets!" << std::endl;
-                *connection = true;
-            }
-
             for(int i = 0; i < *total_pack; i++)
                 client ->send_data(&cam ->encoded[i * *(client ->packet_size)], *(client ->packet_size));
 
             delete total_pack;
-
-            cam ->wait();
+            j++;
         }
+
+        delete cam;
     }
 
     void Facade::run_server_udp(UDPserver* server)
@@ -128,21 +125,24 @@ namespace mrz
                 server ->receive_data(buffer, *buffer_length);
             } while( *(server ->recv_message) > sizeof(int));
 
-            int total_pack = ((int*) buffer)[0];
-            char* long_buffer = new char[*(server ->max_recv_message) * total_pack];
+            int* total_pack = new int( reinterpret_cast<int*>(buffer)[0] );
+            char* long_buffer = new char[*(server ->max_recv_message) * *total_pack];
 
-            for(int i = 0; i < total_pack; i++)
+            for(int i = 0; i < *total_pack; i++)
             {
                 server ->receive_data(buffer, *buffer_length);
 
                 if( *(server ->recv_message) != *(server ->max_recv_message))
+                {
+                    std::cerr << "Received unexpected message" << std::endl;
                     continue;
+                }
 
                 memcpy(&long_buffer[i * *(server ->max_recv_message)],
                        buffer, *(server ->max_recv_message));
             }
 
-            auto display = new Displayer(total_pack, long_buffer);
+            auto display = new Displayer(*total_pack, long_buffer);
             display ->decode_image();
             display ->show_image("UDP");
 
@@ -151,6 +151,7 @@ namespace mrz
             *key = display ->wait();
 
             delete display;
+            delete total_pack;
         }
 
         server ->close_connection();

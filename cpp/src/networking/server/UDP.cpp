@@ -42,7 +42,6 @@ namespace mrz
             exit(1);
         }
 
-
         server ->sin_family = AF_INET;
         server ->sin_addr.s_addr = htonl(INADDR_ANY);
         server ->sin_port = htons(*port);

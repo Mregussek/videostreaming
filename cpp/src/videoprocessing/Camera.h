@@ -21,7 +21,6 @@ namespace mrz
         bool read_frame();
         void process_image();
         void encode_image();
-        void wait();
 
         cv::Mat* gray_image;
         std::vector<uchar> encoded;
@@ -32,7 +31,5 @@ namespace mrz
         size_t* image_size;
     };
 }
-
-
 
 #endif //VIDEOSTREAMING_CAMERA_H

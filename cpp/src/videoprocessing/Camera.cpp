@@ -74,9 +74,4 @@ namespace mrz
         compression.push_back(80);
         cv::imencode(".jpg", *gray_image, encoded, compression);
     }
-
-    void Camera::wait()
-    {
-        *key = cv::waitKey(1);
-    }
 }

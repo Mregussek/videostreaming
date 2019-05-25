@@ -31,8 +31,8 @@ namespace mrz
 
     void Displayer::check_if_continuous()
     {
-        if( this ->image ->isContinuous() )
-            *(this ->image) = this ->image ->clone();
+        if( this ->raw_data ->isContinuous() )
+            *(this ->image) = this ->raw_data ->clone();
     }
 
     size_t* Displayer::get_image_size()
@@ -45,7 +45,10 @@ namespace mrz
         *image = imdecode(*raw_data, 0);
 
         if (image ->size().width == 0)
-            exit(435);
+        {
+            std::cerr << "Decode failure!" << std::endl;
+            exit(1);
+        }
     }
 
     int Displayer::wait()
