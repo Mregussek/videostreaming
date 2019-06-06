@@ -1,6 +1,6 @@
 //   Written by Mateusz Rzeczyca.
 //   Student - AGH University of Science and Technology
-//   info@mateuszrzeczyca.pl
+//   rzeczyca@student.agh.edu.pl
 //   30.03.2019
 
 #include "Camera.h"
@@ -36,21 +36,21 @@ namespace mrz
 
     void Camera::check_if_continuous()
     {
-        if(! (this ->image ->isContinuous()) )
+        if(! (image ->isContinuous()) )
         {
-            *(this ->image) = this ->image ->clone();
-            *(this ->gray_image) = this ->image ->clone();
+            *image = image ->clone();
+            *gray_image = image ->clone();
         }
     }
 
     size_t* Camera::get_image_size()
     {
-        return this ->image_size;
+        return image_size;
     }
 
     bool Camera::read_frame()
     {
-        *(this ->camera) >> *(this ->image);
+        *camera >> *image;
 
         if( image ->empty() )
         {
@@ -63,7 +63,7 @@ namespace mrz
 
     void Camera::process_image()
     {
-        cv::cvtColor(*(this ->image), *(this ->gray_image), cv::COLOR_BGR2GRAY);
+        cv::cvtColor(*image, *gray_image, cv::COLOR_BGR2GRAY);
     }
 
     void Camera::encode_image()

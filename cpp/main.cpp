@@ -1,10 +1,7 @@
 //   Written by Mateusz Rzeczyca.
 //   Student - AGH University of Science and Technology
-//   info@mateuszrzeczyca.pl
+//   rzeczyca@student.agh.edu.pl
 //   1.05.2019
-
-// Managing parameters
-//#include <argp.h>
 
 // My project files
 #include "src/Facade.h"

@@ -1,6 +1,6 @@
 //   Written by Mateusz Rzeczyca.
 //   Student - AGH University of Science and Technology
-//   info@mateuszrzeczyca.pl
+//   rzeczyca@student.agh.edu.pl
 //   11.05.2019
 
 #include "UDP.h"

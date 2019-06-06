@@ -1,6 +1,6 @@
 //   Written by Mateusz Rzeczyca.
 //   Student - AGH University of Science and Technology
-//   info@mateuszrzeczyca.pl
+//   rzeczyca@student.agh.edu.pl
 //   1.05.2019
 
 #ifndef VIDEOSTREAMING_FACADE_H

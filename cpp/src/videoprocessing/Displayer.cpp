@@ -1,6 +1,6 @@
 //   Written by Mateusz Rzeczyca.
 //   Student - AGH University of Science and Technology
-//   info@mateuszrzeczyca.pl
+//   rzeczyca@student.agh.edu.pl
 //   30.03.2019
 
 #include "Displayer.h"
@@ -31,8 +31,8 @@ namespace mrz
 
     void Displayer::check_if_continuous()
     {
-        if( this ->raw_data ->isContinuous() )
-            *(this ->image) = this ->raw_data ->clone();
+        if( raw_data ->isContinuous() )
+            *image = raw_data ->clone();
     }
 
     size_t* Displayer::get_image_size()
@@ -53,17 +53,17 @@ namespace mrz
 
     int Displayer::wait()
     {
-        *(this ->key) = cv::waitKey(1);
-        return *(this ->key);
+        *key = cv::waitKey(1);
+        return *key;
     }
 
     uchar* Displayer::get_metadata()
     {
-        return this ->image ->data;
+        return image ->data;
     }
 
     void Displayer::show_image(const std::string protocol)
     {
-        cv::imshow("Video Streaming " + protocol, *(this ->image));
+        cv::imshow("Video Streaming " + protocol, *image);
     }
 }
