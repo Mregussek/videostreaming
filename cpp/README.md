@@ -1,7 +1,5 @@
 # C++ Version
 
-In **rpi_app** directory you can find code, which have to be run on RPi. You have prepared **CMakeLists.txt** file for building this app.
-
 ## Requirements
 - [OpenCV](https://opencv.org/)
 - [socket](http://www.linuxhowtos.org/C_C++/socket.htm)
@@ -37,7 +35,7 @@ Example Output: 8
 
 make -j8
 ```
-After that you should be able to ***video*** file in this directory.
+After that you should be able to find ***video*** file in this directory.
 
 ```bash
 ls
@@ -66,7 +64,7 @@ Mateusz Rzeczyca
 
 Student - AGH University of Science and Technology
 
-info@mateuszrzeczyca.pl
+rzeczyca@student.agh.edu.pl
 
 Cracow, Poland
 

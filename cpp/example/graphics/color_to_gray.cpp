@@ -1,5 +1,6 @@
 #include <iostream>
 #include "opencv2/opencv.hpp"
+#include <chrono>
 
 /*
 We are going to use the weighed method to convert RGB image to 
@@ -118,13 +119,17 @@ void ImageOperator::to_gray(const unsigned char* bgr_input,
 {
     int index = 0;
     int step = channel * width;
+
     for (int row = 0; row < height; ++row)
-        for (int col = 0; col < width * channel; col += channel)
+        for (int col = 0; col < step; col += channel)
         {
-            gray_output[index] = 0.11 * bgr_input[row*step+col] +
-                             0.59 * bgr_input[row*step+col+1] +
-                             0.3 * bgr_input[row*step+col+2];
-            index++;
+            int new_index = row * step + col;
+
+            *gray_output = 0.11 * *(bgr_input + new_index) +
+                             0.59 * *(bgr_input + new_index + 1) +
+                             0.3 * *(bgr_input + new_index + 2);
+
+            gray_output++;
         }
 }
 
@@ -144,26 +149,57 @@ int main()
         cam >> frame;
         cv::resize(frame, frame, cv::Size(640, 480));
 
-        cv::imshow("bgr_frame", frame);
+        //cv::imshow("bgr_frame", frame);
 
+        auto t1 = std::chrono::high_resolution_clock::now();
         cv::cvtColor(frame, output, cv::COLOR_BGR2GRAY);
-        cv::imshow("opencv_func", output);
+        auto t2 = std::chrono::high_resolution_clock::now();
 
+        std::cout << "cvtColor() took "
+              << std::chrono::duration_cast<std::chrono::milliseconds>(t2-t1).count()
+              << " milliseconds\n";
+
+        //cv::imshow("opencv_func", output);
+
+        t1 = std::chrono::high_resolution_clock::now();
         ImageOperator::to_gray_m1(frame, output);
-        cv::imshow("to_gray_m1",output);
+        t2 = std::chrono::high_resolution_clock::now();
+        //cv::imshow("to_gray_m1",output);
 
+        std::cout << "to_gray_m1() took "
+              << std::chrono::duration_cast<std::chrono::milliseconds>(t2-t1).count()
+              << " milliseconds\n";
+        
+        t1 = std::chrono::high_resolution_clock::now();
         ImageOperator::to_gray_m2(frame, output);
-        cv::imshow("to_gray_m2",output);
+        t2 = std::chrono::high_resolution_clock::now();
+        //cv::imshow("to_gray_m2",output);
 
+        std::cout << "to_gray_m2() took "
+              << std::chrono::duration_cast<std::chrono::milliseconds>(t2-t1).count()
+              << " milliseconds\n";
+
+        t1 = std::chrono::high_resolution_clock::now();
         ImageOperator::to_gray_m3(frame, output);
-        cv::imshow("to_gray_m3",output);
+        t2 = std::chrono::high_resolution_clock::now();
+        //cv::imshow("to_gray_m3",output);
 
+        std::cout << "to_gray_m3() took "
+              << std::chrono::duration_cast<std::chrono::milliseconds>(t2-t1).count()
+              << " milliseconds\n";
+
+        t1 = std::chrono::high_resolution_clock::now();
         ///No OpenCV
         const unsigned char* bgr_input = (unsigned char*)frame.data;
         unsigned char* gray_output = new unsigned char[frame.rows * frame.cols];
         ImageOperator::to_gray(bgr_input, frame.cols, frame.rows, frame.channels(), gray_output);
         cv::Mat output_gray(frame.rows, frame.cols, CV_8UC1, gray_output);
+        t2 = std::chrono::high_resolution_clock::now();
         cv::imshow("to_gray_no_opencv", output_gray);
+
+        std::cout << "no_opencv() took "
+              << std::chrono::duration_cast<std::chrono::milliseconds>(t2-t1).count()
+              << " milliseconds\n";
 
         if(cv::waitKey(30) >= 0)
             break;

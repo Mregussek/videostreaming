@@ -22,7 +22,7 @@ Afterwards we have to find SD card, where the system will be. Best choice will b
 sudo fdisk -l
 ```
 
-It will list all devices which are connected. For it always was ***/dev/sdc/***. Next umount disc, if it gives an error like it isn't mount, that's fine, don't worry.
+It will list all devices which are connected. For me it always was ***/dev/sdc/***. Next umount disc, if it gives an error like it isn't mounted, that's fine, don't worry.
 
 ```bash
 sudo umount /dev/sdc
@@ -45,7 +45,7 @@ Mateusz Rzeczyca
 
 Student - AGH University of Science and Technology
 
-info@mateuszrzeczyca.pl
+rzeczyca@student.agh.edu.pl
 
 Cracow, Poland
 
