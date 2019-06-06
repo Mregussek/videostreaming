@@ -13,7 +13,8 @@ class ImageOperator
 public:
     ImageOperator() = default;
     ~ImageOperator() = default;
-    
+
+    static void cvtCol(const cv::Mat& input, cv::Mat& output);
     static void to_gray_m1(const cv::Mat& input, cv::Mat& output);
     static void to_gray_m2(const cv::Mat& input, cv::Mat& output);
     static void to_gray_m3(const cv::Mat& input, cv::Mat& output);
@@ -23,6 +24,11 @@ public:
                         const int channel,
                         unsigned char* output);
 };
+
+void ImageOperator::cvtCol(const cv::Mat& input, cv::Mat& output)
+{
+    cv::cvtColor(input, output, cv::COLOR_BGR2GRAY);
+}
 
 /*
 We used cv::Vec3b because each element consists of three 
@@ -67,6 +73,7 @@ void ImageOperator::to_gray_m2(const cv::Mat &input, cv::Mat &output)
 
     int index = 0;
     int byte_size = input.channels() * input.rows * input.cols;
+
     while(index != byte_size)
     {
         data_out[index / input.channels()] = unsigned(
@@ -98,14 +105,20 @@ void ImageOperator::to_gray_m3(const cv::Mat &input, cv::Mat &output)
     unsigned char* data_out = (unsigned char*)(output.data);
 
     int index = 0;
+    int cols_limit = input.cols * input.channels();
+
     for (int row = 0; row < input.rows; ++row)
-        for (int col = 0; col < input.cols * input.channels(); col += input.channels())
+    {
+        for (int col = 0; col < cols_limit; col += input.channels())
         {
-            data_out[index]= 0.11*data_in[row*input.step+col]+
-                             0.59*data_in[row*input.step+col+1]+
-                             0.3*data_in[row*input.step+col+2];
-            index++;
+            int new_index = row * input.step + col;
+            *data_out = 0.11 * data_in[new_index] +
+                             0.59 * data_in[new_index + 1] +
+                             0.3 * data_in[new_index + 2];
+            data_out++;
         }
+    }
+
 }
 
 // NO OPENCV
@@ -121,16 +134,19 @@ void ImageOperator::to_gray(const unsigned char* bgr_input,
     int step = channel * width;
 
     for (int row = 0; row < height; ++row)
+    {
         for (int col = 0; col < step; col += channel)
         {
             int new_index = row * step + col;
 
             *gray_output = 0.11 * *(bgr_input + new_index) +
-                             0.59 * *(bgr_input + new_index + 1) +
-                             0.3 * *(bgr_input + new_index + 2);
+                           0.59 * *(bgr_input + new_index + 1) +
+                           0.3 * *(bgr_input + new_index + 2);
 
             gray_output++;
         }
+    }
+
 }
 
 int main()
@@ -149,22 +165,22 @@ int main()
         cam >> frame;
         cv::resize(frame, frame, cv::Size(640, 480));
 
-        //cv::imshow("bgr_frame", frame);
+        cv::imshow("bgr_frame", frame);
 
         auto t1 = std::chrono::high_resolution_clock::now();
-        cv::cvtColor(frame, output, cv::COLOR_BGR2GRAY);
+        ImageOperator::cvtCol(frame, output);
         auto t2 = std::chrono::high_resolution_clock::now();
 
         std::cout << "cvtColor() took "
               << std::chrono::duration_cast<std::chrono::milliseconds>(t2-t1).count()
               << " milliseconds\n";
 
-        //cv::imshow("opencv_func", output);
+        cv::imshow("opencv_func", output);
 
         t1 = std::chrono::high_resolution_clock::now();
         ImageOperator::to_gray_m1(frame, output);
         t2 = std::chrono::high_resolution_clock::now();
-        //cv::imshow("to_gray_m1",output);
+        cv::imshow("to_gray_m1",output);
 
         std::cout << "to_gray_m1() took "
               << std::chrono::duration_cast<std::chrono::milliseconds>(t2-t1).count()
@@ -173,7 +189,7 @@ int main()
         t1 = std::chrono::high_resolution_clock::now();
         ImageOperator::to_gray_m2(frame, output);
         t2 = std::chrono::high_resolution_clock::now();
-        //cv::imshow("to_gray_m2",output);
+        cv::imshow("to_gray_m2",output);
 
         std::cout << "to_gray_m2() took "
               << std::chrono::duration_cast<std::chrono::milliseconds>(t2-t1).count()
@@ -182,7 +198,7 @@ int main()
         t1 = std::chrono::high_resolution_clock::now();
         ImageOperator::to_gray_m3(frame, output);
         t2 = std::chrono::high_resolution_clock::now();
-        //cv::imshow("to_gray_m3",output);
+        cv::imshow("to_gray_m3",output);
 
         std::cout << "to_gray_m3() took "
               << std::chrono::duration_cast<std::chrono::milliseconds>(t2-t1).count()
