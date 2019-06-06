@@ -29,7 +29,7 @@ cd build
 cmake ..
 ```
 
-You can check how cores your CPU has by ***nproc*** and then run ***make*** command.
+You can check how many cores your CPU has by ***nproc*** and then run ***make*** command.
 
 ```bash
 nproc
