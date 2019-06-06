@@ -1,74 +1,74 @@
 //   Written by Mateusz Rzeczyca.
 //   Student - AGH University of Science and Technology
-//   info@mateuszrzeczyca.pl
+//   rzeczyca@student.agh.edu.pl
 //   1.05.2019
 
 #include "TCP.h"
 
 namespace mrz
 {
-    TCPserver::TCPserver(char* set_port) :
-    server_socket( new int ),
-    client_socket( new int ),
-    server( new sockaddr_in ),
-    client( new sockaddr_in ),
-    port( new uint16_t ),
-    address_length( new socklen_t( sizeof(sockaddr_in)) )
+    TCPserver::TCPserver() {}
+
+    void TCPserver::init_object(const char* set_port)
     {
-        char_to_uint16(set_port, this ->port);
+        port = new uint16_t;
+        server_socket = new int;
+        client_socket = new int;
+        server = new sockaddr_in;
+        client = new sockaddr_in;
+        address_length = new socklen_t( sizeof(sockaddr_in) );
+
+        char_to_uint16(set_port, port);
     }
 
     TCPserver::~TCPserver()
     {
-        delete port;
-        delete server_socket;
-        delete client_socket;
-        delete server;
-        delete client;
         delete address_length;
+        delete client;
+        delete server;
+        delete client_socket;
+        delete server_socket;
+        delete port;
     }
 
     void TCPserver::define_socket()
     {
-        *(this ->server_socket) = socket(AF_INET, SOCK_STREAM, 0);
+        *server_socket = socket(AF_INET, SOCK_STREAM, 0);
 
-        if(*(this ->server_socket) < 0)
+        if(*server_socket < 0)
         {
             std::cerr << "Cannot create TCP server socket!" << std::endl;
             exit(1);
         }
 
-        this ->server ->sin_family = AF_INET;
-        this ->server ->sin_addr.s_addr = INADDR_ANY;
-        this ->server ->sin_port = htons(*(this ->port));
+        server ->sin_family = AF_INET;
+        server ->sin_addr.s_addr = INADDR_ANY;
+        server ->sin_port = htons( *port );
     }
 
     void TCPserver::create_server_then_listen()
     {
         auto conv_sock = reinterpret_cast<sockaddr*>( server );
-        int* result = new int;
 
-        *result = bind(*(this ->server_socket), conv_sock, *(this ->address_length));
+        int result = bind(*server_socket, conv_sock, *address_length);
 
-        if(*result < 0)
+        if(result < 0)
         {
             std::cerr << "Cannot bind TCP server socket!" << std::endl;
             exit(1);
         }
 
-        delete result;
-
-        listen(*(this ->server_socket), 1);
+        listen(*server_socket, 1);
 
         std::cout << "TCP-based Server Started!\n" <<
-                  "Server Address: " << inet_ntoa(this ->server ->sin_addr) <<
-                  " Server Port:" << *(this ->port) << "\n";
+                  "Server Address: " << inet_ntoa(server ->sin_addr) <<
+                  " Server Port:" << *port << "\n";
 
         conv_sock = reinterpret_cast<sockaddr*>( client );
 
-        *(this ->client_socket) = accept(*(this ->server_socket), conv_sock, address_length);
+        *client_socket = accept(*server_socket, conv_sock, address_length);
 
-        if(*(this ->client_socket) < 0)
+        if(*client_socket < 0)
         {
             std::cerr << "Cannot accept connection from client" << std::endl;
             exit(1);
@@ -79,28 +79,25 @@ namespace mrz
 
     bool TCPserver::send_data(const size_t* size)
     {
-        auto result = new ssize_t;
-        *result = send(*(this ->client_socket), this ->metadata, *size, 0);
+        ssize_t result = send(*client_socket, metadata, *size, 0);
 
-        if(*result < 0)
+        if(result < 0)
         {
             std::cerr << "Cannot send data to the client!" << std::endl;
-            delete result;
             return false;
         }
 
-        delete result;
         return true;
     }
 
     void TCPserver::close_connection()
     {
-        close( *(this ->server_socket) );
-        close( *(this ->client_socket) );
+        close( *server_socket );
+        close( *client_socket );
     }
 
     void TCPserver::refresh_metadata(unsigned char* new_data)
     {
-        this ->metadata = new_data;
+        metadata = new_data;
     }
 }

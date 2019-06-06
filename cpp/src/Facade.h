@@ -16,16 +16,40 @@
 
 namespace mrz
 {
+    /*
+     * Class created to apply Facade design pattern
+     */
     class Facade {
     public:
-        explicit Facade(TCPserver*);
-        explicit Facade(TCPclient*);
-        explicit Facade(UDPserver*);
-        explicit Facade(UDPclient*);
-        void run_client_tcp(TCPclient*);
-        void run_server_tcp(TCPserver*);
-        void run_client_udp(UDPclient*);
-        void run_server_udp(UDPserver*);
+        Facade();
+
+        /*
+         *  Initialize TCP-based client script
+         *
+         *  @param client Pointer to class that handles TCP-client connection
+         */
+        static void init_client_tcp(TCPclient* client);
+
+        /*
+         *  Initialize TCP-based server script
+         *
+         *  @param client Pointer to class that handles TCP-server connection
+         */
+        static void init_server_tcp(TCPserver*);
+
+        /*
+         *  Initialize UDP-based client script
+         *
+         *  @param client Pointer to class that handles UDP-client connection
+         */
+        static void init_client_udp(UDPclient*);
+
+        /*
+         *  Initialize UDP-based server script
+         *
+         *  @param client Pointer to class that handles UDP-server connection
+         */
+        static void init_server_udp(UDPserver*);
     };
 }
 

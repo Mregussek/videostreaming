@@ -1,35 +1,38 @@
 //   Written by Mateusz Rzeczyca.
 //   Student - AGH University of Science and Technology
-//   info@mateuszrzeczyca.pl
+//   rzeczyca@student.agh.edu.pl
 //   09.05.2019
 
 #include "UDP.h"
 
 namespace mrz
 {
-    UDPserver::UDPserver(char* set_port) :
-    sock_system_call( new int ),
-    port( new uint16_t ),
-    broadcast_permission( new int(1) ),
-    server( new sockaddr_in ),
-    client( new sockaddr_in ),
-    address_length( new socklen_t( sizeof(sockaddr_in) )),
-    recv_message( new int ),
-    max_recv_message( new int(4096) )
+    UDPserver::UDPserver() {}
+
+    void UDPserver::init_object(const char* set_port)
     {
-        char_to_uint16(set_port, this ->port);
+        sock_system_call = new int;
+        port = new uint16_t;
+        broadcast_permission = new int(1);
+        server = new sockaddr_in;
+        client = new sockaddr_in;
+        address_length = new socklen_t( sizeof(sockaddr_in) );
+        recv_message = new int;
+        max_recv_message = new int(4096);
+
+        char_to_uint16(set_port, port);
     }
 
     UDPserver::~UDPserver()
     {
-        delete sock_system_call;
-        delete port;
-        delete broadcast_permission;
-        delete server;
-        delete client;
-        delete address_length;
-        delete recv_message;
         delete max_recv_message;
+        delete recv_message;
+        delete address_length;
+        delete client;
+        delete server;
+        delete broadcast_permission;
+        delete port;
+        delete sock_system_call;
     }
 
     void UDPserver::define_socket()
@@ -63,8 +66,8 @@ namespace mrz
                    (void*) broadcast_permission, sizeof(int) );
 
         std::cout << "UDP-based Server Started!\n" <<
-                  "Server Address: " << inet_ntoa(this ->server ->sin_addr) <<
-                  " Server Port: " << *(this ->port) << "\n";
+                  "Server Address: " << inet_ntoa(server ->sin_addr) <<
+                  " Server Port: " << *port << "\n";
     }
 
     void UDPserver::receive_data(void* buffer, int buffer_length)

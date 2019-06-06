@@ -7,27 +7,32 @@
 
 namespace mrz
 {
-    Facade::Facade(TCPserver* server)
+    void Facade::init_client_tcp(TCPclient* client)
     {
-        run_server_tcp(server);
+        auto display = new Displayer();
+
+        client ->define_socket();
+        client ->connect_to_server();
+
+        display ->check_if_continuous();
+
+        client ->pair_metadata( display ->get_metadata() );
+
+        while(*(display ->key) != 'q')
+        {
+            client ->receive_data(display ->get_image_size());
+
+            display ->show_image("TCP");
+
+            if (display ->wait() >= 0)
+                break;
+        }
+
+        delete display;
+        client ->close_connection();
     }
 
-    Facade::Facade(TCPclient* client)
-    {
-        run_client_tcp(client);
-    }
-
-    Facade::Facade(UDPserver* server)
-    {
-        run_server_udp(server);
-    }
-
-    Facade::Facade(UDPclient* client)
-    {
-        run_client_udp(client);
-    }
-
-    void Facade::run_server_tcp(TCPserver* server)
+    void Facade::init_server_tcp(TCPserver* server)
     {
         auto camera = new Camera();
         camera ->open_camera();
@@ -54,32 +59,7 @@ namespace mrz
         server ->close_connection();
     }
 
-    void Facade::run_client_tcp(TCPclient* client)
-    {
-        auto display = new Displayer();
-
-        client ->define_socket();
-        client ->connect_to_server();
-
-        display ->check_if_continuous();
-
-        client ->pair_metadata( display ->get_metadata() );
-
-        while(*(display ->key) != 'q')
-        {
-            client ->receive_data(display ->get_image_size());
-
-            display ->show_image("TCP");
-
-            if (display ->wait() >= 0)
-                break;
-        }
-
-        delete display;
-        client ->close_connection();
-    }
-
-    void Facade::run_client_udp(UDPclient* client)
+    void Facade::init_client_udp(UDPclient* client)
     {
         client ->define_socket();
 
@@ -95,21 +75,20 @@ namespace mrz
 
             cam ->encode_image();
 
-            int* total_pack = new int(cam ->encoded.capacity() / *(client ->packet_size));
+            int total_pack = 1 + (cam ->encoded.size() - 1) / *(client ->packet_size);
 
-            client ->send_data(total_pack, sizeof(int));
+            client ->send_data(&total_pack, sizeof(int));
 
-            for(int i = 0; i < *total_pack; i++)
+            for(int i = 0; i < total_pack; i++)
                 client ->send_data(&cam ->encoded[i * *(client ->packet_size)], *(client ->packet_size));
 
-            delete total_pack;
             j++;
         }
 
         delete cam;
     }
 
-    void Facade::run_server_udp(UDPserver* server)
+    void Facade::init_server_udp(UDPserver* server)
     {
         server ->define_socket();
         server ->create_server_then_listen();
