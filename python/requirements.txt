@@ -1,0 +1,4 @@
+opencv-python==4.4.0.46
+pyzmq==20.0.0
+numpy==1.19.4
+netifaces==0.10.9
